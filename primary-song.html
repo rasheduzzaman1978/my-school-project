@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -515,3 +516,522 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="school_image/school_logo.jpg" type="image/x-icon">
+  <title>primary-song</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ====== Base ====== */
+    :root{
+      --bg1:#f6f8fb;           /* হালকা ব্যাকগ্রাউন্ড */
+      --bg2:#eef2f7;           /* গ্রেডিয়েন্ট */
+      --card:#ffffff;          /* কার্ড */
+      --ink:#12323a;           /* টেক্সট */
+      --muted:#5d7a80;         /* সাবটেক্সট */
+      --brand:#1aa3a3;         /* অ্যাকসেন্ট */
+      --ring: rgba(26,163,163,.25);
+    }
+    *{margin:0; padding:0; box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font-family:"Noto Sans Bengali","SutonnyMJ","Kalpurush",Arial,sans-serif;
+      color:var(--ink); background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      line-height:1.6; min-height:100vh;
+    }
+
+    /* ===== NAVBAR ===== */
+    .nav_bar{
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,#DDF6D2 0%,#C8E6C9 100%);
+      padding:0 20px; position:sticky; top:0; z-index:1000;
+      box-shadow:0 4px 15px rgba(0,0,0,.1); backdrop-filter:blur(10px);
+      transition:all .3s ease; animation:fadeInUp .6s ease-out;
+    }
+    .nav_bar::before{content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); z-index:-1}
+
+    .nav-links{display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:relative; justify-content:center}
+    .nav_bar a{
+      color:#113D43; font-size:20px; font-weight:500; padding:12px 16px; text-decoration:none;
+      transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; border-radius:8px; position:relative; overflow:hidden;
+    }
+    .nav_bar a::before{content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .5s ease}
+    .nav_bar a:hover::before{left:100%}
+    .nav_bar a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none; box-shadow:0 4px 12px rgba(76,175,80,.25)}
+    .nav_bar a:active{transform:translateY(0)}
+
+    /* Dropdown */
+    .dropdown{position:relative; display:inline-block}
+    .dropdown > a{cursor:pointer}
+    .dropdown-content{
+      display:none; position:absolute; background:linear-gradient(135deg,#E8F5E9 0%,#C8E6C9 100%);
+      min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.2); border-radius:8px; z-index:1001; overflow:hidden; transform:translateY(10px);
+      opacity:0; transition:all .3s ease;
+    }
+    .dropdown-content a{display:block; padding:12px 16px; font-size:16px; color:#113D43; text-decoration:none; transition:all .3s ease}
+    .dropdown-content a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none}
+
+    /* Desktop hover */
+    @media (min-width:769px){
+      .dropdown:hover .dropdown-content{display:block; transform:translateY(0); opacity:1}
+      .nav_bar a{display:inline-flex; align-items:center; height:48px; will-change:transform}
+    }
+
+    /* Search Box */
+    .search-box{
+      display:flex; align-items:center; background:#fff; border-radius:25px; overflow:hidden;
+      box-shadow:0 3px 10px rgba(0,0,0,.1); transition:all .3s ease;
+      position:absolute; right:20px; top:50%; transform:translateY(-50%);
+    }
+    .search-box:focus-within{transform:translateY(-50%) scale(1.02); box-shadow:0 5px 20px rgba(0,0,0,.15)}
+    .search-box input{padding:8px 16px; border:none; font-size:16px; outline:none; background:transparent; width:200px; font-family:inherit}
+    .search-box input::placeholder{color:#999}
+    .search-box button{padding:8px 13px; border:none; background:linear-gradient(135deg,#FEA405,#FF9800); color:#fff; cursor:pointer; font-size:16px; transition:all .3s ease; display:flex; align-items:center; justify-content:center}
+    .search-box button:hover{background:linear-gradient(135deg,#FF9800,#F57C00); transform:scale(1.05)}
+
+    /* Hamburger */
+    .menu-toggle{display:none; font-size:24px; color:#386641; cursor:pointer; padding:8px; border-radius:8px; transition:all .3s ease; background:rgba(255,255,255,.1)}
+    .menu-toggle:hover{background:rgba(255,255,255,.2); transform:scale(1.1)}
+    .menu-toggle.rotated{transform:rotate(180deg); transition:transform .3s ease}
+
+    /* Scroll effect */
+    .nav_bar.scrolled{background:rgba(221,246,210,.95); backdrop-filter:blur(15px)}
+
+    /* ===== Back to Home (fixed) ===== */
+    .back-home{
+      position:fixed; right:18px; bottom:18px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px; border-radius:999px; text-decoration:none;
+      background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; font-weight:700;
+      box-shadow:0 6px 18px rgba(76,175,80,.28);
+      z-index:3500;
+    }
+    .back-home:focus,.back-home:hover{transform:translateY(-1px); box-shadow:0 12px 28px rgba(76,175,80,.35);}
+
+    /* ===== CONTENT ===== */
+    .main-section{background:#fff;border-radius:12px;padding:30px 40px;box-shadow:0 4px 20px rgba(0,0,0,.1);display:flex;flex-direction:column;gap:30px;margin:30px auto;max-width:1200px; width:100%;animation:fadeInUp .6s ease-out}
+  .section-box{max-width:1200px;margin:0 auto;width:100%;background:#f9f9f9;border-radius:10px;padding:25px;box-shadow:0 3px 10px rgba(0,0,0,.06);transition: transform .3s ease, box-shadow .3s ease; border-left:4px solid #4CAF50;}
+  .section-box:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,.1)}
+  .section-main-header{font-size:24px;font-weight:600; text-align: center;  color:#1e293b;margin:0 0 20px 0;border-bottom:3px solid #3498db;padding-bottom:8px;text-align:center;}
+
+    .container{width:min(1200px,92%); margin:0 auto 40px;}
+
+    header.container{padding:28px 16px; text-align:center}
+    header.container h1{margin:0 0 6px; font-size:clamp(22px,4vw,30px)}
+
+    .section-box{background:#f9f9f9;border-radius:10px; padding:25px;box-shadow:0 3px 10px rgba(0,0,0,.06);transition: transform .3s ease, box-shadow .3s ease; border-left:4px solid #4CAF50;}
+    .section-box:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,.1)}
+    .section-box h2{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:600;color:#2c3e50;margin-bottom:12px}
+
+    .grid{display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));}
+    .track{background:var(--card); border-radius:18px; padding:14px; box-shadow:0 6px 18px rgba(0,0,0,.06); transition: transform .18s ease, box-shadow .18s ease; position:relative; overflow:hidden; border:1px solid #e8eef5;}
+    .track::after{content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(1200px 200px at -10% -20%, rgba(26,163,163,.08), transparent 45%);}    
+    .track:hover{ transform:translateY(-3px); box-shadow:0 12px 26px rgba(0,0,0,.09); }
+
+    .cover{height:130px; border-radius:14px; background: linear-gradient(135deg, rgba(26,163,163,.18), rgba(26,163,163,.06)), repeating-linear-gradient(45deg, #dfe9ee 0 10px, #f3f7fa 10px 20px); display:grid; place-items:center; margin-bottom:10px; position:relative; border:1px solid #e6edf3;}
+    .badge{position:absolute; top:10px; left:10px; font-weight:700; font-size:13px; background:#fff; color:var(--brand); border:1px solid #d9ecec; padding:4px 8px; border-radius:999px;}
+    .cover span{font-weight:800; font-size:40px; opacity:.16; letter-spacing:.08em;}
+
+    h3{margin:6px 0 0; font-size:16px}
+    .meta{margin:2px 0 10px; font-size:13px; color:var(--muted)}
+
+    audio{ width:100%; outline:none; accent-color: var(--brand); }
+
+    .actions{ display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+    .btn{ display:inline-flex; align-items:center; gap:8px; text-decoration:none; font-size:13px; padding:8px 10px; border-radius:999px; border:1px solid #dbe7ea; color:var(--ink); background:#fff; }
+    .btn:hover{ box-shadow:0 1px 0 rgba(0,0,0,.06), 0 6px 14px rgba(26,163,163,.06); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width:1024px){
+      .search-box input{width:150px}
+      .nav_bar a{font-size:16px; padding:10px 12px}
+      .dropdown-content{min-width:180px}
+    }
+    @media (max-width:768px){
+      .nav_bar{flex-direction:column; align-items:center; padding:15px 20px 0; justify-content:center}
+      .menu-toggle{display:block; position:absolute; top:15px; right:20px}
+
+      .nav-links{ flex-direction:column; width:100%; max-height:0; overflow:hidden; transition:max-height .5s ease-out; align-items:center; }
+      .nav_bar.active .nav-links{max-height:850px; padding-bottom:5px}
+
+      .nav_bar a{ display:block; width:80%; text-align:center; padding:8px; margin:3px auto; border-radius:10px; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); transform:translateX(-100px); opacity:0; transition:all .4s cubic-bezier(.4,0,.2,1); }
+      .nav_bar.active a{transform:translateX(0); opacity:1}
+
+      .dropdown{width:80%;}
+      .dropdown-content{position:static; display:none; width:100%; box-shadow:none; background:rgba(255,255,255,.1); margin:5px 0; border-radius:8px; transform:none; opacity:1; transition:none;}
+      .dropdown.active .dropdown-content{display:block}
+      .dropdown-content a{padding:10px 15px; text-align:center; font-size:15px}
+
+      .nav_bar.active .nav-links > a:nth-of-type(1){transition-delay:.05s}
+      .nav_bar.active .nav-links > a:nth-of-type(2){transition-delay:.1s}
+      .nav_bar.active .nav-links > a:nth-of-type(3){transition-delay:.15s}
+      .nav_bar.active .nav-links > a:nth-of-type(4){transition-delay:.2s}
+      .nav_bar.active .nav-links > a:nth-of-type(5){transition-delay:.25s}
+      .nav_bar.active .nav-links > a:nth-of-type(6){transition-delay:.3s}
+      .nav_bar.active .nav-links > a:nth-of-type(7){transition-delay:.35s}
+      .nav_bar.active .nav-links > a:nth-of-type(8){transition-delay:.4s}
+
+      .search-box{width:80%; margin:15px 0 10px; opacity:0; transform:translateY(-20px); transition:all .3s ease; position:static; right:auto; top:auto}
+      .nav_bar.active .search-box{opacity:1; transform:translateY(0); transition-delay:.5s}
+      .search-box input{flex:1; width:auto}
+    }
+
+    /* Animations */
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)}}
+
+    @media (prefers-reduced-motion: reduce){
+      .nav_bar a, .dropdown-content, .search-box, .menu-toggle {transition:none !important}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="nav_bar" id="navbar" aria-label="প্রধান নেভিগেশন">
+    <div class="nav-links" id="navLinks">
+      <a href="#school-info">বিদ্যালয়ের তথ্য</a>
+      <a href="#teachers">শিক্ষক</a>
+      <a href="#students">শিক্ষার্থী</a>
+      <a href="#results">ফলাফল</a>
+      <a href="#notices">নোটিশ বোর্ড</a>
+      <a href="#gallery">গ্যালারি</a>
+      <a href="#admission">ভর্তি</a>
+      <a href="#advice">পরামর্শ</a>
+
+      <!-- Dropdown -->
+      <div class="dropdown" id="dropdown">
+        <a id="othersMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-controls="othersPanel">অন্যান্য ▼</a>
+        <div class="dropdown-content" id="othersPanel" role="menu" aria-label="অন্যান্য">
+          <a href="#sub1" role="menuitem">সাব-মেনু ১</a>
+          <a href="#sub2" role="menuitem">সাব-মেনু ২</a>
+          <a href="#sub3" role="menuitem">সাব-মেনু ৩</a>
+          <a href="#sub4" role="menuitem">সাব-মেনু ৪</a>
+          <a href="#sub5" role="menuitem">সাব-মেনু ৫</a>
+        </div>
+      </div>
+
+      <a href="#contact">যোগাযোগ</a>
+    </div>
+
+    <div class="search-box">
+      <input type="text" placeholder="অনুসন্ধান করুন..." id="searchInput" aria-label="সার্চ">
+      <button type="button" id="searchBtn" aria-label="সার্চ করুন">🔍</button>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="মেনু টগল" aria-expanded="false" aria-controls="navLinks">☰</button>
+  </nav>
+
+  <!-- Back to Home Button -->
+  <a href="index.html" class="back-home" aria-label="হোমে ফিরে যান">🏠 হোম</a>
+
+  <!-- Header -->
+  <header class="container">
+    <div class="section-box">
+      <h2 class="section-main-header">🎵 প্রাথমিকের ১২টি অডিও গান প্লেয়ার</h2>
+      <p style="color:var(--muted); margin-top:6px">নিচে ১২টি গানের কার্ড আছে। প্রথমটি .mp4 হলেও টাইপ আলাদা করে দেওয়া হয়েছে।</p>
+    
+  <!-- Audio Grid -->
+  <main class="container grid" dir="auto">
+    <!-- Track 01 (.mp4) -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>01</span>
+        <div class="badge">ট্র্যাক ১</div>
+      </div>
+      <h3>গান ০১ — জাতীয় সঙ্গীত</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ০১ প্লে করুন">
+        <source src="primary-song/amar-sonar-bangla.mp4" type="audio/mp4" />
+        আপনার ব্রাউজার অডিও ট্যাগ সাপোর্ট করে না।
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/amar-sonar-bangla.mp4" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP4 (অডিও)</span>
+      </div>
+    </article>
+
+    <!-- Track 02 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>02</span>
+        <div class="badge">ট্র্যাক ২</div>
+      </div>
+      <h3>গান ০২ — আমার ভাইয়ের রক্তে রাঙানো একুশে ফেব্রুয়ারি</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ০২ প্লে করুন">
+        <source src="primary-song/amar-vaiyer-rokte-rangano.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/amar-vaiyer-rokte-rangano.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+
+    <!-- Track 03 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>03</span>
+        <div class="badge">ট্র্যাক ৩</div>
+      </div>
+      <h3>গান ০৩ — আমরা করবো জয় একদিন</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ০৩ প্লে করুন">
+        <source src="primary-song/amra-korbo-joy.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/amra-korbo-joy.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+
+    <!-- Track 04 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>04</span>
+        <div class="badge">ট্র্যাক ৪</div>
+      </div>
+      <h3>গান ০৪ — আমরা সবাই রাজা</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ০৪ প্লে করুন">
+        <source src="primary-song/amra-sobai-raza.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/amra-sobai-raza.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+
+    <!-- Track 05 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>05</span>
+        <div class="badge">ট্র্যাক ৫</div>
+      </div>
+      <h3>গান ০৫ — চল চল চল ঊর্ধ্ব গগনে বাজে মাদল</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ০৫ প্লে করুন">
+        <source src="primary-song/chal-chal-chal.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/chal-chal-chal.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+
+    <!-- Track 06 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>06</span>
+        <div class="badge">ট্র্যাক ৬</div>
+      </div>
+      <h3>গান ০৬ — এই সুন্দর ফুল সুন্দর ফল</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ০৬ প্লে করুন">
+        <source src="primary-song/ei-sundor-ful.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/ei-sundor-ful.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+
+    <!-- Track 07 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>07</span>
+        <div class="badge">ট্র্যাক ৭</div>
+      </div>
+      <h3>গান ০৭ — নিজের হাতে কাজ করো</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ০৭ প্লে করুন">
+        <source src="primary-song/nizer-hate-kaj-koro.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/nizer-hate-kaj-koro.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+
+    <!-- Track 08 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>08</span>
+        <div class="badge">ট্র্যাক ৮</div>
+      </div>
+      <h3>গান ০৮ — প্রজাপতি প্রজাপতি কোথায় পেলে ভাই</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ০৮ প্লে করুন">
+        <source src="primary-song/projapoti-projapoti.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/projapoti-projapoti.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+
+    <!-- Track 09 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>09</span>
+        <div class="badge">ট্র্যাক ৯</div>
+      </div>
+      <h3>গান ০৯ — রক্ত দিয়ে নাম লিখেছি বাংলাদেশের নাম</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ০৯ প্লে করুন">
+        <source src="primary-song/rokto-diye-nam-likhechi.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/rokto-diye-nam-likhechi.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+
+    <!-- Track 10 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>10</span>
+        <div class="badge">ট্র্যাক ১০</div>
+      </div>
+      <h3>গান ১০ — আনন্দলোকে মঙ্গলালোকে</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ১০ প্লে করুন">
+        <source src="primary-song/anondoloke-mongolaloke.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/anondoloke-mongolaloke.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    
+    </article>
+
+    <!-- Track 11 -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>11</span>
+        <div class="badge">ট্র্যাক ১১</div>
+      </div>
+      <h3>গান ১১ — ধন ধান্যে পুষ্পে ভরা আমাদের</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ১১ প্লে করুন">
+        <source src="primary-song/dhonodhane-pushpevora.mp3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/dhonodhane-pushpevora.mp3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+
+    <!-- Track 12 (upper-case extension fixed type OK) -->
+    <article class="track">
+      <div class="cover" aria-hidden="true">
+        <span>12</span>
+        <div class="badge">ট্র্যাক ১২</div>
+      </div>
+      <h3>গান ১২ — আল্লাহ মেঘ দেন</h3>
+      <p class="meta">শিল্পী: —</p>
+      <audio controls preload="metadata" aria-label="গান ১২ প্লে করুন">
+        <source src="primary-song/allah-megh-den.MP3" type="audio/mpeg" />
+      </audio>
+      <div class="actions">
+        <a class="btn" href="primary-song/allah-megh-den.MP3" download>⬇️ ডাউনলোড</a>
+        <span style="font-size:12px; color:#6b858b;">MP3</span>
+      </div>
+    </article>
+  </main>
+</div>
+</header>
+  <script>
+    const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menuToggle');
+    const dropdown = document.getElementById('dropdown');
+    const othersMenu = document.getElementById('othersMenu');
+    const navLinksContainer = document.getElementById('navLinks');
+    const navLinks = navLinksContainer.querySelectorAll('a[href^="#"]');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+
+    // Menu helpers
+    function openMenu(){
+      navbar.classList.add('active');
+      menuToggle.textContent = '✖';
+      menuToggle.classList.add('rotated');
+      menuToggle.setAttribute('aria-expanded','true');
+    }
+    function closeMenu(){
+      navbar.classList.remove('active');
+      menuToggle.textContent = '☰';
+      menuToggle.classList.remove('rotated');
+      menuToggle.setAttribute('aria-expanded','false');
+      dropdown.classList.remove('active');
+      othersMenu.setAttribute('aria-expanded','false');
+    }
+    function toggleMenu(){ navbar.classList.contains('active') ? closeMenu() : openMenu(); }
+    if (menuToggle) menuToggle.addEventListener('click', (e)=>{ e.stopPropagation(); toggleMenu(); });
+
+    // Dropdown (mobile)
+    function toggleDropdown(e){
+      if (window.innerWidth <= 768){
+        e.preventDefault();
+        e.stopPropagation();
+        const willBeActive = !dropdown.classList.contains('active');
+        dropdown.classList.toggle('active');
+        othersMenu.setAttribute('aria-expanded', willBeActive ? 'true' : 'false');
+      }
+    }
+    if (othersMenu) {
+      othersMenu.addEventListener('click', toggleDropdown);
+      othersMenu.addEventListener('keydown', (e)=>{ if (e.key==='Enter' || e.key===' ') toggleDropdown(e); });
+    }
+
+    // Close on link click (mobile)
+    navLinks.forEach(link=>{
+      link.addEventListener('click', ()=>{ if (window.innerWidth <= 768){ setTimeout(closeMenu,300); }});
+    });
+
+    // Click outside to close (mobile)
+    document.addEventListener('click', (e)=>{
+      if (window.innerWidth <= 768 && !navbar.contains(e.target) && navbar.classList.contains('active')) closeMenu();
+    });
+
+    // Search
+    function handleSearch(){
+      const query = searchInput.value.trim();
+      if (query){ alert(`অনুসন্ধান: "${query}"\nএই বৈশিষ্ট্যটি শীঘ্রই যোগ করা হবে।`); }
+      else { alert('অনুগ্রহ করে অনুসন্ধানের জন্য কিছু লিখুন।'); }
+    }
+    if (searchBtn) searchBtn.addEventListener('click', handleSearch);
+    if (searchInput) searchInput.addEventListener('keypress', (e)=>{ if(e.key==='Enter') handleSearch(); });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+      anchor.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+        if (!href || href === '#') return;
+        const targetId = href.substring(1);
+        const target = document.getElementById(targetId);
+        if (target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
+
+    // Navbar scroll effect
+    function onScroll(){ navbar.classList.toggle('scrolled', window.scrollY > 50); }
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('orientationchange', onScroll);
+
+    // Resize handling
+    window.addEventListener('resize', ()=>{ if (window.innerWidth > 768){ closeMenu(); }});
+    document.addEventListener('DOMContentLoaded', ()=>{ closeMenu(); onScroll(); });
+  </script>
+</body>
+</html>
+>>>>>>> 3ba20fb (Add all project files including images)

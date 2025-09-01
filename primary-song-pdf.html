@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -723,3 +724,730 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="shortcut icon" href="school_image/school_logo.jpg" type="image/x-icon">
+  <title>প্রাথমিক সিলেবাসের গান - গয়হাট্টা সরকারি প্রাথমিক বিদ্যালয়</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#113D43;
+      --muted:#5d7a80;
+      --brand:#4CAF50;
+      --card:#ffffff;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:"Noto Sans Bengali", Arial, sans-serif;
+      background:linear-gradient(135deg,#F0F2BD 0%,#B8CFCE 100%);
+      min-height:100vh; line-height:1.6; color:var(--ink);
+    }
+
+    /* ===== NAVBAR ===== */
+    .nav_bar{
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,#DDF6D2 0%,#C8E6C9 100%);
+      padding:0 20px; position:sticky; top:0; z-index:1000;
+      box-shadow:0 4px 15px rgba(0,0,0,.1); backdrop-filter:blur(10px);
+      transition:all .3s ease; animation:fadeInUp .6s ease-out;
+    }
+    .nav_bar::before{content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); z-index:-1}
+
+    .nav-links{display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:relative; justify-content:center}
+    .nav_bar a{
+      color:#113D43; font-size:20px; font-weight:500; padding:12px 16px; text-decoration:none;
+      transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; border-radius:8px; position:relative; overflow:hidden;
+    }
+    .nav_bar a::before{content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .5s ease}
+    .nav_bar a:hover::before{left:100%}
+    .nav_bar a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none; box-shadow:0 4px 12px rgba(76,175,80,.25)}
+    .nav_bar a:active{transform:translateY(0)}
+
+    /* Dropdown */
+    .dropdown{position:relative; display:inline-block}
+    .dropdown > a{cursor:pointer}
+    .dropdown-content{
+      display:none; position:absolute; background:linear-gradient(135deg,#E8F5E9 0%,#C8E6C9 100%);
+      min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.2); border-radius:8px; z-index:1001; overflow:hidden; transform:translateY(10px);
+      opacity:0; transition:all .3s ease;
+    }
+    .dropdown-content a{display:block; padding:12px 16px; font-size:16px; color:#113D43; text-decoration:none; transition:all .3s ease}
+    .dropdown-content a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none}
+
+    @media (min-width:769px){
+      .dropdown:hover .dropdown-content{display:block; transform:translateY(0); opacity:1}
+      .nav_bar a{display:inline-flex; align-items:center; height:48px; will-change:transform}
+    }
+
+    /* Search Box */
+    .search-box{
+      display:flex; align-items:center; background:#fff; border-radius:25px; overflow:hidden;
+      box-shadow:0 3px 10px rgba(0,0,0,.1); transition:all .3s ease;
+      position:absolute; right:20px; top:50%; transform:translateY(-50%);
+    }
+    .search-box:focus-within{transform:translateY(-50%) scale(1.02); box-shadow:0 5px 20px rgba(0,0,0,.15)}
+    .search-box input{padding:8px 16px; border:none; font-size:16px; outline:none; background:transparent; width:200px; font-family:inherit}
+    .search-box input::placeholder{color:#999}
+    .search-box button{padding:8px 13px; border:none; background:linear-gradient(135deg,#FEA405,#FF9800); color:#fff; cursor:pointer; font-size:16px; transition:all .3s ease; display:flex; align-items:center; justify-content:center}
+    .search-box button:hover{background:linear-gradient(135deg,#FF9800,#F57C00); transform:scale(1.05)}
+
+    /* Hamburger */
+    .menu-toggle{display:none; font-size:24px; color:#386641; cursor:pointer; padding:8px; border-radius:8px; transition:all .3s ease; background:rgba(255,255,255,.1)}
+    .menu-toggle:hover{background:rgba(255,255,255,.2); transform:scale(1.1)}
+    .menu-toggle.rotated{transform:rotate(180deg); transition:transform .3s ease}
+
+    /* Scroll effect */
+    .nav_bar.scrolled{background:rgba(221,246,210,.95); backdrop-filter:blur(15px)}
+
+    /* ===== Back to Home (fixed) ===== */
+    .back-home{
+      position:fixed; right:18px; bottom:18px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px; border-radius:999px; text-decoration:none;
+      background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; font-weight:700;
+      box-shadow:0 6px 18px rgba(76,175,80,.28);
+      z-index:3500; transition:all .3s ease;
+    }
+    .back-home:focus,.back-home:hover{transform:translateY(-1px); box-shadow:0 12px 28px rgba(76,175,80,.35);}
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width:1024px){
+      .search-box input{width:150px}
+      .nav_bar a{font-size:16px; padding:10px 12px}
+      .dropdown-content{min-width:180px}
+    }
+    @media (max-width:768px){
+      .nav_bar{flex-direction:column; align-items:center; padding:15px 20px 0; justify-content:center}
+      .menu-toggle{display:block; position:absolute; top:15px; right:20px}
+      .nav-links{
+        flex-direction:column; width:100%; max-height:0; overflow:hidden; transition:max-height .5s ease-out; align-items:center;
+      }
+      .nav_bar.active .nav-links{max-height:850px; padding-bottom:5px}
+      .nav_bar a{
+        display:block; width:80%; text-align:center; padding:8px; margin:3px auto; border-radius:10px;
+        background:rgba(255,255,255,.1); backdrop-filter:blur(5px);
+        transform:translateX(-100px); opacity:0; transition:all .4s cubic-bezier(.4,0,.2,1);
+      }
+      .nav_bar.active a{transform:translateX(0); opacity:1}
+      .dropdown{width:80%;}
+      .dropdown-content{position:static; display:none; width:100%; box-shadow:none; background:rgba(255,255,255,.1); margin:5px 0; border-radius:8px; transform:none; opacity:1; transition:none;}
+      .dropdown.active .dropdown-content{display:block}
+      .dropdown-content a{padding:10px 15px; text-align:center; font-size:15px}
+      .nav_bar.active .nav-links > a:nth-of-type(1){transition-delay:.05s}
+      .nav_bar.active .nav-links > a:nth-of-type(2){transition-delay:.1s}
+      .nav_bar.active .nav-links > a:nth-of-type(3){transition-delay:.15s}
+      .nav_bar.active .nav-links > a:nth-of-type(4){transition-delay:.2s}
+      .nav_bar.active .nav-links > a:nth-of-type(5){transition-delay:.25s}
+      .nav_bar.active .nav-links > a:nth-of-type(6){transition-delay:.25s}
+      .nav_bar.active .nav-links > .dropdown{transition-delay:.3s}
+      .nav_bar.active .nav-links > a:nth-last-of-type(1){transition-delay:.35s}
+      .search-box{width:80%; margin:15px 0 10px; opacity:0; transform:translateY(-20px); transition:all .3s ease; position:static; right:auto; top:auto}
+      .nav_bar.active .search-box{opacity:1; transform:translateY(0); transition-delay:.5স}
+      .search-box input{flex:1; width:auto}
+    }
+
+    /* Animations */
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)}}
+    @media (prefers-reduced-motion: reduce){
+      .nav_bar a, .dropdown-content, .search-box, .menu-toggle {transition:none !important}
+    }
+
+    .main-section{background:#fff;border-radius:12px;padding:30px 40px;box-shadow:0 4px 20px rgba(0,0,0,.1);display:flex;flex-direction:column;gap:30px;margin:30px auto;max-width:1200px; width:100%;animation:fadeInUp .6s ease-out}
+  .section-box{max-width:1200px;margin:0 auto;width:100%;background:#f9f9f9;border-radius:10px;padding:25px;box-shadow:0 3px 10px rgba(0,0,0,.06);transition: transform .3s ease, box-shadow .3s ease; border-left:4px solid #4CAF50;}
+  .section-box:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,.1)}
+  .section-main-header{font-size:24px;font-weight:600;color:#1e293b;margin:0 0 20px 0;border-bottom:3px solid #3498db;padding-bottom:8px;text-align:center;}
+
+    /* ===== IMAGE GALLERY ===== */
+    #gallery{ padding:28px 0; }
+    .wrap{ width:min(1200px,92%); margin:0 auto; }
+    .section-box{
+      background:#f9f9f9; border-radius:15px; padding:30px; box-shadow:0 8px 25px rgba(0,0,0,.08);
+      transition: transform .3s ease, box-shadow .3s ease; border-left:5px solid #4CAF50;
+    }
+    .section-box:hover{ transform: translateY(-3px); box-shadow: 0 12px 35px rgba(0,0,0,.12); }
+    .section-main-header{
+      display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700;
+      color:#1a4b5f; border-bottom:3px solid #3498db; padding:15px 0; margin-bottom:25px;
+      background:linear-gradient(135deg,#eaf6ff,#fff); border-radius:10px; text-shadow:1px 1px 2px rgba(0,0,0,.1);
+    }
+    .grid{ display:grid; gap:20px; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); }
+    .card{
+      background:var(--card); border:1px solid #e6edf3; border-radius:15px; padding:15px;
+      box-shadow:0 6px 20px rgba(0,0,0,.08); display:flex; flex-direction:column;
+      transition:all .3s ease; overflow:hidden;
+    }
+    .card:hover{ transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,.15); }
+    .thumb{ position:relative; height:180px; border-radius:12px; overflow:hidden; margin-bottom:15px; background:linear-gradient(135deg,#eef5f1,#f8fff8); }
+    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .3s ease; }
+    .card:hover .thumb img{ transform: scale(1.05); }
+    .badge{ position:absolute; top:10px; left:10px; background:linear-gradient(135deg,#1976d2,#1565c0); color:#fff; font-weight:700; font-size:12px; padding:4px 10px; border-radius:999px; box-shadow: 0 2px 8px rgba(25,118,210,.3); }
+    .title{ font-size:16px; font-weight:600; color:var(--ink); margin:8px 0 15px; text-align:center; }
+    .actions{ margin-top:auto; display:flex; gap:10px; }
+    .btn{ flex:1; text-align:center; font-size:14px; font-weight:600; padding:10px 12px; border-radius:25px; border:2px solid #dbe7ea; background:#fff; color:var(--ink); cursor:pointer; transition:all .3s ease; text-decoration:none; display:inline-block; }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+    .btn.primary{ background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; border-color:transparent; }
+    .btn.primary:hover{ background:linear-gradient(135deg,#45a049,#4CAF50); box-shadow: 0 4px 15px rgba(76,175,80,.3); }
+
+    /* ===== Lightbox (Zoomable) ===== */
+    .lightbox{
+      position:fixed; inset:0; background:rgba(0,0,0,.85);
+      display:none; align-items:center; justify-content:center;
+      z-index:4000; backdrop-filter:blur(4px);
+    }
+    .lightbox.open{ display:flex; animation:fadeInUp .25s ease; }
+    .lb-shell{
+      position:relative; width:min(96vw,1100px); height:min(92vh,820px);
+      background:#0e0e0e; border-radius:14px; border:1px solid #2a2a2a;
+      box-shadow:0 20px 60px rgba(0,0,0,.6); overflow:hidden;
+      display:grid; grid-template-rows:auto 1fr auto;
+    }
+    .lb-header, .lb-footer{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 14px; background:linear-gradient(135deg,#1f2937,#111827); color:#e5e7eb;
+    }
+    .lb-title{ font-weight:600; }
+    .lb-counter{ color:#cbd5e1; font-weight:500; }
+
+    .lb-stage{
+      position:relative; overflow:hidden; background:#000;
+      touch-action:none; /* জেসচার কন্ট্রোল */
+    }
+    /* ইমেজকে ট্রান্সফর্ম করা হবে */
+    .lb-img{
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%) scale(1);
+      transform-origin:center center;
+      max-width:100%; max-height:100%;
+      user-select:none; -webkit-user-drag:none; pointer-events:none;
+    }
+
+    /* ভাসমান বড় অ্যারো */
+    .lb-arrow{
+      position:absolute; top:50%; transform:translateY(-50%);
+      font-size:44px; line-height:1; color:#fff; width:56px; height:56px;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.15);
+      border-radius:50%; cursor:pointer; z-index:10; user-select:none;
+      transition:transform .15s ease, background .2s ease, opacity .2s ease;
+      opacity:.85;
+    }
+    .lb-arrow:hover{ transform:translateY(-50%) scale(1.05); background:rgba(0,0,0,.5); }
+    .lb-arrow.left{ left:10px; }
+    .lb-arrow.right{ right:10px; }
+
+    /* কন্ট্রোল বাটন */
+    .ctrls{ display:flex; gap:8px; align-items:center; }
+    .ctrl-btn{
+      padding:8px 12px; border:none; border-radius:999px; font-weight:600; cursor:pointer;
+      background:#1f2937; color:#e5e7eb; border:1px solid #374151; transition:.2s;
+    }
+    .ctrl-btn:hover{ transform:translateY(-1px); background:#111827; }
+    .ctrl-btn.primary{ background:linear-gradient(135deg,#4CAF50,#45a049); border-color:transparent; color:#fff; }
+    .ctrl-btn.danger{ background:linear-gradient(135deg,#e53935,#c62828); color:#fff; border-color:transparent; }
+
+    /* হিন্ট */
+    .hint{
+      position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+      color:#9ca3af; font-size:12px; background:rgba(0,0,0,.4); padding:6px 10px; border-radius:999px;
+    }
+
+    @media (max-width:768px){
+      .grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+      .section-main-header { font-size: 22px; padding: 12px; }
+      .section-box { padding: 20px; }
+      .thumb { height: 150px; }
+      .lb-shell{ width:96vw; height:90vh; }
+      .ctrl-btn{ padding:7px 10px; font-size:13px; }
+      .lb-arrow{ width:48px; height:48px; font-size:38px; }
+    }
+
+    /* ==== PRINT: 3 images per A4 page ==== */
+@page{
+  size: A4 portrait;
+  margin: 12mm; /* চাইলে 10–15mm টুইক করুন */
+}
+
+@media print{
+  /* স্ক্রিন-ওনলি জিনিস লুকান */
+  .nav_bar,
+  .search-box,
+  .back-home,
+  .lightbox { display:none !important; }
+
+  html, body{
+    background:#fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* বক্স শ্যাডো/বর্ডার হালকা রাখা */
+  .section-box, .card{
+    box-shadow:none !important;
+    border-color:#ddd !important;
+  }
+
+  /* গ্রিড: এক কলাম, কম গ্যাপ */
+  #imgGrid.grid{
+    display:block !important; /* স্ট্যাটিক ফ্লোতে ফেলি যাতে ব্রেক ভালো কাজ করে */
+  }
+
+  /* প্রতিটি কার্ড = একটি ছবি ব্লক */
+  .card{
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin: 0 0 6mm 0;   /* ব্লকগুলোর মধ্যে গ্যাপ */
+    padding: 0 !important;
+    border: none !important;
+    background: #fff !important;
+  }
+
+  /* থাম্ব + ইমেজ: A4 usable height ~ 297-2*12 = 273mm
+     3 ভাগে ~91mm; শিরোনাম/গ্যাপ ধরে max-height ~85mm */
+  .thumb{
+    height: auto !important;
+    margin: 0 0 2mm 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+  }
+  .thumb img{
+    width:100% !important;
+    height:auto !important;
+    object-fit:contain !important;
+    max-height:85mm !important;   /* দরকার হলে 80–88mm টুইক করুন */
+    display:block;
+  }
+
+  /* ক্যাপশন (টাইটেল) ছোট করে দেখান; চাইলে লুকাতেও পারেন */
+  .title{
+    font-size:12px !important;
+    text-align:center !important;
+    margin: 1mm 0 0 0 !important;
+    color:#000 !important;
+  }
+
+  /* বাটন/অ্যাকশন লুকান */
+  .actions, .badge { display:none !important; }
+
+  /* প্রতি ৩টি কার্ডের পর নতুন পৃষ্ঠা */
+  .card:nth-of-type(3n){
+    break-after: page;
+    page-break-after: always;
+    margin-bottom: 0 !important;
+  }
+
+  /* শেষ কার্ডে বাড়তি ব্রেক নয় */
+  .card:last-child{
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  /* বাইরের প্যাডিং কমিয়ে ফিট নিশ্চিত করা */
+  .main-section, .wrap, .section-box{
+    padding:0 !important;
+    margin:0 !important;
+    background:#fff !important;
+    border:none !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="nav_bar" id="navbar" aria-label="প্রধান নেভিগেশন">
+    <div class="nav-links" id="navLinks">
+      <a href="#school-info">বিদ্যালয়ের তথ্য</a>
+      <a href="#teachers">শিক্ষক</a>
+      <a href="#students">শিক্ষার্থী</a>
+      <a href="#results">ফলাফল</a>
+      <a href="#notices">নোটিশ বোর্ড</a>
+      <a href="#gallery" class="active">গ্যালারি</a>
+      <a href="#admission">ভর্তি</a>
+      <a href="#advice">পরামর্শ</a>
+
+      <!-- Dropdown -->
+      <div class="dropdown" id="dropdown">
+        <a id="othersMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-controls="othersPanel">অন্যান্য ▼</a>
+        <div class="dropdown-content" id="othersPanel" role="menu" aria-label="অন্যান্য">
+          <a href="#sub1" role="menuitem">সাব-মেনু ১</a>
+          <a href="#sub2" role="menuitem">সাব-মেনু ২</a>
+          <a href="#sub3" role="menuitem">সাব-মেনু ৩</a>
+          <a href="#sub4" role="menuitem">সাব-মেনু ৪</a>
+          <a href="#sub5" role="menuitem">সাব-মেনু ৫</a>
+        </div>
+      </div>
+
+      <a href="#contact">যোগাযোগ</a>
+    </div>
+
+    <div class="search-box">
+      <input type="text" placeholder="অনুসন্ধান করুন..." id="searchInput" aria-label="সার্চ">
+      <button type="button" id="searchBtn" aria-label="সার্চ করুন">🔍</button>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="মেনু টগল" aria-expanded="false" aria-controls="navLinks">☰</button>
+  </nav>
+
+  <!-- Back to Home Button -->
+  <a href="index.html" class="back-home" aria-label="হোমে ফিরে যান">🏠 হোম</a>
+
+  <!-- IMAGE GALLERY -->
+  <section id="gallery">
+    <div class="wrap">
+      <div class="section-box">
+        <h2 class="section-main-header">🎵 প্রাথমিক সিলেবাসের ১২টি গানের কথা</h2>
+        <div id="imgGrid" class="grid"></div>
+      </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lbTitle">
+      <div class="lb-shell">
+        <div class="lb-header">
+          <div class="lb-title" id="lbTitle">Image</div>
+          <div class="ctrls">
+            <button class="ctrl-btn" id="zoomOut" title="জুম আউট ( - )">−</button>
+            <button class="ctrl-btn" id="zoomIn" title="জুম ইন ( + )">＋</button>
+            <button class="ctrl-btn" id="zoomReset" title="রিসেট ( 1:1 )">1:1</button>
+            <a class="ctrl-btn primary" id="downloadBtn" href="#" download title="ডাউনলোড">⬇ ডাউনলোড</a>
+            <button class="ctrl-btn danger" id="lbCloseTop" title="বন্ধ করুন">✖</button>
+          </div>
+        </div>
+
+        <div class="lb-stage" id="lbStage">
+          <img id="lbImg" class="lb-img" alt="" loading="lazy">
+          <div class="lb-arrow left" id="arrowLeft" aria-label="পূর্বের">⟨</div>
+          <div class="lb-arrow right" id="arrowRight" aria-label="পরের">⟩</div>
+          <div class="hint">ডাবল-ক্লিক: জুম / মাউস হুইল: জুম / ড্র্যাগ: প্যান / ← → : নেভিগেট / Esc: বন্ধ</div>
+        </div>
+
+        <div class="lb-footer">
+          <div class="lb-counter" id="lbCounter">1 / 12</div>
+          <div class="ctrls">
+            <button class="ctrl-btn" id="lbPrev">⟨ পূর্বের</button>
+            <button class="ctrl-btn" id="lbNext">পরের ⟩</button>
+            <button class="ctrl-btn danger" id="lbClose">বন্ধ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Script -->
+  <script>
+    const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menuToggle');
+    const dropdown = document.getElementById('dropdown');
+    const othersMenu = document.getElementById('othersMenu');
+    const navLinksContainer = document.getElementById('navLinks');
+    const navLinks = navLinksContainer.querySelectorAll('a[href^="#"]');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+
+    // Menu helpers
+    function openMenu(){
+      navbar.classList.add('active');
+      menuToggle.textContent = '✖';
+      menuToggle.classList.add('rotated');
+      menuToggle.setAttribute('aria-expanded','true');
+    }
+    function closeMenu(){
+      navbar.classList.remove('active');
+      menuToggle.textContent = '☰';
+      menuToggle.classList.remove('rotated');
+      menuToggle.setAttribute('aria-expanded','false');
+      dropdown.classList.remove('active');
+      othersMenu.setAttribute('aria-expanded','false');
+    }
+    function toggleMenu(){ navbar.classList.contains('active') ? closeMenu() : openMenu(); }
+    menuToggle.addEventListener('click', (e)=>{ e.stopPropagation(); toggleMenu(); });
+
+    // Dropdown (mobile)
+    function toggleDropdown(e){
+      if (window.innerWidth <= 768){
+        e.preventDefault();
+        e.stopPropagation();
+        const willBeActive = !dropdown.classList.contains('active');
+        dropdown.classList.toggle('active');
+        othersMenu.setAttribute('aria-expanded', willBeActive ? 'true' : 'false');
+      }
+    }
+    othersMenu.addEventListener('click', toggleDropdown);
+    othersMenu.addEventListener('keydown', (e)=>{ if (e.key==='Enter' || e.key===' ') toggleDropdown(e); });
+
+    // Close on link click (mobile)
+    navLinks.forEach(link=>{
+      link.addEventListener('click', ()=>{ if (window.innerWidth <= 768){ setTimeout(closeMenu,300); }});
+    });
+
+    // Click outside to close (mobile)
+    document.addEventListener('click', (e)=>{
+      if (window.innerWidth <= 768 && !navbar.contains(e.target) && navbar.classList.contains('active')) closeMenu();
+    });
+
+    // Search
+    function handleSearch(){
+      const query = searchInput.value.trim();
+      if (query){
+        alert(`অনুসন্ধান: "${query}"\nএই বৈশিষ্ট্যটি শীঘ্রই যোগ করা হবে।`);
+        searchInput.value = '';
+      } else {
+        alert('অনুগ্রহ করে অনুসন্ধানের জন্য কিছু লিখুন।');
+      }
+    }
+    searchBtn.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keypress', (e)=>{ if(e.key==='Enter') handleSearch(); });
+
+    // Navbar scroll effect
+    function onScroll(){ navbar.classList.toggle('scrolled', window.scrollY > 50); }
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('orientationchange', onScroll);
+    window.addEventListener('resize', ()=>{ if (window.innerWidth > 768){ closeMenu(); }});
+    document.addEventListener('DOMContentLoaded', ()=>{ closeMenu(); onScroll(); });
+
+    // ====== GALLERY DATA ======
+    const IMAGES = [
+      { title: "জাতীয় সঙ্গীত", src: "primary-song-pdf/jatio-songit.jpg", alt: "জাতীয় সঙ্গীত - আমার সোনার বাংলা" },
+      { title: "একুশে ফেব্রুয়ারি", src: "primary-song-pdf/amar-vaiyer-rokte.jpg", alt: "একুশে ফেব্রুয়ারি - ভাষা আন্দোলনের গান" },
+      { title: "আমরা করবো জয়", src: "primary-song-pdf/amra-korbo-joy.jpg", alt: "আমরা করবো জয় - অনুপ্রেরণার গান" },
+      { title: "আমরা সবাই রাজা", src: "primary-song-pdf/amra-sobai-raja.jpg", alt: "আমরা সবাই রাজা - শিশুদের অধিকারের গান" },
+      { title: "চল চল চল", src: "primary-song-pdf/chol-chol-chol.jpg", alt: "চল চল চল - উৎসাহের গান" },
+      { title: "এই সুন্দর ফুল", src: "primary-song-pdf/ei-sundor-ful.jpg", alt: "এই সুন্দর ফুল - প্রকৃতি প্রেমের গান" },
+      { title: "নিজের হাতে কাজ", src: "primary-song-pdf/nijer-hate.jpg", alt: "নিজের হাতে কাজ - পরিশ্রমের গান" },
+      { title: "প্রজাপতি প্রজাপতি", src: "primary-song-pdf/projapoti.jpg", alt: "প্রজাপতি প্রজাপতি - শিশুতোষ গান" },
+      { title: "রক্ত দিয়ে নাম", src: "primary-song-pdf/rokto-diye-nam.jpg", alt: "রক্ত দিয়ে নাম - দেশপ্রেমের গান" },
+      { title: "আনন্দলোকে", src: "primary-song-pdf/anondoloke.jpg", alt: "আনন্দলোকে - রবীন্দ্র সংগীত" },
+      { title: "ধন ধান্যে পুষ্পে ভরা", src: "primary-song-pdf/dhonodhanne.jpg", alt: "ধন ধান্যে পুষ্পে ভরা - দেশাত্মবোধক" },
+      { title: "আল্লাহ মেঘ দেন", src: "primary-song-pdf/allah-megh-den.jpg", alt: "আল্লাহ মেঘ দেন - কৃষিকাজের গান" }
+    ];
+
+    // ====== RENDER GRID ======
+    const grid = document.getElementById('imgGrid');
+    function renderGrid() {
+      grid.innerHTML = IMAGES.map((img, i) => `
+        <article class="card">
+          <div class="thumb">
+            <span class="badge">${String(i+1).padStart(2, '0')}</span>
+            <img loading="lazy" src="${img.src}" alt="${img.alt || img.title}">
+          </div>
+          <div class="title">${img.title}</div>
+          <div class="actions">
+            <button type="button" class="btn primary view-btn" data-index="${i}">ওপেন</button>
+            <a class="btn" href="${img.src}" download>ডাউনলোড</a>
+          </div>
+        </article>
+      `).join('');
+    }
+    renderGrid();
+
+    // ====== LIGHTBOX / ZOOM LOGIC ======
+    const lb = document.getElementById('lightbox');
+    const lbStage = document.getElementById('lbStage');
+    const lbImg = document.getElementById('lbImg');
+    const lbTitle = document.getElementById('lbTitle');
+    const lbCounter = document.getElementById('lbCounter');
+    const lbClose = document.getElementById('lbClose');
+    const lbCloseTop = document.getElementById('lbCloseTop');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    const arrowLeft = document.getElementById('arrowLeft');
+    const arrowRight = document.getElementById('arrowRight');
+    const zoomInBtn = document.getElementById('zoomIn');
+    const zoomOutBtn = document.getElementById('zoomOut');
+    const zoomResetBtn = document.getElementById('zoomReset');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let current = 0;
+    let scale = 1, minScale = 1, maxScale = 6;
+    let dx = 0, dy = 0; // translation
+    let isDragging = false, startX = 0, startY = 0;
+
+    function applyTransform(){
+      lbImg.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(${scale})`;
+    }
+    function setCounter(){ lbCounter.textContent = `${current+1} / ${IMAGES.length}`; }
+    function setTitle(){ lbTitle.textContent = IMAGES[current].title || 'Image'; }
+    function setDownload(){ downloadBtn.href = IMAGES[current].src; downloadBtn.setAttribute('download', (IMAGES[current].title||`image-${current+1}`)+'.jpg'); }
+
+    function openLB(index){
+      current = index;
+      scale = 1; dx = 0; dy = 0;
+      lbImg.src = IMAGES[current].src;
+      lbImg.alt = IMAGES[current].alt || IMAGES[current].title || 'Image';
+      setTitle(); setCounter(); setDownload();
+      applyTransform();
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLB(){
+      lb.classList.remove('open');
+      lbImg.src = '';
+      document.body.style.overflow = '';
+    }
+    function nextLB(){ openLB((current + 1) % IMAGES.length); }
+    function prevLB(){ openLB((current - 1 + IMAGES.length) % IMAGES.length); }
+
+    // Grid click open
+    grid.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.view-btn');
+      if(btn){ openLB(parseInt(btn.dataset.index, 10)); }
+    });
+
+    // Close handlers
+    [lbClose, lbCloseTop].forEach(b => b.addEventListener('click', closeLB));
+    lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
+
+    // Arrows & footer nav
+    lbNext.addEventListener('click', nextLB);
+    lbPrev.addEventListener('click', prevLB);
+    arrowRight.addEventListener('click', nextLB);
+    arrowLeft.addEventListener('click', prevLB);
+
+    // Keyboard
+    document.addEventListener('keydown', (e)=>{
+      if(!lb.classList.contains('open')) return;
+      if(e.key === 'Escape') closeLB();
+      if(e.key === 'ArrowRight') nextLB();
+      if(e.key === 'ArrowLeft') prevLB();
+      if(e.key === '+') zoomBy(1.2);
+      if(e.key === '-') zoomBy(1/1.2);
+      if(e.key === '0') resetZoom();
+    });
+
+    // Zoom Buttons
+    function zoomBy(factor, centerX=null, centerY=null){
+      const newScale = Math.min(maxScale, Math.max(minScale, scale * factor));
+      if(newScale === scale) return;
+
+      // Zoom to cursor position (if provided)
+      if(centerX !== null && centerY !== null){
+        // Convert stage coords to image local shift
+        const rect = lbStage.getBoundingClientRect();
+        const cx = centerX - rect.left - rect.width/2 - dx;
+        const cy = centerY - rect.top - rect.height/2 - dy;
+        dx -= cx * (newScale/scale - 1);
+        dy -= cy * (newScale/scale - 1);
+      }
+
+      scale = newScale;
+      applyTransform();
+    }
+    function resetZoom(){
+      scale = 1; dx = 0; dy = 0; applyTransform();
+    }
+    zoomInBtn.addEventListener('click', ()=>zoomBy(1.2, lbStage.clientWidth/2, lbStage.clientHeight/2));
+    zoomOutBtn.addEventListener('click', ()=>zoomBy(1/1.2, lbStage.clientWidth/2, lbStage.clientHeight/2));
+    zoomResetBtn.addEventListener('click', resetZoom);
+
+    // Wheel zoom
+    lbStage.addEventListener('wheel', (e)=>{
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.15 : 1/1.15;
+      zoomBy(factor, e.clientX, e.clientY);
+    }, { passive:false });
+
+    // Drag to pan
+    lbStage.addEventListener('mousedown', (e)=>{
+      isDragging = true; startX = e.clientX; startY = e.clientY;
+      lbStage.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', (e)=>{
+      if(!isDragging) return;
+      dx += (e.clientX - startX);
+      dy += (e.clientY - startY);
+      startX = e.clientX; startY = e.clientY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', ()=>{ isDragging = false; lbStage.style.cursor = 'default'; });
+
+    // Double click to toggle zoom
+    lbStage.addEventListener('dblclick', (e)=>{
+      if(scale === 1){ zoomBy(2, e.clientX, e.clientY); }
+      else { resetZoom(); }
+    });
+
+    // Touch pinch-zoom & pan (basic)
+    let touchMode = { active:false, distance:0, center:[0,0], lastX:0, lastY:0, fingers:0 };
+    function getTouches(e){ return Array.from(e.touches).map(t=>({ x:t.clientX, y:t.clientY })); }
+    function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
+    function mid(a,b){ return [(a.x+b.x)/2,(a.y+b.y)/2]; }
+
+    lbStage.addEventListener('touchstart', (e)=>{
+      touchMode.fingers = e.touches.length;
+      if(e.touches.length === 2){
+        e.preventDefault();
+        const [p1,p2] = getTouches(e);
+        touchMode.active = true;
+        touchMode.distance = dist(p1,p2);
+        touchMode.center = mid(p1,p2);
+      } else if(e.touches.length === 1){
+        touchMode.lastX = e.touches[0].clientX;
+        touchMode.lastY = e.touches[0].clientY;
+      }
+    }, { passive:false });
+
+    lbStage.addEventListener('touchmove', (e)=>{
+      if(e.touches.length === 2){
+        e.preventDefault();
+        const [p1,p2] = getTouches(e);
+        const newDist = dist(p1,p2);
+        const factor = newDist / (touchMode.distance || newDist);
+        const [cx,cy] = mid(p1,p2);
+        zoomBy(factor, cx, cy);
+        touchMode.distance = newDist;
+      } else if(e.touches.length === 1 && scale > 1){
+        const x = e.touches[0].clientX;
+        const y = e.touches[0].clientY;
+        dx += (x - touchMode.lastX);
+        dy += (y - touchMode.lastY);
+        touchMode.lastX = x; touchMode.lastY = y;
+        applyTransform();
+      }
+    }, { passive:false });
+
+    lbStage.addEventListener('touchend', ()=>{
+      touchMode.active = false; touchMode.fingers = 0;
+    });
+
+    // Open from grid
+    grid.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.view-btn');
+      if(btn) openLB(parseInt(btn.dataset.index,10));
+    });
+
+    // Keyboard hints also work
+    document.addEventListener('keydown', (e)=>{
+      if(!lb.classList.contains('open')) return;
+      if(e.key === 'Escape') closeLB();
+      if(e.key === 'ArrowRight') nextLB();
+      if(e.key === 'ArrowLeft') prevLB();
+    });
+
+    // Build grid initially
+    renderGrid();
+
+    // Delegate click from cards (image click also open)
+    grid.addEventListener('click', (e)=>{
+      const cardImg = e.target.closest('.thumb img');
+      if(cardImg){
+        const src = cardImg.getAttribute('src');
+        const idx = IMAGES.findIndex(it=>it.src===src);
+        if(idx>-1) openLB(idx);
+      }
+    });
+  </script>
+</body>
+</html>
+>>>>>>> 3ba20fb (Add all project files including images)
