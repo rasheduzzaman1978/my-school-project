@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="school_image/school_logo.jpg" type="image/x-icon">
+  <title>school-result-schoolarship</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    /* === Palette === */
+    :root{
+      --text:#113D43;
+      --body1:#F0F2BD; --body2:#B8CFCE;
+      --card1:#DDF6D2; --card2:#C8E6C9;
+      --accent:#4CAF50; --accent-2:#45a049;
+      --ring:#C8E6C9;
+      --shadow:0 4px 15px rgba(0,0,0,.10);
+      --br:16px; --br-sm:12px; --speed:.25s;
+    }
+
+    body{
+      font-family:"Noto Sans Bengali","SutonnyMJ","Kalpurush",Arial,sans-serif;
+      background:linear-gradient(135deg,var(--body1) 0%,var(--body2) 100%);
+      min-height:100vh; line-height:1.6; color:var(--text);
+    }
+
+    /* ===== NAVBAR ===== */
+    .nav_bar{
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,var(--card1) 0%,var(--card2) 100%);
+      padding:0 20px; position:sticky; top:0; z-index:1000;
+      box-shadow:var(--shadow); backdrop-filter:blur(10px);
+      transition:all .3s ease; animation:fadeInUp .6s ease-out;
+    }
+    .nav_bar::before{content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); z-index:-1}
+
+    .nav-links{display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:relative; justify-content:center}
+    .nav_bar a{
+      color:var(--text); font-size:20px; font-weight:500; padding:12px 16px; text-decoration:none;
+      transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; border-radius:8px; position:relative; overflow:hidden;
+    }
+    .nav_bar a::before{content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .5s ease}
+    .nav_bar a:hover::before{left:100%}
+    .nav_bar a:hover{background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; transform:none; box-shadow:0 4px 12px rgba(76,175,80,.25)}
+    .nav_bar a:active{transform:translateY(0)}
+
+    /* Dropdown */
+    .dropdown{position:relative; display:inline-block}
+    .dropdown > a{cursor:pointer}
+    .dropdown-content{
+      display:none; position:absolute; background:linear-gradient(135deg,#E8F5E9 0%,var(--card2) 100%);
+      min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.2); border-radius:8px; z-index:1001; overflow:hidden; transform:translateY(10px);
+      opacity:0; transition:all .3s ease;
+    }
+    .dropdown-content a{display:block; padding:12px 16px; font-size:16px; color:var(--text); text-decoration:none; transition:all .3s ease}
+    .dropdown-content a:hover{background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; transform:none}
+
+    @media (min-width:769px){
+      .dropdown:hover .dropdown-content{display:block; transform:translateY(0); opacity:1}
+      .nav_bar a{display:inline-flex; align-items:center; height:48px; will-change:transform}
+    }
+
+    /* Search Box (ডেস্কটপে থাকবে, মোবাইলে লুকানো) */
+    .search-box{
+      display:flex; align-items:center; background:#fff; border-radius:25px; overflow:hidden;
+      box-shadow:0 3px 10px rgba(0,0,0,.1); transition:all .3s ease;
+      position:absolute; right:20px; top:50%; transform:translateY(-50%);
+    }
+    .search-box input{padding:8px 16px; border:none; font-size:16px; outline:none; background:transparent; width:200px; font-family:inherit}
+    .search-box input::placeholder{color:#999}
+    .search-box button{padding:8px 13px; border:none; background:linear-gradient(135deg,#FEA405,#FF9800); color:#fff; cursor:pointer; font-size:16px; transition:all .3s ease; display:flex; align-items:center; justify-content:center}
+    .search-box button:hover{background:linear-gradient(135deg,#FF9800,#F57C00); transform:scale(1.05)}
+    @media (max-width:768px){ .search-box{ display:none; } }
+
+    /* Hamburger */
+    .menu-toggle{display:none; font-size:24px; color:#386641; cursor:pointer; padding:8px; border-radius:8px; transition:all .3s ease; background:rgba(255,255,255,.1)}
+    .menu-toggle:hover{background:rgba(255,255,255,.2); transform:scale(1.1)}
+    .menu-toggle.rotated{transform:rotate(180deg); transition:transform .3s ease}
+
+    /* Scroll effect */
+    .nav_bar.scrolled{background:rgba(221,246,210,.95); backdrop-filter:blur(15px)}
+
+    /* Back to Home */
+    .back-home{
+      position:fixed; right:18px; bottom:18px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px; border-radius:999px; text-decoration:none;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; font-weight:700;
+      box-shadow:0 6px 18px rgba(76,175,80,.28);
+      z-index:3500;
+    }
+    .back-home:focus,.back-home:hover{transform:translateY(-1px); box-shadow:0 12px 28px rgba(76,175,80,.35);}
+
+    /* ===== RESPONSIVE (nav links only) ===== */
+    @media (max-width:768px){
+      .nav_bar{flex-direction:column; align-items:center; padding:15px 20px 0; justify-content:center}
+      .menu-toggle{display:block; position:absolute; top:15px; right:20px}
+      .nav-links{flex-direction:column; width:100%; max-height:0; overflow:hidden; transition:max-height .5s ease-out; align-items:center;}
+      .nav_bar.active .nav-links{max-height:850px; padding-bottom:5px}
+      .nav_bar a{
+        display:block; width:80%; text-align:center; padding:8px; margin:3px auto; border-radius:10px;
+        background:rgba(255,255,255,.1); backdrop-filter:blur(5px);
+        transform:translateX(-100px); opacity:0; transition:all .4s cubic-bezier(.4,0,.2,1);
+      }
+      .nav_bar.active a{transform:translateX(0); opacity:1}
+      .dropdown{width:80%;}
+      .dropdown-content{position:static; display:none; width:100%; box-shadow:none; background:rgba(255,255,255,.1); margin:5px 0; border-radius:8px; transform:none; opacity:1; transition:none;}
+      .dropdown.active .dropdown-content{display:block}
+      .dropdown-content a{padding:10px 15px; text-align:center; font-size:15px}
+    }
+
+    /* Animations */
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)}}
+    @media (prefers-reduced-motion: reduce){
+      .nav_bar a, .dropdown-content, .search-box, .menu-toggle {transition:none !important}
+    }
+
+    /* ===== Main Section ===== */
+    .main-section{
+      background:#fff;
+      border-radius:12px;
+      padding:30px 40px;
+      box-shadow:0 4px 20px rgba(0,0,0,.1);
+      display:flex;
+      flex-direction:column;
+      gap:30px;
+      margin:30px auto;
+      max-width:1200px;
+    }
+
+    /* Section-box: বাম পাশে বর্ডার */
+    .section-box {
+      border-left:4px solid #4CAF50;
+      padding-left: 20px;
+      border-radius:10px 0 0 10px;
+      background:transparent;
+    }
+
+    /* হেডিং স্টাইল */
+    .section-main-header{
+      display:flex;align-items:center;justify-content:center;
+      font-size:30px;font-weight:700;color:#1a4b5f;
+      border-bottom:3px solid #3498db;
+      padding-bottom:12px;margin-bottom:8px;
+      background:linear-gradient(to right,#eaf6ff,#fff);
+      border-radius:8px;
+      text-shadow:1px 1px 2px rgba(0,0,0,.1)
+    }
+
+    /* === .div-container: পেইজের মাঝে (centered), উপরে 60px, LR auto === */
+    .div-container{
+      max-width:900px;
+      margin:40px auto 24px;
+      padding:10px 12px;
+      background:linear-gradient(135deg, rgba(221,246,210,.30) 0%, rgba(200,230,201,.30) 100%);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:var(--br);
+      box-shadow:inset 0 3px 8px rgba(0,0,0,.03), inset 0 -3px 8px rgba(0,0,0,.02), 0 6px 18px rgba(0,0,0,.06);
+    }
+    @media (max-width:1200px){ .div-container{ margin:60px 20px 24px; } }
+    @media (max-width:600px) { .div-container{ margin:60px 12px 20px; padding:8px 10px; } }
+
+    /* === Inner wrapper (now minimal spacing) === */
+    #exam-results-wrapper{max-width:100%; margin:0 auto; padding:0;}
+
+    /* === Grid layout === */
+    .grid{
+      display:grid; gap:10px;
+      grid-template-columns:2fr 1fr;
+      align-items:start;
+    }
+    @media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+
+    /* === Cards === */
+    .card{
+      background:linear-gradient(135deg,var(--card1) 0%, var(--card2) 100%);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:var(--br);
+      box-shadow:var(--shadow);
+      padding:10px;
+      color:var(--text);
+    }
+    .card-title{margin:0 0 8px 0; font-size:17px; font-weight:900; display:flex; align-items:center; gap:8px;}
+
+    /* Left: Results Menu */
+    .btn{
+      appearance:none; border:1px solid var(--card2); background:#fff;
+      border-radius:var(--br-sm); padding:9px 11px;
+      font-weight:800; color:var(--text); width:100%;
+      display:flex; align-items:center; justify-content:space-between; gap:8px;
+      box-shadow:0 2px 0 rgba(0,0,0,.03), 0 8px 16px rgba(0,0,0,.06);
+      cursor:pointer; transition:transform var(--speed), box-shadow var(--speed), background var(--speed), color var(--speed);
+    }
+    .btn:hover{transform:translateY(-1px); box-shadow:0 10px 18px rgba(0,0,0,.10); background:linear-gradient(135deg,#fff,#F6FFF6)}
+    .btn:focus-visible{outline:3px solid var(--ring); outline-offset:2px}
+    .chev{font-weight:900; transition:transform var(--speed)}
+    .rot{transform:rotate(90deg)}
+    .panel{display:none; margin-top:8px;}
+    .panel.show{display:block; animation:fadeIn var(--speed) ease both}
+    @keyframes fadeIn{from{opacity:0; transform:translateY(-4px)} to{opacity:1; transform:translateY(0)}}
+
+    .year{
+      border:1px solid rgba(0,0,0,.06); border-radius:var(--br-sm); overflow:hidden;
+      background:linear-gradient(180deg,#FDFEFB 0%, #F4FBF6 100%); margin-bottom:6px;
+    }
+    .year-head{
+      width:100%; background:transparent; border:0; padding:9px 11px; text-align:left;
+      cursor:pointer; font-weight:800; display:flex; align-items:center; justify-content:space-between; color:var(--text);
+    }
+    .year-head:hover{background:rgba(17,61,67,.06)}
+    .year-head:focus-visible{outline:3px solid var(--ring); outline-offset:2px}
+    .year-body{display:none; border-top:1px dashed rgba(0,0,0,.10); background:#fff}
+    .year-body.show{display:block}
+
+    .class-list{
+      padding:8px; display:grid; gap:6px;
+      grid-template-columns:repeat(auto-fit, minmax(120px,1fr));
+      max-width:380px;
+    }
+    .class-list a{
+      text-decoration:none; color:var(--text); font-weight:700;
+      border:1px solid var(--card2); border-radius:10px; padding:7px 9px; background:#fff;
+      display:inline-flex; align-items:center; gap:6px;
+      transition:transform var(--speed), box-shadow var(--speed), border-color var(--speed), background var(--speed), color var(--speed);
+      box-shadow:0 2px 0 rgba(0,0,0,.02), 0 8px 16px rgba(0,0,0,.05);
+    }
+    .class-list a:hover{
+      transform:translateY(-1px);
+      border-color:rgba(76,175,80,.40);
+      box-shadow:0 12px 22px rgba(76,175,80,.16);
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:#fff;
+    }
+    .badge{
+      font-size:11px; font-weight:900; color:#fff;
+      background:linear-gradient(180deg,var(--accent),var(--accent-2));
+      padding:2px 7px; border-radius:999px; box-shadow:0 6px 12px rgba(46,125,50,.22);
+    }
+
+    /* Right: Scholarship Card */
+    .scholar-wrap{
+      display:flex; flex-direction:column; gap:8px;
+      background:linear-gradient(135deg,var(--card1) 0%, var(--card2) 100%);
+      border:1px solid rgba(0,0,0,.06); border-radius:var(--br); padding:10px;
+      box-shadow:var(--shadow); color:var(--text);
+    }
+    .scholar-text{margin:0; color:#2b5a54; line-height:1.5}
+    .scholar-btn{
+      text-decoration:none; color:#fff; font-weight:900; text-align:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      border:1px solid rgba(76,175,80,.25);
+      padding:9px 14px; border-radius:999px;
+      display:inline-flex; align-items:center; gap:8px; justify-content:center;
+      box-shadow:0 8px 18px rgba(76,175,80,.25);
+      transition:transform var(--speed), box-shadow var(--speed), filter var(--speed);
+      white-space:nowrap;
+    }
+    .scholar-btn:hover{transform:translateY(-1px); filter:brightness(1.03); box-shadow:0 16px 30px rgba(76,175,80,.28)}
+    .scholar-btn:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
+
+    /* ==== Extra action section (container-এর ভিতরে নীচে) ==== */
+    .extra-action{
+      margin-top:14px;
+      padding:12px;
+      background:linear-gradient(135deg,var(--card1) 0%, var(--card2) 100%);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:var(--br);
+      box-shadow:var(--shadow);
+      padding:10px;
+      color:var(--text);
+      text-align:center;
+    }
+
+    .extra-action p{
+      margin:0 0 10px 0;
+      font-weight:800;
+      color:#2b5a54;
+    }
+    .check-btn{
+      appearance:none; border:1px solid rgba(76,175,80,.25);
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:#fff; font-weight:900;
+      padding:10px 18px; border-radius:999px; cursor:pointer;
+      box-shadow:0 10px 24px rgba(76,175,80,.25);
+      transition:transform var(--speed), box-shadow var(--speed), filter var(--speed);
+    }
+    .check-btn:hover{transform:translateY(-1px); filter:brightness(1.03); box-shadow:0 16px 32px rgba(76,175,80,.28)}
+    .check-btn:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="nav_bar" id="navbar" aria-label="প্রধান নেভিগেশন">
+    <div class="nav-links" id="navLinks">
+      <a href="#school-info">বিদ্যালয়ের তথ্য</a>
+      <a href="#teachers">শিক্ষক</a>
+      <a href="#students">শিক্ষার্থী</a>
+      <a href="#results">ফলাফল</a>
+      <a href="#notices">নোটিশ বোর্ড</a>
+      <a href="#gallery">গ্যালারি</a>
+      <a href="#admission">ভর্তি</a>
+      <a href="#advice">পরামর্শ</a>
+      <!-- Dropdown -->
+      <div class="dropdown" id="dropdown">
+        <a id="othersMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-controls="othersPanel">অন্যান্য ▼</a>
+        <div class="dropdown-content" id="othersPanel" role="menu" aria-label="অন্যান্য">
+          <a href="#sub1" role="menuitem">সাব-মেনু ১</a>
+          <a href="#sub2" role="menuitem">সাব-মেনু ২</a>
+          <a href="#sub3" role="menuitem">সাব-মেনু ৩</a>
+          <a href="#sub4" role="menuitem">সাব-মেনু ৪</a>
+          <a href="#sub5" role="menuitem">সাব-মেনু ৫</a>
+        </div>
+      </div>
+      <a href="#contact">যোগাযোগ</a>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="অনুসন্ধান করুন..." id="searchInput" aria-label="সার্চ">
+      <button type="button" id="searchBtn" aria-label="সার্চ করুন">🔍</button>
+    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="মেনু টগল" aria-expanded="false" aria-controls="navLinks">☰</button>
+  </nav>
+
+  <!-- Main Section -->
+  <section class="main-section" id="results">
+    <div class="section-box">
+      <div class="section-main-header">📊 ফলাফল</div>
+      <div class="div-container">
+        <div id="exam-results-wrapper">
+          <div class="grid">
+            <!-- Left: বিভিন্ন সালের পরীক্ষার ফলাফল -->
+            <div class="card" id="results-menu">
+              <h3 class="card-title">📊 বিভিন্ন সালের পরীক্ষার ফলাফল</h3>
+              <!-- Main trigger -->
+              <button id="mainTrigger" class="btn" aria-controls="mainPanel" aria-expanded="false" type="button">
+                <span>সাল ও শ্রেণি বাছাই করুন</span>
+                <span class="chev">▸</span>
+              </button>
+              <!-- Main panel -->
+              <div id="mainPanel" class="panel" aria-hidden="true">
+                <!-- 2024 -->
+                <div class="year">
+                  <button class="year-head" type="button" aria-controls="y2024" aria-expanded="false">
+                    <span>২০২৪ সালের ফলাফল</span>
+                    <span class="chev">▸</span>
+                  </button>
+                  <div id="y2024" class="year-body" aria-hidden="true">
+                    <div class="class-list">
+                      <a href="Marksheet 1 Print.pdf" target="_blank" rel="noopener"><span class="badge">১ম</span> শ্রেণি</a>
+                      <a href="Marksheet 2 Print.pdf" target="_blank" rel="noopener"><span class="badge">২য়</span> শ্রেণি</a>
+                      <a href="Marksheet 3 Print.pdf" target="_blank" rel="noopener"><span class="badge">৩য়</span> শ্রেণি</a>
+                      <a href="Marksheet 4 Print.pdf" target="_blank" rel="noopener"><span class="badge">৪র্থ</span> শ্রেণি</a>
+                      <a href="Marksheet 5 Print.pdf" target="_blank" rel="noopener"><span class="badge">৫ম</span> শ্রেণি</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- 2025 -->
+                <div class="year">
+                  <button class="year-head" type="button" aria-controls="y2025" aria-expanded="false">
+                    <span>২০২৫ সালের ফলাফল</span>
+                    <span class="chev">▸</span>
+                  </button>
+                  <div id="y2025" class="year-body" aria-hidden="true">
+                    <div class="class-list">
+                      <a href="result-c1-2025.pdf" target="_blank" rel="noopener"><span class="badge">১ম</span> শ্রেণি</a>
+                      <a href="Result c 2 2025.pdf" target="_blank" rel="noopener"><span class="badge">২য়</span> শ্রেণি</a>
+                      <a href="result-c3-2025.pdf" target="_blank" rel="noopener"><span class="badge">৩য়</span> শ্রেণি</a>
+                      <a href="result-c4-2025.pdf" target="_blank" rel="noopener"><span class="badge">৪র্থ</span> শ্রেণি</a>
+                      <a href="result-c5-2025.pdf" target="_blank" rel="noopener"><span class="badge">৫ম</span> শ্রেণি</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Right: বৃত্তিপ্রাপ্ত শিক্ষার্থীদের ফলাফল -->
+            <div class="card scholar-wrap" id="scholar-card">
+              <h3 class="card-title">🎓 বৃত্তিপ্রাপ্ত শিক্ষার্থীদের ফলাফল</h3>
+              <p class="scholar-text">এখানে ক্লিক করলে বৃত্তিপ্রাপ্তদের ফলাফল নতুন ট্যাবে পিডিএফ আকারে খুলবে।</p>
+              <a class="scholar-btn" href="schoolarship-result.html" target="_blank" rel="noopener">ফলাফল দেখুন</a>
+            </div>
+          </div>
+          <!-- Extra action section (div-container এর ভিতরে নীচে) -->
+          <div class="extra-action">
+            <p>শ্রেণি, রোল, শাখা, শিক্ষাবর্ষ দিয়ে মার্কশীটসহ ফলাফল চেক করুন</p>
+            <button class="check-btn" id="checkResultBtn" type="button">ফলাফল চেক করুন</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to Home Button -->
+  <a href="index.html" class="back-home" aria-label="হোমে ফিরে যান">🏠 হোম</a>
+
+  <script>
+    /* ===== Navbar ===== */
+    const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menuToggle');
+    const dropdown = document.getElementById('dropdown');
+    const othersMenu = document.getElementById('othersMenu');
+    const navLinksContainer = document.getElementById('navLinks');
+    const navLinks = navLinksContainer.querySelectorAll('a[href^="#"]');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+
+    function openMenu(){ navbar.classList.add('active'); menuToggle.textContent='✖'; menuToggle.classList.add('rotated'); menuToggle.setAttribute('aria-expanded','true'); }
+    function closeMenu(){ navbar.classList.remove('active'); menuToggle.textContent='☰'; menuToggle.classList.remove('rotated'); menuToggle.setAttribute('aria-expanded','false'); dropdown.classList.remove('active'); othersMenu.setAttribute('aria-expanded','false'); }
+    function toggleMenu(){ navbar.classList.contains('active') ? closeMenu() : openMenu(); }
+    menuToggle.addEventListener('click', (e)=>{ e.stopPropagation(); toggleMenu(); });
+
+    function toggleDropdown(e){
+      if (window.innerWidth <= 768){
+        e.preventDefault(); e.stopPropagation();
+        const willBeActive = !dropdown.classList.contains('active');
+        dropdown.classList.toggle('active');
+        othersMenu.setAttribute('aria-expanded', willBeActive ? 'true' : 'false');
+      }
+    }
+    othersMenu.addEventListener('click', toggleDropdown);
+    othersMenu.addEventListener('keydown', (e)=>{ if (e.key==='Enter' || e.key===' ') toggleDropdown(e); });
+
+    navLinks.forEach(link=>{ link.addEventListener('click', ()=>{ if (window.innerWidth <= 768){ setTimeout(closeMenu,300); } }); });
+    document.addEventListener('click', (e)=>{ if (window.innerWidth <= 768 && !navbar.contains(e.target) && navbar.classList.contains('active')) closeMenu(); });
+
+    function handleSearch(){
+      const query = searchInput.value.trim();
+      if (query){ alert(`অনুসন্ধান: "${query}"\nএই বৈশিষ্টটি শীঘ্রই যোগ করা হবে।`); }
+      else { alert('অনুগ্রহ করে অনুসন্ধানের জন্য কিছু লিখুন।'); }
+    }
+    searchBtn.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keypress', (e)=>{ if(e.key==='Enter') handleSearch(); });
+
+    // Smooth scroll (safety)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+      anchor.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+        if (!href || href === '#') return;
+        const target = document.getElementById(href.substring(1));
+        if (target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
+
+    function onScroll(){ navbar.classList.toggle('scrolled', window.scrollY > 50); }
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('orientationchange', onScroll);
+    window.addEventListener('resize', ()=>{ if (window.innerWidth > 768){ closeMenu(); }});
+    document.addEventListener('DOMContentLoaded', ()=>{ closeMenu(); onScroll(); });
+
+    /* ===== Results: Event Delegation ===== */
+    const resultsMenu = document.getElementById('results-menu');
+    function rotChevron(el, on){ const ic = el.querySelector('.chev'); if (ic) ic.classList.toggle('rot', !!on); }
+
+    resultsMenu.addEventListener('click', (e)=>{
+      const mainBtn = e.target.closest('#mainTrigger');
+      const yearHead = e.target.closest('.year-head');
+
+      if (mainBtn){
+        const panel = document.getElementById('mainPanel');
+        const open = !panel.classList.contains('show');
+        panel.classList.toggle('show', open);
+        mainBtn.setAttribute('aria-expanded', String(open));
+        panel.setAttribute('aria-hidden', String(!open));
+        rotChevron(mainBtn, open);
+        return;
+      }
+      if (yearHead){
+        const body = document.getElementById(yearHead.getAttribute('aria-controls'));
+        const open = !body.classList.contains('show');
+        body.classList.toggle('show', open);
+        yearHead.setAttribute('aria-expanded', String(open));
+        body.setAttribute('aria-hidden', String(!open));
+        rotChevron(yearHead, open);
+      }
+    });
+
+    /* ===== Extra action button ===== */
+    document.getElementById('checkResultBtn').addEventListener('click', ()=>{
+      alert('এই প্রক্রিয়াটি শীঘ্রই যুক্ত করা হবে।');
+    });
+  </script>
+</body>
+</html>
