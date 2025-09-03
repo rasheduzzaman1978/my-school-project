@@ -53,7 +53,7 @@ header{
 }
 .nav_bar a{
   color:#113D43; 
-  font-size: clamp(14px, 1vw, 16px); /* <-- FIX: responsive, capped */
+  font-size: clamp(16px, 1vw, 16px); /* <-- FIX: responsive, capped */
   font-weight:500; 
   padding:12px 16px; 
   text-decoration:none;
@@ -93,7 +93,7 @@ header{
 .search-box:focus-within{transform:scale(1.02); box-shadow:0 5px 20px rgba(0,0,0,.15)}
 .search-box input{
   padding:8px 16px; border:none; font-size:15px; outline:none; background:transparent; 
-  width: min(28rem, 32vw);    /* <-- FIX: sensible width on desktop */
+  width: 150px;
   font-family:inherit
 }
 .search-box input::placeholder{color:#999}
@@ -110,12 +110,12 @@ header{
 
 /* =============== RESPONSIVE (DESKTOP DOWN) =============== */
 @media (max-width: 1200px){
-  .search-box input{ width: min(22rem, 34vw); }
+  .search-box input{ width: 180px; }
 }
 @media (max-width: 1024px){
   .nav_bar a{ font-size: 15px; padding:10px 12px; }
   .dropdown-content{ min-width:180px; }
-  .search-box input{ width: min(18rem, 40vw); }
+  .search-box input{ width: 170px; }
 }
 
 /* ছোট স্ক্রিন: হেডার হাইড, মেনু ডিফল্ট ক্লোজ */
@@ -157,7 +157,7 @@ header{
     transition:all .3s ease; position:static;
   }
   .nav_bar.active .search-box{opacity:1; transform:translateY(0); transition-delay:.5s}
-  .search-box input{flex:1; width:auto}
+  .search-box input{flex:1; width:160px;}
 }
 
 @media (prefers-reduced-motion: reduce){
