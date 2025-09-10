@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="shortcut icon" href="school_image/school_logo.jpg" type="image/x-icon">
+  <title>ফলাফল চেক করুন</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+  <style>
+    :root{
+      --card-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      --border:#94a3b8;
+      --muted:#334155;
+      --bg:#f7fafc;
+      --primary:#0f766e;
+      --accent:#ef4444; 
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --err:#dc2626;
+    }
+    body {
+  font-family: 'Noto Sans Bengali', "SutonnyMJ", "Kalpurush", Arial, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+  margin: 0;
+  padding: 16px;
+  background: linear-gradient(135deg, #F0F2BD 0%, #B8CFCE 100%); /* Change the background color */
+  min-height: 100vh;
+  line-height: 1.6;
+  color: #113D43;
+}
+
+/* ===== BUTTONS ===== */
+button {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn {
+  background: #2563eb; /* Update button background color */
+  color: #fff;
+}
+
+.btn:hover {
+  background: #1e40af; /* Update button hover color */
+}
+
+.btn-secondary {
+  background: #0ea5e9; /* Update secondary button color */
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #0284c7; /* Update secondary button hover color */
+}
+
+/* ===== SECTIONS ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.grid > div {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background-color: #ffffff; /* Add background color for sections */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Optional: add shadow to section */
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+input, select {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 14px;
+  background: #fff;
+}
+
+input:focus, select:focus {
+  border-color: #0ea5e9; /* Add focus effect for input and select */
+  outline: none;
+}
+
+
+
+  /* ===== NAVBAR ===== */
+  .nav_bar{
+    display:flex; align-items:center; justify-content:space-between;
+    background:linear-gradient(135deg,#DDF6D2 0%,#C8E6C9 100%);
+    padding:0 20px; position:sticky; top:0; z-index:1000;
+    box-shadow:0 4px 15px rgba(0,0,0,.1); backdrop-filter:blur(10px);
+    transition:all .3s ease; animation:fadeInUp .6s ease-out;
+  }
+  .nav_bar::before{content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); z-index:-1}
+
+  .nav-links{display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:relative; justify-content:center; flex:1}
+  .nav_bar a{
+    color:#113D43; font-size:20px; font-weight:500; padding:12px 16px; text-decoration:none;
+    transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; border-radius:8px; position:relative; overflow:hidden;
+  }
+  .nav_bar a::before{content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .5s ease}
+  .nav_bar a:hover::before{left:100%}
+  .nav_bar a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none; box-shadow:0 4px 12px rgba(76,175,80,.25)}
+  .nav_bar a:active{transform:translateY(0)}
+
+  /* Dropdown */
+  .dropdown{position:relative; display:inline-block}
+  .dropdown > a{cursor:pointer}
+  .dropdown-content{
+    display:none; position:absolute; background:linear-gradient(135deg,#E8F5E9 0%,#C8E6C9 100%);
+    min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.2); border-radius:8px; z-index:1001; overflow:hidden; transform:translateY(10px);
+    opacity:0; transition:all .3s ease;
+  }
+  .dropdown-content a{display:block; padding:12px 16px; font-size:16px; color:#113D43; text-decoration:none; transition:all .3s ease}
+  .dropdown-content a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none}
+
+  /* Desktop hover */
+  @media (min-width:769px){
+    .dropdown:hover .dropdown-content{display:block; transform:translateY(0); opacity:1}
+    .nav_bar a{display:inline-flex; align-items:center; height:48px; will-change:transform}
+  }
+
+  /* Search Box */
+  .search-box{
+    display:flex; align-items:center; background:#fff; border-radius:25px; overflow:hidden;
+    box-shadow:0 3px 10px rgba(0,0,0,.1); transition:all .3s ease;
+    position:static;
+    transform:none;
+    margin-left:auto;
+  }
+  .search-box:focus-within{box-shadow:0 5px 20px rgba(0,0,0,.15)}
+  .search-box input{padding:8px 16px; border:none; font-size:16px; outline:none; background:transparent; width:200px; font-family:inherit}
+  .search-box input::placeholder{color:#999}
+  .search-box button{padding:8px 13px; border:none; background:linear-gradient(135deg,#FEA405,#FF9800); color:#fff; cursor:pointer; font-size:16px; transition:all .3স ease; display:flex; align-items:center; justify-content:center}
+  .search-box button:hover{background:linear-gradient(135deg,#FF9800,#F57C00); transform:scale(1.05)}
+
+  /* Hamburger */
+  .menu-toggle{display:none; font-size:24px; color:#386641; cursor:pointer; padding:8px; border-radius:8px; transition:all .3s ease; background:rgba(255,255,255,.1)}
+  .menu-toggle:hover{background:rgba(255,255,255,.2); transform:scale(1.1)}
+  .menu-toggle.rotated{transform:rotate(180deg); transition:transform .3s ease}
+
+  /* Scroll effect */
+  .nav_bar.scrolled{background:rgba(221,246,210,.95); backdrop-filter:blur(15px)}
+
+  /* ===== Back to Home (fixed) ===== */
+  .back-home{
+    position:fixed; right:18px; bottom:18px;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 14px; border-radius:999px; text-decoration:none;
+    background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; font-weight:700;
+    box-shadow:0 6px 18px rgba(76,175,80,.28);
+    z-index:3500;
+  }
+  .back-home:focus,.back-home:hover{transform:translateY(-1px); box-shadow:0 12px 28px rgba(76,175,80,.35);}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:1024px){
+    .search-box input{width:150px}
+    .nav_bar a{font-size:16px; padding:10px 12px}
+    .dropdown-content{min-width:180px}
+  }
+
+  @media (max-width:768px){
+    .nav_bar{flex-direction:column; align-items:center; padding:15px 20px 0; justify-content:center}
+    .menu-toggle{display:block; position:absolute; top:15px; right:20px}
+
+    .nav-links{
+      flex-direction:column; width:100%; max-height:0; overflow:hidden; transition:max-height .5s ease-out; align-items:center;
+    }
+    .nav_bar.active .nav-links{max-height:850px; padding-bottom:5px}
+
+    .nav_bar a{
+      display:block; width:80%; text-align:center; padding:8px; margin:3px auto; border-radius:10px;
+      background:rgba(255,255,255,.1); backdrop-filter:blur(5px);
+      transform:translateX(-100px); opacity:0; transition:all .4s cubic-bezier(.4,0,.2,1);
+    }
+    .nav_bar.active a{transform:translateX(0); opacity:1}
+
+    .dropdown{width:80%;}
+    .dropdown-content{position:static; display:none; width:100%; box-shadow:none; background:rgba(255,255,255,.1); margin:5px 0; border-radius:8px; transform:none; opacity:1; transition:none;}
+    .dropdown.active .dropdown-content{display:block}
+    .dropdown-content a{padding:10px 15px; text-align:center; font-size:15px}
+
+    .nav_bar.active .nav-links > a:nth-of-type(1){transition-delay:.05s}
+    .nav_bar.active .nav-links > a:nth-of-type(2){transition-delay:.1স}
+    .nav_bar.active .nav-links > a:nth-of-type(3){transition-delay:.15s}
+    .nav_bar.active .nav-links > a:nth-of-type(4){transition-delay:.2s}
+    .nav_bar.active .nav-links > a:nth-of-type(5){transition-delay:.25s}
+    .nav_bar.active .nav-links > a:nth-of-type(6){transition-delay:.3s}
+    .nav_bar.active .nav-links > a:nth-of-type(7){transition-delay:.35s}
+    .nav_bar.active .nav-links > a:nth-of-type(8){transition-delay:.4s}
+
+    .search-box{width:80%; margin:15px 0 10px; opacity:0; transform:translateY(-20px); transition:all .3s ease; position:static; right:auto; top:auto}
+    .nav_bar.active .search-box{opacity:1; transform:translateY(0); transition-delay:.5স}
+    .search-box input{flex:1; width:auto}
+  }
+
+  /* Animations (fade only; header removed) */
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)}}
+
+  @media (prefers-reduced-motion: reduce){
+    .nav_bar a, .dropdown-content, .search-box, .menu-toggle {transition:none !important}
+  }
+
+    .container { max-width: 1120px; margin: 0 auto; margin-top: 50px; }
+    .card { background: #fff; border-radius: 16px; box-shadow: var(--card-shadow); padding: 20px; }
+    .title { font-size: 24px; font-weight: 700; margin-bottom: 16px; text-align:center; }
+
+    .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+    .grid > div { display: flex; flex-direction: column; }
+    label { font-weight: 600; margin-bottom: 6px; }
+    input, select { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; background:#fff; }
+    button { padding: 12px 16px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; }
+    .btn { background: #2563eb; color: #fff; }
+    .btn-secondary { background: #0ea5e9; color: #fff; }
+    .status { display:flex; gap:8px; align-items:center; margin-bottom:12px; font-size:14px; }
+    .badge { padding:4px 10px; border-radius:999px; font-weight:700; }
+    .ok { background:#dcfce7; color:#166534; border:1px solid #86efac; }
+    .warn { background:#fef9c3; color:#854d0e; border:1px solid #fde68a; }
+    .err { background:#fee2e2; color:#991b1b; border:1px solid #fecaca; }
+    .small { font-size:12px; color:var(--muted); }
+
+    .sheet { background:#fff; border:1px solid var(--border); border-radius: 8px; padding: 14mm; margin-top: 16px; }
+    .sheet-inner{ width: 100%; max-width: 180mm; margin: 0 auto; }
+    .sheet-header{
+      display:grid; grid-template-columns: 22mm 1fr; align-items:center; gap:6mm; margin-bottom: 6mm;
+    }
+    .logo{ width:22mm; height:22mm; object-fit:contain; border-radius:4px; border:1px solid #e2e8f0; }
+    .school h1{ margin:0; font-size: 22pt; color: var(--primary); text-align:center; }
+    .school p{ margin:.5mm 0 0 0; color:#334155; text-align:center; }
+
+    .sheet-title{ text-align:center; margin: 2mm 0 4mm 0; }
+    .sheet-title .name{ display:inline-block; border:2px dotted #b45309; padding:2mm 6mm; border-radius:8px; font-size: 36px; font-weight:900; letter-spacing:.1px; text-align: center; color: #0f766e; }
+    .sheet-title .exam{ margin-top:2mm; color:var(--accent); font-size: 20px; font-weight:800; text-align: center; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border:1px solid var(--border); padding: 2.5mm 3mm; font-size: 11pt; line-height: 1.28; }
+    th { background:#f1f5f9; }
+    .meta-table { margin-top: 1.5mm; }
+    .subject-table { margin-top: 2mm; }
+    .subject-table th { text-align:center; }
+    .subject-table td{ text-align:center; }
+    .subject-table td:first-child{ width: 30%; text-align:left; }
+    .meta-table th{ text-align:left; }
+    .meta-table td{ text-align:center; }
+
+    .signatures{ display:flex; justify-content:space-between; margin-top: 15mm; font-size:13pt; color:#334155; gap:8px; }
+    .signatures .line{ width: 32%; text-align:center; }
+    .signatures .line::before{ content:""; display:block; border-top:1px solid #94a3b8; margin: 18mm 0 2mm 0; }
+
+    .print-footer{ display:none; }
+    .print-meta{ text-align:right; font-size:9pt; color:#475569; }
+    
+    @media print {
+  /* ——— শুধু প্রিন্টে টিউন ——— */
+  .card, .controls, .troubleshoot, .nav_bar, .back-home { display:none !important; }
+
+  /* এক পেজে ফিট করার জন্য হালকা স্কেল */
+  .sheet{ 
+    box-shadow:none; border-color:#cbd5e1;
+    zoom: 0.90;                  /* Chrome/Edge */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    page-break-inside: avoid;
+  }
+
+  /* Adjust header styles */
+  .school h1 {
+    font-size: 22pt; /* Header font size */
+    margin-top: 2mm; /* Decreased top margin */
+  }
+
+  .school p {
+    margin: .5mm 0 0 0;
+    font-size: 16pt; /* Increased font size */
+  }
+
+  .sheet-title .name {
+    font-size: 24px; /* Font size of the title */
+    padding: 1.5mm 6mm;
+  }
+
+  .sheet-title .exam {
+    font-size: 16px; 
+    margin-top: 1mm;
+  }
+
+  th, td {
+    font-size: 13pt; 
+    padding: 1.8mm 2.2mm; 
+    line-height: 1.22;
+  }
+
+  .subject-table td:first-child {
+    width: 34%; 
+  }
+
+  .signatures {
+    margin-top: 9mm;
+    font-size: 13pt;
+    gap:6px;
+  }
+
+  /* Footer adjustment */
+  .print-footer {
+    position: fixed;
+    bottom: 6mm;
+    left: 8mm;
+    right: 8mm;
+    text-align: right;
+    font-size: 10pt;
+    color: #475569;
+    display: block;
+  }
+
+  /* Signature styles */
+  .signatures {
+    margin-top: 9mm;
+    font-size: 13pt;
+    gap:6px;
+  }
+
+  .print-footer {
+    display:block;
+    position: fixed;
+    bottom: 6mm;
+    left: 8mm;
+    right: 8mm;
+    text-align:right;
+  }
+  .print-meta{ font-size:9pt; color:#475569; }
+}
+
+    
+
+    @page { size: A4; margin: 8mm; }
+
+    .hide { display:none; }
+    .troubleshoot { margin-top:12px; font-size:16px; color:var(--muted); }
+    .troubleshoot details { border:1px dashed #e2e8f0; border-radius:12px; padding:10px 12px; background:#fff; }
+    .troubleshoot summary { font-weight:700; cursor:pointer; }
+
+    @media (max-width: 992px){
+      .grid{ grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 640px){
+      body{ padding: 12px; }
+      .grid{ grid-template-columns: 1fr; }
+      .grid > div:last-child{ align-items:center; }
+      .sheet{ padding: 8mm 6mm; }
+      .sheet-header{ grid-template-columns: 1fr; text-align:center; gap: 4mm; }
+      .logo{ margin: 0 auto; }
+      .sheet-title .name{ font-size: 22px; }
+      .sheet-title .exam{ font-size: 16px; }
+      th, td{ font-size: 10pt; padding: 2mm; }
+      .signatures{ flex-direction:column; gap:5mm; margin-top: 12mm; }
+      .signatures .line{ width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="nav_bar" id="navbar" aria-label="প্রধান নেভিগেশন">
+    <div class="nav-links" id="navLinks">
+      <a href="#school-info">বিদ্যালয়ের তথ্য</a>
+      <a href="#teachers">শিক্ষক</a>
+      <a href="#students">শিক্ষার্থী</a>
+      <a href="#results">ফলাফল</a>
+      <a href="#notices">নোটিশ বোর্ড</a>
+      <a href="#gallery">গ্যালারি</a>
+      <a href="#admission">ভর্তি</a>
+      <a href="#advice">পরামর্শ</a>
+
+      <!-- Dropdown -->
+      <div class="dropdown" id="dropdown">
+        <a id="othersMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-controls="othersPanel">অন্যান্য ▼</a>
+        <div class="dropdown-content" id="othersPanel" role="menu" aria-label="অন্যান্য">
+          <a href="#sub1" role="menuitem">সাব-মেনু ১</a>
+          <a href="#sub2" role="menuitem">সাব-মেনু ২</a>
+          <a href="#sub3" role="menuitem">সাব-মেনু ৩</a>
+          <a href="#sub4" role="menuitem">সাব-মেনু ৪</a>
+          <a href="#sub5" role="menuitem">সাব-মেনু ৫</a>
+        </div>
+      </div>
+
+      <a href="#contact">যোগাযোগ</a>
+    </div>
+
+    <div class="search-box">
+      <input type="text" placeholder="অনুসন্ধান করুন..." id="searchInput" aria-label="সার্চ">
+      <button type="button" id="navSearchBtn" aria-label="সার্চ করুন">🔍</button>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="মেনু টগল" aria-expanded="false" aria-controls="navLinks">☰</button>
+  </nav>
+
+  <!-- Back to Home Button -->
+  <a href="../school-result-schoolarship.html" class="back-home" aria-label="হোমে ফিরে যান">🏠 হোম</a>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="card controls">
+      <div class="title">ফলাফল চেক করুন</div>
+
+      <div class="status" id="dataStatus">
+        <span class="badge warn" id="statusBadge">ডেটা লোড হচ্ছে...</span>
+        <span class="small" id="statusInfo"></span>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>রোল</label>
+          <input id="roll" type="text" placeholder="রোল লিখুন" required>
+        </div>
+        <div>
+          <label>শ্রেণি</label>
+          <select id="class">
+            <option value="">সব</option>
+            <option>১ম</option>
+            <option>২য়</option>
+            <option>৩য়</option>
+            <option>৪র্থ</option>
+            <option>৫ম</option>
+          </select>
+        </div>
+        <div>
+          <label>শাখা</label>
+          <select id="section">
+            <option value="">সব</option>
+            <option>ক</option>
+            <option>খ</option>
+          </select>
+        </div>
+        <div>
+          <label>পরীক্ষার নাম</label>
+          <select id="exam">
+            <option value="" selected disabled hidden>পরীক্ষার নাম নির্বাচন করুন</option>
+            <option>১ম প্রান্তিক মূল্যায়ন</option>
+            <option>২য় প্রান্তিক মূল্যায়ন</option>
+            <option>চূড়ান্ত মূল্যায়ন</option>
+          </select>
+        </div>
+        <div>
+          <label>শিক্ষাবর্ষ</label>
+          <select id="year">
+            <option value="" selected disabled hidden>সাল নির্বাচন করুন</option>
+            <!--<option>২০২৪</option>-->
+            <option>২০২৫</option>
+            <!--<option>২০২৬</option>-->
+          </select>
+        </div>
+        <div style="display:flex; gap:8px; align-items:end; justify-content:center;">
+          <button id="formSearchBtn" class="btn">সার্চ</button>
+          <button id="clearBtn" class="btn-secondary" type="button">রিসেট</button>
+          <button id="downloadBtn" class="btn-secondary" type="button">ডাউনলোড</button>
+        </div>
+      </div>
+
+      <div class="troubleshoot">
+        <details>
+          <summary>🔧 অপশন না দেখালে কী করবেন?</summary>
+          <ul>
+            <li>এই পেজ এবং <code>results.json</code> (বা <code>sheet2_data.json</code>) একই ফোল্ডারে আছে কিনা দেখুন।</li>
+            <li>বাটনের লিংক: <code>results/results-checker.html</code> হলে JSON পাথ <code>results/results.json</code> হতে হবে।</li>
+            <li><b>file://</b> দিয়ে খুললে অনেক ব্রাউজারে JSON লোড হবে না। সার্ভারে (http/https) চালিয়ে দেখুন।</li>
+            <li>বিকল্পভাবে নিচে “JSON আপলোড করুন” দিয়ে ফাইল হাতে লোড করুন।</li>
+          </ul>
+          <div style="margin-top:8px">
+            <input type="file" id="jsonFile" accept="application/json">
+            <button id="loadJsonBtn" class="btn-secondary" type="button">JSON আপলোড করুন</button>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div id="sheet" class="sheet hide">
+      <div class="sheet-inner">
+        <div class="sheet-header">
+          <img id="schoolLogo" class="logo" src="" alt="Logo" />
+          <div class="school">
+            <h1 id="schoolName">বিদ্যালয়ের নাম</h1>
+            <p id="schoolAddr">ঠিকানা, উপজেলা, জেলা</p>
+            <p id="schoolContact">মোবাইল: ০১৭১৮-৭২৪৪১৪, ইমেইল: ggps1929@gmail.com</p>
+           </div>
+        </div>
+
+        <div class="sheet-title">
+          <div style="text-align:center; font-family: 'Noto Sans Bengali', sans-serif; font-size:28px; font-weight:700; color:#00695c; border:2px solid #00695c; display:inline-block; padding:4px 16px; border-radius:6px;">
+            নম্বরপত্র
+          </div>
+          <div class="exam" id="examTitle">পরীক্ষার নাম •  শিক্ষাবর্ষ</div>
+        </div>
+
+        <table class="meta-table">
+          <tr>
+            <th>নাম</th><td id="m_name">—</td>
+            <th>শ্রেণি</th><td id="m_class">—</td>
+            <th>রোল</th><td id="m_roll">—</td>
+            <th>শাখা</th><td id="m_section">—</td>
+          </tr>
+          <tr>
+            <th>পিতার নাম</th><td id="m_father">—</td>
+            <th>মাতার নাম</th><td id="m_mother">—</td>
+            <th>লিঙ্গ</th><td id="m_gender">—</td>
+            <th>উপস্থিতি</th><td id="m_att">—</td>
+          </tr>
+        </table>
+
+        <table class="subject-table">
+          <thead>
+            <tr>
+              <th>বিষয়সমূহ</th>
+              <th>১ম প্রান্তিক মূল্যায়ন</th>
+              <th>২য় প্রান্তিক মূল্যায়ন</th>
+              <th>চূড়ান্ত মূল্যায়ন</th>
+            </tr>
+          </thead>
+          <tbody id="subjectRows"></tbody>
+          <tfoot id="subjectFoot"></tfoot>
+        </table>
+
+        <div class="signatures">
+          <div class="line">অভিভাবকের স্বাক্ষর</div>
+          <div class="line">শ্রেণি শিক্ষকের স্বাক্ষর</div>
+          <div class="line">প্রধান শিক্ষকের স্বাক্ষর</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="print-footer print-meta">
+    মুদ্রণের সময়: <span id="printTime"></span>
+  </div>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  const menuToggle = document.getElementById('menuToggle');
+  const dropdown = document.getElementById('dropdown');
+  const othersMenu = document.getElementById('othersMenu');
+  const navLinksContainer = document.getElementById('navLinks');
+  const navLinks = navLinksContainer.querySelectorAll('a[href^="#"]');
+  const searchInput = document.getElementById('searchInput');
+  const navSearchBtn = document.getElementById('navSearchBtn');
+
+  // Menu helpers
+  function openMenu(){
+    navbar.classList.add('active');
+    menuToggle.textContent = '✖';
+    menuToggle.classList.add('rotated');
+    menuToggle.setAttribute('aria-expanded','true');
+  }
+  function closeMenu(){
+    navbar.classList.remove('active');
+    menuToggle.textContent = '☰';
+    menuToggle.classList.remove('rotated');
+    menuToggle.setAttribute('aria-expanded','false');
+    dropdown.classList.remove('active');
+    othersMenu.setAttribute('aria-expanded','false');
+  }
+  function toggleMenu(){ navbar.classList.contains('active') ? closeMenu() : openMenu(); }
+  menuToggle.addEventListener('click', (e)=>{ e.stopPropagation(); toggleMenu(); });
+
+  // Dropdown (mobile)
+  function toggleDropdown(e){
+    if (window.innerWidth <= 768){
+      e.preventDefault();
+      e.stopPropagation();
+      const willBeActive = !dropdown.classList.contains('active');
+      dropdown.classList.toggle('active');
+      othersMenu.setAttribute('aria-expanded', willBeActive ? 'true' : 'false');
+    }
+  }
+  othersMenu.addEventListener('click', toggleDropdown);
+  othersMenu.addEventListener('keydown', (e)=>{ if (e.key==='Enter' || e.key===' ') toggleDropdown(e); });
+
+  // Close on link click (mobile)
+  navLinks.forEach(link=>{
+    link.addEventListener('click', ()=>{ if (window.innerWidth <= 768){ setTimeout(closeMenu,300); }});
+  });
+
+  // Click outside to close (mobile)
+  document.addEventListener('click', (e)=>{
+    if (window.innerWidth <= 768 && !navbar.contains(e.target) && navbar.classList.contains('active')) closeMenu();
+  });
+
+  // Search (navbar)
+  function handleSearch(){
+    const query = searchInput.value.trim();
+    if (query){ alert(`অনুসন্ধান: "${query}"\nএই বৈশিষ্ট্যটি শীঘ্রই যোগ করা হবে।`); }
+    else { alert('অনুগ্রহ করে অনুসন্ধানের জন্য কিছু লিখুন।'); }
+  }
+  navSearchBtn.addEventListener('click', handleSearch);
+  searchInput.addEventListener('keypress', (e)=>{ if(e.key==='Enter') handleSearch(); });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+    anchor.addEventListener('click', function(e){
+      const href = this.getAttribute('href');
+      if (!href || href === '#') return;
+      const targetId = href.substring(1);
+      const target = document.getElementById(targetId);
+      if (target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  // Navbar scroll effect
+  function onScroll(){
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  }
+  window.addEventListener('scroll', onScroll);
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('orientationchange', onScroll);
+
+  // Resize handling
+  window.addEventListener('resize', ()=>{ if (window.innerWidth > 768){ closeMenu(); }});
+  document.addEventListener('DOMContentLoaded', ()=>{ closeMenu(); onScroll(); });
+
+  // ======= CONFIG =======
+  const SCHOOL_NAME ="গয়হাট্টা সরকারি প্রাথমিক বিদ্যালয়";
+  const SCHOOL_ADDR = "গয়হাট্টা-৬৭৬২, উল্লাপাড়া, সিরাজগঞ্জ।";
+  const SCHOOL_CONTACT = "মোবাইল: ০১৭১৮-৭২৪৪১৪, ইমেইল: ggps1929@gmail.com";
+  const LOGO_URL = "school_logo.jpg";
+
+  // ======= Data source candidates =======
+  const queryUrl = new URLSearchParams(location.search).get("data");
+  const DATA_CANDIDATES = [
+    queryUrl, 
+    "sheet2_data.json",
+    "results.json",
+    "./results.json",
+    "../results.json",
+    "data/results.json"
+  ].filter(Boolean);
+
+  let records = [];
+  const selects = {
+    class: document.getElementById('class'),
+    section: document.getElementById('section'),
+    exam: document.getElementById('exam'),
+    year: document.getElementById('year')
+  };
+
+  // ======= UI status =======
+  const statusBadge = document.getElementById('statusBadge');
+  const statusInfo  = document.getElementById('statusInfo');
+  function setStatus(type, text, info=""){
+    statusBadge.className = "badge " + type;
+    statusBadge.textContent = text;
+    statusInfo.textContent = info;
+  }
+
+  // ======= Digit helpers =======
+  const bnToEnMap = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
+  function bnToEn(s){ return (s??"").toString().replace(/[০-৯]/g, d => bnToEnMap[d]); }
+  const enToBnMap = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
+  function enToBn(s){ return (s??"").toString().replace(/[0-9]/g, d => enToBnMap[d]); }
+  function toBnDigits(v){ if(v===null||v===undefined) return ""; const t=String(v); return t.replace(/[0-9]/g, d=>enToBnMap[d]); }
+
+  // ======= Date-time (BN) =======
+  const days = ["রবিবার","সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
+  const months = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+  function bnDateTime(date){
+    const d = days[date.getDay()];
+    const dd = enToBn(date.getDate());
+    const mm = months[date.getMonth()];
+    const yyyy = enToBn(date.getFullYear());
+    let h = date.getHours();
+    const m = enToBn(String(date.getMinutes()).padStart(2,'0'));
+    const ampm = h >= 12 ? "অপরাহ্ন" : "পূর্বাহ্ন";
+    h = h % 12; if(h === 0) h = 12;
+    const hh = enToBn(h);
+    return `${d}, ${dd} ${mm} ${yyyy}, ${hh}:${m} ${ampm}`;
+  }
+  function updatePrintTime(){
+    const el = document.getElementById('printTime');
+    if (el) el.textContent = bnDateTime(new Date());
+  }
+
+  // ======= Header =======
+  function initHeader(){
+    document.getElementById('schoolName').textContent = SCHOOL_NAME;
+    document.getElementById('schoolAddr').textContent = SCHOOL_ADDR;
+    document.getElementById('schoolContact').textContent = SCHOOL_CONTACT;
+    document.getElementById('schoolLogo').src = LOGO_URL;
+    updatePrintTime();
+  }
+
+  // ======= Load data =======
+  async function loadData(){
+    for(const url of DATA_CANDIDATES){
+      try{
+        const res = await fetch(url);
+        if(!res.ok) throw new Error("HTTP "+res.status);
+        const json = await res.json();
+        records = Array.isArray(json) ? json : (json.records || []);
+        setStatus("ok", "ডেটা লোড হয়েছে", `রেকর্ড: ${records.length}`);
+        return;
+      }catch(err){
+        console.warn("Failed to load", url, err);
+      }
+    }
+    setStatus("err", "ডেটা লোড হয়নি", "results.json পাথ ঠিক আছে কিনা দেখুন, অথবা নিচে JSON আপলোড করুন।");
+  }
+  loadData();
+
+  // ======= Manual upload =======
+  document.getElementById('loadJsonBtn').addEventListener('click', async ()=>{
+    const f = document.getElementById('jsonFile').files[0];
+    if(!f){ alert("JSON ফাইল নির্বাচন করুন"); return; }
+    try{
+      const txt = await f.text();
+      const json = JSON.parse(txt);
+      records = Array.isArray(json) ? json : (json.records || []);
+      setStatus("ok", "ডেটা লোড হয়েছে", `রেকর্ড: ${records.length}`);
+    }catch(e){
+      alert("JSON পড়তে সমস্যা হয়েছে: " + e.message);
+    }
+  });
+
+  function normalize(str){ return (str??"").toString().trim(); }
+
+  // শ্রেণি নরমালাইজার
+  function canonicalClass(x){
+    x = normalize(x);
+    if(!x) return "";
+    if(/(১ম|প্রথম)/.test(x)) return "১ম";
+    if(/(২য়|দ্বিতীয়|দ্বিতীয়)/.test(x)) return "২য়";
+    if(/(৩য়|তৃতীয়|তৃতীয়)/.test(x)) return "৩য়";
+    if(/(৪র্থ|চতুর্থ)/.test(x)) return "৪র্থ";
+    if(/(৫ম|পঞ্চম)/.test(x)) return "৫ম";
+    return x;
+  }
+
+  function onSearch(){
+    const roll = bnToEn(normalize(document.getElementById('roll').value));
+    const klassSel = canonicalClass(selects.class.value);
+    const sectionSel = normalize(selects.section.value);
+    const examSel = normalize(selects.exam.value);
+    const yearSelEn = bnToEn(normalize(selects.year.value)); // বাংলা → ইংরেজি
+
+    if(!records.length){
+      alert("ডেটা লোড হয়নি। উপরের নির্দেশনা দেখে JSON পাথ ঠিক করুন বা JSON আপলোড করুন।");
+      return;
+    }
+
+    // Filter
+    let candidates = records.filter(rec => {
+      const r = bnToEn(String(rec["রোল"] ?? ""));
+      const c = canonicalClass(rec["শ্রেণি"]);
+      const s = normalize(rec["শাখা"]);
+      const e = normalize(rec["পরীক্ষার নাম"] ?? rec["পরীক্ষা"] ?? "");
+      const yEn = bnToEn(String(rec["শিক্ষাবর্ষ"] ?? ""));
+
+      const rollOk  = roll   ? (r === roll) : true;
+      const classOk = klassSel ? (c === klassSel) : true;
+      const secOk   = sectionSel ? (s === sectionSel) : true;
+      const examOk  = examSel ? (e === examSel) : true;
+      const yearOk  = yearSelEn ? (yEn === yearSelEn) : true;
+
+      return rollOk && classOk && secOk && examOk && yearOk;
+    });
+
+    if(!roll){
+      if(candidates.length === 1){
+        renderSheet(candidates[0], {klass: klassSel, section: sectionSel, exam: examSel, year: selects.year.value});
+        return;
+      } else if(candidates.length === 0){
+        alert("কোনো রেকর্ড মেলেনি। ইনপুটগুলো (বিশেষ করে শিক্ষাবর্ষ) ঠিক আছে কি না দেখুন।");
+        document.getElementById('sheet').classList.add('hide');
+        return;
+      } else {
+        alert("একাধিক রেকর্ড মিলেছে। অনুগ্রহ করে রোল দিন।");
+        document.getElementById('sheet').classList.add('hide');
+        return;
+      }
+    }
+
+    const exact = candidates.find(rec => bnToEn(String(rec["রোল"] ?? "")) === roll);
+    const hit = exact || candidates[0];
+    if(!hit){
+      alert("রেকর্ড মেলেনি। ইনপুটগুলো যাচাই করুন।");
+      document.getElementById('sheet').classList.add('hide');
+      return;
+    }
+    renderSheet(hit, {klass: klassSel, section: sectionSel, exam: examSel, year: selects.year.value});
+  }
+
+  document.getElementById('formSearchBtn').addEventListener('click', onSearch);
+
+  document.getElementById('clearBtn').addEventListener('click', ()=>{
+    document.getElementById('roll').value = "";
+    selects.class.value = "";
+    selects.section.value = "";
+    selects.exam.value = "";
+    selects.year.value = "";
+    document.getElementById('sheet').classList.add('hide');
+  });
+
+  window.addEventListener('beforeprint', updatePrintTime);
+
+  function renderSheet(rec, userSel){
+    initHeader();
+
+    // Title
+    const recExam = rec["পরীক্ষার নাম"] ?? rec["পরীক্ষা"] ?? "পরীক্ষা";
+    const ex = userSel.exam || recExam;
+    const yrRaw = rec["শিক্ষাবর্ষ"];
+    const yr = userSel.year || (typeof yrRaw === "number" ? enToBn(String(yrRaw)) : (yrRaw || "শিক্ষাবর্ষ"));
+    document.getElementById('examTitle').textContent = ex + " • " + yr;
+
+    // Meta
+    document.getElementById('m_name').textContent    = rec["নাম"]||"—";
+    document.getElementById('m_class').textContent   = userSel.klass || rec["শ্রেণি"] || "—";
+    document.getElementById('m_roll').textContent    = toBnDigits(rec["রোল"]||"—");
+    document.getElementById('m_section').textContent = userSel.section || rec["শাখা"] || "—";
+    document.getElementById('m_father').textContent  = rec["পিতার নাম"]||"—";
+    document.getElementById('m_mother').textContent  = rec["মাতার নাম"]||"—";
+    document.getElementById('m_gender').textContent  = rec["লিঙ্গ"]||"—";
+    document.getElementById('m_att').textContent     = rec["উপস্থিত/অনুপস্থিত"]||"—";
+
+    // Subjects
+    const keys = Object.keys(rec);
+    const exclude = new Set([
+      "রোল","নাম","শ্রেণি","শাখা","লিঙ্গ","উপস্থিত/অনুপস্থিত",
+      "পরীক্ষা","পরীক্ষার নাম","শিক্ষাবর্ষ","বর্তমান অবস্থান",
+      "মোট","সর্বমোট"
+    ]);
+
+    const map = {}; // base -> {s1,s2,sf}
+    function detectSuffix(key){
+      key = key.trim();
+      if(/চূ[ড়|ড়]ান্ত|ফাইনাল/.test(key)) return "sf";
+      if(/১ম|প্রথম/.test(key)) return "s1";
+      if(/২য়|দ্বিতীয়|দ্বিতীয়/.test(key)) return "s2";
+      return null;
+    }
+    function stripSuffix(key){
+      return key.replace(/\s*(?:১ম|১|প্রথম|২য়|২|দ্বিতীয়|দ্বিতীয়|৩য়|৩|তৃতীয়|তৃতীয়|চূড়ান্ত|চূড়ান্ত|ফাইনাল)\s*$/,"").replace(/[()\-\–]+$/,"").trim();
+    }
+
+    for(const k of keys){
+      if(exclude.has(k)) continue;
+      const val = rec[k];
+      if(val === "" || val === null || typeof val === "undefined") continue;
+      const base = stripSuffix(k);
+      const code = detectSuffix(k);
+      if(!map[base]) map[base] = {s1:"", s2:"", sf:""};
+      if(code === "s1") map[base].s1 = val;
+      else if(code === "s2") map[base].s2 = val;
+      else if(code === "sf") map[base].sf = val;
+      else {
+        // no suffix: put into selected exam column
+        const selected = userSel.exam || "";
+        if(selected.includes("১ম")) map[base].s1 = val;
+        else if(selected.includes("২য়")) map[base].s2 = val;
+        else map[base].sf = val;
+      }
+    }
+
+    const tbody = document.getElementById('subjectRows');
+    tbody.innerHTML = "";
+    const bases = Object.keys(map).sort((a,b)=>{
+      const weight = (n)=>{
+        if(/বাংলা/.test(n)) return 0;
+        if(/ইংরেজি/.test(n)) return 1;
+        if(/গণিত/.test(n)) return 2;
+        if(/বিজ্ঞান/.test(n)) return 3;
+        if(/বাংলাদেশ|বিশ্বপরিচ|বিশ্ব পরিচ|বাওবি/.test(n)) return 4;
+        if(/ধর্ম|ইসলাম|হিন্দু|খ্রিস্ট|খ্রীষ্ট|বৌদ্ধ/.test(n)) return 5;
+        return 9;
+      };
+      const wa = weight(a), wb = weight(b);
+      if(wa !== wb) return wa - wb;
+      return a.localeCompare(b,'bn');
+    });
+
+    bases.forEach(base => {
+      const v1 = map[base].s1, v2 = map[base].s2, vf = map[base].sf;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${base}</td><td>${toBnDigits(v1 ?? "")}</td><td>${toBnDigits(v2 ?? "")}</td><td>${toBnDigits(vf ?? "")}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    // --- Footer rows: সর্বমোট + বর্তমান অবস্থান ---
+    const foot = document.getElementById('subjectFoot');
+    foot.innerHTML = "";
+
+    // কোন কলামে মোট/র‍্যাঙ্ক বসবে
+    const selectedExam = (userSel.exam || recExam || "").toString();
+    let colIdx = 3; // ডিফল্ট: চূড়ান্ত
+    if (selectedExam.includes("১ম")) colIdx = 1;
+    else if (selectedExam.includes("২য়")) colIdx = 2;
+
+    // সর্বমোট সারি
+    const totalVal = rec["সর্বমোট"] ?? rec["মোট"] ?? "";
+    const trTotal = document.createElement('tr');
+    trTotal.innerHTML = `<td>সর্বমোট</td><td></td><td></td><td></td>`;
+    if (totalVal !== "") trTotal.children[colIdx].textContent = toBnDigits(totalVal);
+    foot.appendChild(trTotal);
+
+    // বর্তমান অবস্থান সারি
+    const rankVal = rec["বর্তমান অবস্থান"] ? toBnDigits(rec["বর্তমান অবস্থান"]) : "—";
+    const trRank = document.createElement('tr');
+    trRank.innerHTML = `<td>বর্তমান অবস্থান</td><td></td><td></td><td></td>`;
+    trRank.children[colIdx].textContent = rankVal;
+    foot.appendChild(trRank);
+
+    document.getElementById('sheet').classList.remove('hide');
+  }
+
+  window.addEventListener('load', updatePrintTime);
+
+  // ডাউনলোড বাটন কাজ করার জন্য কোড
+  document.getElementById('downloadBtn').addEventListener('click', function() {
+    const element = document.getElementById('sheet');
+    const options = {
+        margin:       10,
+        filename:     'result_sheet.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().from(element).set(options).save();
+  });
+</script>
+</body>
+</html>
