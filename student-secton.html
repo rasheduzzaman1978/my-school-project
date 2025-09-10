@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="school_image/school_logo.jpg" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>students-section</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:"Noto Sans Bengali",Arial,sans-serif;
+      background:linear-gradient(135deg,#F0F2BD 0%,#B8CFCE 100%);
+      min-height:100vh; line-height:1.6; color:#113D43;
+    }
+
+    /* ===== NAVBAR (match main file) ===== */
+    .nav_bar{
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#DDF6D2 0%,#C8E6C9 100%);
+      padding:0 20px;position:sticky;top:0;z-index:1000;
+      box-shadow:0 4px 15px rgba(0,0,0,.1);backdrop-filter:blur(10px);
+      transition:all .3s ease;animation:fadeInUp .6s ease-out;
+    }
+    .nav_bar::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);backdrop-filter:blur(5px);z-index:-1}
+    .nav-links{display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:relative;justify-content:center}
+    .nav_bar a{
+      color:#113D43;font-size:20px;font-weight:500;padding:12px 16px;text-decoration:none;
+      transition:all .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;border-radius:8px;position:relative;overflow:hidden;
+    }
+    .nav_bar a::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .5s ease}
+    .nav_bar a:hover::before{left:100%}
+    .nav_bar a:hover{background:linear-gradient(135deg,#4CAF50,#45a049);color:#fff;box-shadow:0 4px 12px rgba(76,175,80,.25)}
+    .dropdown{position:relative;display:inline-block}
+    .dropdown > a{cursor:pointer}
+    .dropdown-content{
+      display:none;position:absolute;background:linear-gradient(135deg,#E8F5E9 0%,#C8E6C9 100%);
+      min-width:220px;box-shadow:0 8px 16px rgba(0,0,0,.2);border-radius:8px;z-index:1100;
+      overflow:hidden;transform:translateY(10px);opacity:0;transition:all .3s ease
+    }
+    .dropdown-content a{display:block;padding:12px 16px;font-size:16px;color:#113D43;text-decoration:none;transition:all .2s}
+    .dropdown-content a:hover{background:linear-gradient(135deg,#4CAF50,#45a049);color:#fff}
+    @media (min-width:769px){
+      .dropdown:hover .dropdown-content{display:block;transform:translateY(0);opacity:1}
+      .nav_bar a{display:inline-flex;align-items:center;height:48px}
+    }
+
+    /* ===== Search Box: desktop default ===== */
+    .search-box{
+      display:flex;align-items:center;background:#fff;border-radius:25px;overflow:hidden;
+      box-shadow:0 3px 10px rgba(0,0,0,.1);transition:all .3s ease;
+      position:absolute;right:20px;top:50%;transform:translateY(-50%);white-space:nowrap;
+    }
+    .search-box input{
+      flex:1 1 auto;min-width:0;width:auto;padding:8px 16px;border:none;font-size:16px;outline:none;background:transparent;font-family:inherit
+    }
+    .search-box input::placeholder{color:#999}
+    .search-box button{
+      flex:0 0 auto;padding:8px 13px;border:none;background:linear-gradient(135deg,#FEA405,#FF9800);
+      color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center
+    }
+
+    .menu-toggle{display:none;font-size:24px;color:#386641;cursor:pointer;padding:8px;border-radius:8px;background:rgba(255,255,255,.1)}
+    .nav_bar.scrolled{background:rgba(221,246,210,.95);backdrop-filter:blur(15px)}
+
+    /* ===== Students Section ===== */
+    #students{max-width:1200px;margin:16px auto;background:#fff;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:hidden}
+    /* Header styled like main file's section-main-header */
+    #students .header{background:transparent;padding:24px 20px 10px}
+    #students .header h1{
+      font-size:32px;font-weight:700;color:#1a4b5f;background:linear-gradient(to right,#eaf6ff,#fff);
+      border-bottom:3px solid #3498db;border-radius:8px;padding:12px 16px;text-align:center;
+      box-shadow:0 3px 10px rgba(0,0,0,.06);text-shadow:1px 1px 2px rgba(0,0,0,.1)
+    }
+
+    .main-content{display:flex;min-height:600px}
+    .left-panel{flex:1;padding:30px;background:#f8f9fa;border-right:1px solid #dee2e6}
+    .right-panel{flex:1;padding:30px;background:#fff;position:relative;z-index:10}
+
+    .school-info{text-align:center;margin-bottom:30px}
+    .school-name{font-size:24px;font-weight:bold;color:#2a5298;margin-bottom:5px}
+    .school-address{font-size:16px;color:#666;margin-bottom:20px}
+    .title-underline{font-size:18px;font-weight:bold;color:#333;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #2a5298}
+
+    table{width:100%;border-collapse:collapse;margin-top:20px;box-shadow:0 2px 10px rgba(0,0,0,0.1);border-radius:8px;overflow:hidden}
+    th{background:linear-gradient(135deg,#2a5298,#1e3c72);color:#fff;padding:15px;text-align:center;font-weight:700;font-size:16px}
+    td{padding:12px 15px;text-align:center;border-bottom:1px solid #eee;font-size:15px}
+    tr:nth-child(even){background-color:#f8f9fa}
+    tr:hover{background-color:#e3f2fd;transition:background-color .3স}
+    .total-row{background:linear-gradient(135deg,#4CAF50,#45a049)!important;color:#fff!important;font-weight:bold}
+    .total-row td{border:none;font-size:16px}
+
+    .right-panel h2{color:#2a5298;font-size:24px;margin-bottom:25px;text-align:center;padding-bottom:10px;border-bottom:2px solid #2a5298}
+    .summary-info{background:linear-gradient(135deg,#4CAF50,#45a049);color:#fff;padding:15px;border-radius:8px;margin-bottom:20px;text-align:center;font-weight:700}
+
+    /* Class dropdowns + Tooltip */
+    .students_class-dropdown{margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,.1);border-radius:8px;overflow:visible;position:relative;transition:transform .3s}
+    .students_class-dropdown:hover{transform:translateY(-2px)}
+    .students_dropbtn{background:linear-gradient(135deg,#2a5298,#1e3c72);color:#fff;padding:15px 20px;font-size:16px;border:none;cursor:pointer;width:100%;text-align:left;display:flex;align-items:center}
+    .students_dropbtn:hover{background:linear-gradient(135deg,#1e3c72,#2a5298)}
+    .students_dropbtn .material-icons{margin-right:10px}
+    .students_dropdown-content{display:none;background:#f9f9f9;min-width:100%;box-shadow:0 8px 16px rgba(0,0,0,.2);position:relative;z-index:100}
+    .students_dropdown-content a{color:#333;padding:12px 20px;text-decoration:none;display:flex;align-items:center;border-bottom:1px solid #eee;position:relative}
+    .students_dropdown-content a:hover{background:#e3f2fd}
+    .students_dropdown-content a .material-icons{margin-right:10px;color:#2a5298}
+    .students_class-dropdown:hover .students_dropdown-content{display:block}
+
+    .branch-tooltip-text{
+      visibility:hidden;opacity:0;background:linear-gradient(135deg,#333,#555);color:#fff;text-align:center;border-radius:12px;
+      padding:10px 14px;position:absolute;z-index:3000;bottom:120%;left:50%;transform:translateX(-50%);transition:all .3s ease;white-space:nowrap
+    }
+    .branch-tooltip-text::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border-width:6px;border-style:solid;border-color:#333 transparent transparent transparent}
+    .students_dropdown-content a:hover .branch-tooltip-text{visibility:visible;opacity:1;bottom:130%}
+
+    /* Back to Home (no Back-to-Top) */
+    .back-home{
+      position:fixed;right:18px;bottom:18px;
+      display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;text-decoration:none;
+      background:linear-gradient(135deg,#4CAF50,#45a049);color:#fff;font-weight:700;box-shadow:0 6px 18px rgba(76,175,80,.28);z-index:940
+    }
+    .back-home:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(76,175,80,.35)}
+
+    /* Animations */
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)}}
+
+    /* ===== Responsive (mobile behavior like main file) ===== */
+    @media (max-width:1024px){.search-box input{width:150px}.nav_bar a{font-size:16px;padding:10px 12px}.dropdown-content{min-width:190px}}
+
+    @media (max-width:768px){
+      .nav_bar{flex-direction:column;align-items:center;padding:15px 20px 0}
+      .menu-toggle{display:block;position:absolute;top:15px;right:20px}
+
+      /* collapsible menu links */
+      .nav-links{
+        flex-direction:column;width:100%;max-height:0;overflow:hidden;transition:max-height .5s ease-out;align-items:center
+      }
+      .nav_bar.active .nav-links{max-height:850px;padding-bottom:5px}
+
+      .nav_bar a{
+        display:block;width:80%;text-align:center;padding:8px;margin:3px auto;border-radius:10px;
+        background:rgba(255,255,255,.1);backdrop-filter:blur(5px);
+        transform:translateX(-100px);opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1)
+      }
+      .nav_bar.active a{transform:translateX(0);opacity:1}
+
+      .dropdown{width:80%}
+      .dropdown-content{
+        position:static;display:none;width:100%;box-shadow:none;background:rgba(255,255,255,.1);
+        margin:5px 0;border-radius:8px;transform:none;opacity:1;transition:none
+      }
+      .dropdown.active .dropdown-content{display:block}
+      .dropdown-content a{text-align:center;font-size:15px}
+
+      /* ✅ Search box only when menu is open */
+      .search-box{
+        position:static;right:auto;top:auto;
+        width:80%;margin:15px 0 10px;
+        opacity:0;transform:translateY(-20px);
+        transition:all .3s ease;
+      }
+      .nav_bar.active .search-box{
+        opacity:1;transform:translateY(0);transition-delay:.5s; /* নিশ্চিত করুন এখানে s আছে */
+      }
+
+      .search-box input{width:100%}
+
+      .main-content{flex-direction:column}
+      .left-panel{border-right:none;border-bottom:1px solid #dee2e6}
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .nav_bar a,.dropdown-content,.search-box,.menu-toggle{transition:none!important}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav class="nav_bar" id="navbar" aria-label="প্রধান নেভিগেশন">
+    <div class="nav-links" id="navLinks">
+      <a href="#school-info">বিদ্যালয়ের তথ্য</a>
+      <a href="#teachers">শিক্ষক</a>
+      <a href="#students">শিক্ষার্থী</a>
+      <a href="#results">ফলাফল</a>
+      <a href="#notices">নোটিশ বোর্ড</a>
+      <a href="#gallery">গ্যালারি</a>
+      <a href="#admission">ভর্তি</a>
+      <a href="#advice">পরামর্শ</a>
+
+      <div class="dropdown" id="dropdown">
+        <a id="othersMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-controls="othersPanel">অন্যান্য ▼</a>
+        <div class="dropdown-content" id="othersPanel" role="menu" aria-label="অন্যান্য">
+          <a href="https://nctb.portal.gov.bd/site/page/c57df64c-7ea0-4d93-a915-3921181dbefc" target="_blank" rel="noopener" role="menuitem">পিডিএফ টেক্সটবুক</a>
+          <a href="2ndterm-exam-2025.html" target="_blank" rel="noopener" role="menuitem">পরীক্ষার রুটিন</a>
+          <a href="school_image/holiday_list_2025.jpg" target="_blank" rel="noopener" role="menuitem">ছুটির তালিকা ২০২৫</a>
+          <a href="teachers.html" target="_blank" rel="noopener" role="menuitem">শিক্ষক তালিকা</a>
+        </div>
+      </div>
+
+      <a href="#contact">যোগাযোগ</a>
+    </div>
+
+    <!-- Desktop search (mobile-এ মেনু খোলা হলে নিচে দেখাবে) -->
+    <div class="search-box">
+      <input type="text" placeholder="অনুসন্ধান করুন..." id="searchInput" aria-label="সার্চ">
+      <button type="button" id="searchBtn" aria-label="সার্চ করুন">🔍</button>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="মেনু টগল" aria-expanded="false" aria-controls="navLinks">☰</button>
+  </nav>
+
+  <!-- ===== Students Content ===== -->
+  <section id="students">
+    <div class="header"><h1>📚 শিক্ষার্থীদের তথ্য</h1></div>
+
+    <div class="main-content">
+      <div class="left-panel" id="school-info">
+        <div class="school-info">
+          <p class="school-name">গয়হাট্টা সরকারি প্রাথমিক বিদ্যালয়</p>
+          <p class="school-address">উল্লাপাড়া, সিরাজগঞ্জ।</p>
+          <p class="title-underline">বিদ্যালয়ের শিক্ষার্থীদের তালিকা</p>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>শ্রেণি</th>
+              <th>ছেলে</th>
+              <th>ছাত্রী</th>
+              <th>সর্বমোট</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>প্রাক-প্রাথমিক (৪+)</td><td>৫</td><td>৬</td><td>১১</td></tr>
+            <tr><td>প্রাক-প্রাথমিক (৫+)</td><td>১৫</td><td>২১</td><td>৩৬</td></tr>
+            <tr><td>প্রথম</td><td>২৯</td><td>৪২</td><td>৭১</td></tr>
+            <tr><td>দ্বিতীয়</td><td>৬১</td><td>৩২</td><td>৯৩</td></tr>
+            <tr><td>তৃতীয়</td><td>৬৩</td><td>৫৪</td><td>১১৭</td></tr>
+            <tr><td>চতুর্থ</td><td>৫২</td><td>৬০</td><td>১১২</td></tr>
+            <tr><td>পঞ্চম</td><td>৪৩</td><td>৪৮</td><td>৯১</td></tr>
+            <tr class="total-row"><td>সর্বমোট</td><td>২৬৮</td><td>২৬৩</td><td>৫৩১</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="right-panel">
+        <h2>শ্রেণিভিত্তিক শিক্ষার্থীর তথ্য</h2>
+        <div class="summary-info">
+          মোট শিক্ষার্থী: ৫৩১ জন | ছেলে: ২৬৮ জন | ছাত্রী: ২৬৩ জন
+        </div>
+
+        <!-- শিশু শ্রেণি -->
+        <div class="students_class-dropdown">
+          <button class="students_dropbtn"><span class="material-icons">menu_book</span> শিশু শ্রেণি</button>
+          <div class="students_dropdown-content">
+            <a class="download-link" href="students-shishu-ka.xlsx" download>
+              <span class="material-icons">folder_open</span> প্রাক-প্রাথমিক (৪+)
+              <span class="branch-tooltip-text">মোট শিক্ষার্থী: ১১ জন | ছেলে: ৫ | মেয়ে: ৬</span>
+            </a>
+            <a class="download-link" href="students-shishu-kha.xlsx" download>
+              <span class="material-icons">folder_open</span> প্রাক-প্রাথমিক (৫+)
+              <span class="branch-tooltip-text">মোট শিক্ষার্থী: ৩৬ জন | ছেলে: ১৫ | মেয়ে: ২১</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- প্রথম শ্রেণি -->
+        <div class="students_class-dropdown">
+          <button class="students_dropbtn"><span class="material-icons">menu_book</span> প্রথম শ্রেণি</button>
+          <div class="students_dropdown-content">
+            <a class="download-link" href="students-class1-ka.xlsx" download>
+              <span class="material-icons">folder_open</span> প্রথম শ্রেণি (ক শাখা)
+              <span class="branch-tooltip-text">মোট: ৩৫ | ছেলে: ৯ | মেয়ে: ২৬</span>
+            </a>
+            <a class="download-link" href="students-class1-kha.xlsx" download>
+              <span class="material-icons">folder_open</span> প্রথম শ্রেণি (খ শাখা)
+              <span class="branch-tooltip-text">মোট: ৩২ | ছেলে: ১৬ | মেয়ে: ১৫</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- দ্বিতীয় শ্রেণি -->
+        <div class="students_class-dropdown">
+          <button class="students_dropbtn"><span class="material-icons">menu_book</span> দ্বিতীয় শ্রেণি</button>
+          <div class="students_dropdown-content">
+            <a class="download-link" href="students-class2-ka.xlsx" download>
+              <span class="material-icons">folder_open</span> দ্বিতীয় শ্রেণি (ক শাখা)
+              <span class="branch-tooltip-text">মোট: ৪৬ | ছেলে: ৩০ | মেয়ে: ১৬</span>
+            </a>
+            <a class="download-link" href="students-class2-kha.xlsx" download>
+              <span class="material-icons">folder_open</span> দ্বিতীয় শ্রেণি (খ শাখা)
+              <span class="branch-tooltip-text">মোট: ৪৭ | ছেলে: ৩১ | মেয়ে: ১৬</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- তৃতীয় শ্রেণি -->
+        <div class="students_class-dropdown">
+          <button class="students_dropbtn"><span class="material-icons">menu_book</span> তৃতীয় শ্রেণি</button>
+          <div class="students_dropdown-content">
+            <a class="download-link" href="students-class3-ka.xlsx" download>
+              <span class="material-icons">folder_open</span> তৃতীয় শ্রেণি (ক শাখা)
+              <span class="branch-tooltip-text">মোট: ৫৯ | ছেলে: ৩০ | মেয়ে: ২৯</span>
+            </a>
+            <a class="download-link" href="students-class3-kha.xlsx" download>
+              <span class="material-icons">folder_open</span> তৃতীয় শ্রেণি (খ শাখা)
+              <span class="branch-tooltip-text">মোট: ৬১ | ছেলে: ৩৬ | মেয়ে: ২৫</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- চতুর্থ শ্রেণি -->
+        <div class="students_class-dropdown">
+          <button class="students_dropbtn"><span class="material-icons">menu_book</span> চতুর্থ শ্রেণি</button>
+          <div class="students_dropdown-content">
+            <a class="download-link" href="students-class4-ka.xlsx" download>
+              <span class="material-icons">folder_open</span> চতুর্থ শ্রেণি (ক শাখা)
+              <span class="branch-tooltip-text">মোট: ৫৪ | ছেলে: ৩২ | মেয়ে: ২২</span>
+            </a>
+            <a class="download-link" href="students-class4-kha.xlsx" download>
+              <span class="material-icons">folder_open</span> চতুর্থ শ্রেণি (খ শাখা)
+              <span class="branch-tooltip-text">মোট: ৫৭ | ছেলে: ১৯ | মেয়ে: ৩৮</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- পঞ্চম শ্রেণি -->
+        <div class="students_class-dropdown">
+          <button class="students_dropbtn"><span class="material-icons">menu_book</span> পঞ্চম শ্রেণি</button>
+          <div class="students_dropdown-content">
+            <a class="download-link" href="students-class5-ka.xlsx" download>
+              <span class="material-icons">folder_open</span> পঞ্চম শ্রেণি (ক শাখা)
+              <span class="branch-tooltip-text">মোট: ৪৩ | ছেলে: ২০ | মেয়ে: ২৩</span>
+            </a>
+            <a class="download-link" href="students-class5-kha.xlsx" download>
+              <span class="material-icons">folder_open</span> পঞ্চম শ্রেণি (খ শাখা)
+              <span class="branch-tooltip-text">মোট: ৪৮ | ছেলে: ২৫ | মেয়ে: ২৩</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Only Back to Home -->
+  <a href="index.html" class="back-home" aria-label="হোমে ফিরে যান">🏠 হোম</a>
+
+  <script>
+    // ===== Menu / Navbar behaviors =====
+    const navbar=document.getElementById('navbar');
+    const menuToggle=document.getElementById('menuToggle');
+    const dropdown=document.getElementById('dropdown');
+    const othersMenu=document.getElementById('othersMenu');
+    const navLinksContainer=document.getElementById('navLinks');
+    const navLinks=navLinksContainer.querySelectorAll('a[href^="#"]');
+    const searchInput=document.getElementById('searchInput');
+    const searchBtn=document.getElementById('searchBtn');
+
+    function openMenu(){navbar.classList.add('active'); if(menuToggle){menuToggle.textContent='✖'; menuToggle.setAttribute('aria-expanded','true');}}
+    function closeMenu(){navbar.classList.remove('active'); if(menuToggle){menuToggle.textContent='☰'; menuToggle.setAttribute('aria-expanded','false');} dropdown?.classList.remove('active'); othersMenu?.setAttribute('aria-expanded','false');}
+    function toggleMenu(){navbar.classList.contains('active')?closeMenu():openMenu();}
+    if(menuToggle){menuToggle.addEventListener('click',e=>{e.stopPropagation();toggleMenu();});}
+
+    function toggleDropdown(e){
+      if(window.innerWidth<=768){
+        e.preventDefault(); e.stopPropagation();
+        const active=!dropdown.classList.contains('active');
+        dropdown.classList.toggle('active');
+        othersMenu.setAttribute('aria-expanded',active?'true':'false');
+      }
+    }
+    if(othersMenu){
+      othersMenu.addEventListener('click',toggleDropdown);
+      othersMenu.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' ') toggleDropdown(e); });
+    }
+
+    // Close on link click (mobile)
+    navLinks.forEach(link=>{ link.addEventListener('click',()=>{ if(window.innerWidth<=768){ setTimeout(closeMenu,300); } }); });
+
+    // Click outside to close (mobile)
+    document.addEventListener('click',e=>{ if(window.innerWidth<=768 && !navbar.contains(e.target) && navbar.classList.contains('active')) closeMenu(); });
+
+    // Search (placeholder alert)
+    function handleSearch(){
+      const q=searchInput.value.trim();
+      if(q){ alert(`অনুসন্ধান: "${q}"\nএই বৈশিষ্ট্যটি শীঘ্রই যোগ করা হবে।`); }
+      else { alert('অনুগ্রহ করে অনুসন্ধানের জন্য কিছু লিখুন।'); }
+    }
+    if(searchBtn){searchBtn.addEventListener('click',handleSearch);}
+    if(searchInput){searchInput.addEventListener('keypress',e=>{ if(e.key==='Enter') handleSearch(); });}
+
+    // navbar shadow on scroll
+    function onScroll(){ navbar.classList.toggle('scrolled', window.scrollY > 50); }
+    window.addEventListener('scroll', onScroll); onScroll();
+    window.addEventListener('resize', ()=>{ if(window.innerWidth>768) closeMenu(); });
+  </script>
+</body>
+</html>

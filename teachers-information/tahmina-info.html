@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tahmina-info</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+
+    body{
+      font-family:"Noto Sans Bengali","SutonnyMJ","Kalpurush",Arial,sans-serif;
+      background:linear-gradient(135deg,#F0F2BD 0%,#B8CFCE 100%);
+      min-height:100vh; line-height:1.6; color:#113D43;
+    }
+    
+    /* ===== NAVBAR ===== */
+    .nav_bar{
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,#DDF6D2 0%,#C8E6C9 100%);
+      padding:0 20px; position:sticky; top:0; z-index:1000;
+      box-shadow:0 4px 15px rgba(0,0,0,.1); backdrop-filter:blur(10px);
+      transition:all .3s ease; animation:fadeInUp .6s ease-out;
+    }
+    .nav_bar::before{content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); z-index:-1}
+
+    .nav-links{display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:relative; justify-content:center}
+    .nav_bar a{
+      color:#113D43; font-size:20px; font-weight:500; padding:12px 16px; text-decoration:none;
+      transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; border-radius:8px; position:relative; overflow:hidden;
+    }
+    .nav_bar a::before{content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .5s ease}
+    .nav_bar a:hover::before{left:100%}
+    .nav_bar a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none; box-shadow:0 4px 12px rgba(76,175,80,.25)}
+    .nav_bar a:active{transform:translateY(0)}
+
+    /* Dropdown */
+    .dropdown{position:relative; display:inline-block}
+    .dropdown > a{cursor:pointer}
+    .dropdown-content{
+      display:none; position:absolute; background:linear-gradient(135deg,#E8F5E9 0%,#C8E6C9 100%);
+      min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.2); border-radius:8px; z-index:1001; overflow:hidden; transform:translateY(10px);
+      opacity:0; transition:all .3s ease;
+    }
+    .dropdown-content a{display:block; padding:12px 16px; font-size:16px; color:#113D43; text-decoration:none; transition:all .3s ease}
+    .dropdown-content a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none}
+
+    /* Desktop hover */
+    @media (min-width:769px){
+      .dropdown:hover .dropdown-content{display:block; transform:translateY(0); opacity:1}
+      .nav_bar a{display:inline-flex; align-items:center; height:48px; will-change:transform}
+    }
+
+    /* Search Box */
+    .search-box{
+      display:flex; align-items:center; background:#fff; border-radius:25px; overflow:hidden;
+      box-shadow:0 3px 10px rgba(0,0,0,.1); transition:all .3s ease;
+      position:absolute; right:20px; top:50%; transform:translateY(-50%);
+    }
+    .search-box:focus-within{transform:translateY(-50%) scale(1.02); box-shadow:0 5px 20px rgba(0,0,0,.15)}
+    .search-box input{padding:8px 16px; border:none; font-size:16px; outline:none; background:transparent; width:200px; font-family:inherit}
+    .search-box input::placeholder{color:#999}
+    .search-box button{padding:8px 13px; border:none; background:linear-gradient(135deg,#FEA405,#FF9800); color:#fff; cursor:pointer; font-size:16px; transition:all .3s ease; display:flex; align-items:center; justify-content:center}
+    .search-box button:hover{background:linear-gradient(135deg,#FF9800,#F57C00); transform:scale(1.05)}
+
+    /* Hamburger */
+    .menu-toggle{display:none; font-size:24px; color:#386641; cursor:pointer; padding:8px; border-radius:8px; transition:all .3s ease; background:rgba(255,255,255,.1)}
+    .menu-toggle:hover{background:rgba(255,255,255,.2); transform:scale(1.1)}
+    .menu-toggle.rotated{transform:rotate(180deg); transition:transform .3s ease}
+
+    /* Scroll effect */
+    .nav_bar.scrolled{background:rgba(221,246,210,.95); backdrop-filter:blur(15px)}
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width:1024px){
+      .search-box input{width:150px}
+      .nav_bar a{font-size:16px; padding:10px 12px}
+      .dropdown-content{min-width:180px}
+    }
+
+    @media (max-width:768px){
+      .nav_bar{flex-direction:column; align-items:center; padding:15px 20px 0; justify-content:center}
+      .menu-toggle{display:block; position:absolute; top:15px; right:20px}
+
+      .nav-links{
+        flex-direction:column; width:100%; max-height:0; overflow:hidden; transition:max-height .5s ease-out; align-items:center;
+      }
+      .nav_bar.active .nav-links{max-height:850px; padding-bottom:5px}
+
+      .nav_bar a{
+        display:block; width:80%; text-align:center; padding:8px; margin:3px auto; border-radius:10px;
+        background:rgba(255,255,255,.1); backdrop-filter:blur(5px);
+        transform:translateX(-100px); opacity:0; transition:all .4s cubic-bezier(.4,0,.2,1);
+      }
+      .nav_bar.active a{transform:translateX(0); opacity:1}
+
+      .dropdown{width:80%;}
+      .dropdown-content{position:static; display:none; width:100%; box-shadow:none; background:rgba(255,255,255,.1); margin:5px 0; border-radius:8px; transform:none; opacity:1; transition:none;}
+      .dropdown.active .dropdown-content{display:block}
+      .dropdown-content a{padding:10px 15px; text-align:center; font-size:15px}
+
+      .nav_bar.active .nav-links > a:nth-of-type(1){transition-delay:.05s}
+      .nav_bar.active .nav-links > a:nth-of-type(2){transition-delay:.1s}
+      .nav_bar.active .nav-links > a:nth-of-type(3){transition-delay:.15s}
+      .nav_bar.active .nav-links > a:nth-of-type(4){transition-delay:.2s}
+      .nav_bar.active .nav-links > a:nth-of-type(5){transition-delay:.25s}
+      .nav_bar.active .nav-links > a:nth-of-type(6){transition-delay:.3s}
+      .nav_bar.active .nav-links > a:nth-of-type(7){transition-delay:.35s}
+      .nav_bar.active .nav-links > a:nth-of-type(8){transition-delay:.4s}
+
+      .search-box{width:80%; margin:15px 0 10px; opacity:0; transform:translateY(-20px); transition:all .3s ease; position:static; right:auto; top:auto}
+      .nav_bar.active .search-box{opacity:1; transform:translateY(0); transition-delay:.5s}
+      .search-box input{flex:1; width:auto}
+    }
+
+    /* Animations (fade only; header removed) */
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)}}
+
+    @media (prefers-reduced-motion: reduce){
+      .nav_bar a, .dropdown-content, .search-box, .menu-toggle {transition:none !important}
+    }
+    
+    .container { 
+      max-width: 1000px; 
+      margin: 20px auto; 
+      padding: 20px;
+      width: 100%;
+      overflow-x: hidden; /* Prevent horizontal scroll on container */
+    }
+
+    /* Header: স্ক্রিনে লুকানো, প্রিন্ট/PDF-এ দৃশ্যমান */
+    .header { display: none; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; }
+    .header img { width: 70px; height: 70px; border-radius: 50%; }
+    .header .title { text-align: center; }
+    .header h1 { margin: 0; font-size: 22px; color: #2563eb; }
+    .header p { margin: 0; font-size: 14px; color: #555; }
+
+    .profile, .routine { 
+      background: #fff; 
+      padding: 20px; 
+      border-radius: 10px; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+      margin-bottom: 20px; 
+      width: 100%;
+      overflow: hidden; /* Prevent content overflow */
+    }
+    .profile { display: flex; flex-wrap: wrap; gap: 20px; }
+    .profile img { width: 180px; height: 180px; border-radius: 10px; border: 2px solid #ddd; object-fit: cover; }
+    .profile .info { flex: 1; min-width: 300px; } /* Ensure info section is responsive */
+    .profile .info h2 { color: #2563eb; margin: 0 0 10px; }
+    .profile .info .item { margin: 4px 0; }
+    .key { font-weight: bold; display: inline-block; width: 200px; }
+    .actions { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn { padding: 8px 12px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 14px; border: none; color: #fff; display: flex; align-items: center; gap: 5px; }
+    .btn.print { background: #2563eb; }
+    .btn.download { background: #16a34a; }
+    .btn.call { background: #0ea5e9; }
+    .btn.email { background: #6b7280; }
+    .btn.whatsapp { background: #25D366; }
+
+    .routine h2 { text-align: center; color: #2563eb; margin-bottom: 15px; }
+    
+    /* Fix for table overflow on small screens */
+    .routine {
+      overflow-x: auto; /* Enable horizontal scrolling for the routine section */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+    
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: 14px; 
+      min-width: 700px; /* Ensure table has a minimum width */
+    }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background: #2563eb; color: #fff; }
+    tr:nth-child(even) { background: #f9fafc; }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .profile {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .profile img {
+        width: 150px;
+        height: 150px;
+      }
+      
+      .key {
+        width: 180px;
+      }
+      
+      .actions {
+        justify-content: center;
+      }
+      
+      table {
+        font-size: 13px;
+      }
+      
+      th, td {
+        padding: 6px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .profile .info .item {
+        font-size: 14px;
+      }
+      
+      .key {
+        width: 160px;
+        font-size: 14px;
+      }
+      
+      .btn {
+        font-size: 12px;
+        padding: 6px 10px;
+      }
+      
+      table {
+        font-size: 12px;
+        min-width: 600px; /* Slightly smaller min-width for very small screens */
+      }
+      
+      th, td {
+        padding: 4px;
+      }
+    }
+
+    /* প্রিন্টের সময়: হেডার দেখাবে, বাটন/ব্যাক-হোম লুকাবে */
+    @media print {
+      @page { size: A4; margin: 0.3in; }
+      body { background: #fff; }
+      .btn, .nav_bar { display: none !important; }
+      .profile, .routine { page-break-inside: avoid; }
+      .header { display: flex !important; }
+      .routine {
+        overflow-x: visible; /* Disable scrolling for print */
+      }
+      table {
+        min-width: 100%; /* Full width for print */
+        font-size: 12px;
+      }
+    }
+
+    /* PDF জেনারেশন চলাকালীন স্ক্রিন CSS */
+    .pdf-mode .header { display: flex !important; }
+    .pdf-mode .btn, .pdf-mode .nav_bar { display: none !important; }
+
+    /* PDF-মোডে কম্প্যাক্ট লে-আউট (এক পাতায় ফিট করতে সাহায্য করে) */
+    .pdf-mode body { font-size: 0.95rem; }
+    .pdf-mode .container { padding: 12px; }
+    .pdf-mode .profile, .pdf-mode .routine { box-shadow: none; padding: 14px; margin-bottom: 12px; }
+    .pdf-mode .profile img { width: 140px; height: 140px; }
+    .pdf-mode .header img { width: 60px; height: 60px; }
+    .pdf-mode table { font-size: 13px; }
+    .pdf-mode th, .pdf-mode td { padding: 6px; }
+
+    /* ===== Back to Home (fixed) ===== */
+  .back-home{
+    position:fixed; right:18px; bottom:18px;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 14px; border-radius:999px; text-decoration:none;
+    background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; font-weight:700;
+    box-shadow:0 6px 18px rgba(76,175,80,.28);
+    z-index:3500;
+  }
+  .back-home:focus,.back-home:hover{transform:translateY(-1px); box-shadow:0 12px 28px rgba(76,175,80,.35);}
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="nav_bar" id="navbar" aria-label="প্রধান নেভিগেশন">
+    <div class="nav-links" id="navLinks">
+      <a href="#school-info">বিদ্যালয়ের তথ্য</a>
+      <a href="#teachers">শিক্ষক</a>
+      <a href="#students">শিক্ষার্থী</a>
+      <a href="#results">ফলাফল</a>
+      <a href="#notices">নোটিশ বোর্ড</a>
+      <a href="#gallery">গ্যালারি</a>
+      <a href="#admission">ভর্তি</a>
+      <a href="#advice">পরামর্শ</a>
+
+      <!-- Dropdown -->
+      <div class="dropdown" id="dropdown">
+        <a id="othersMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-controls="othersPanel">অন্যান্য ▼</a>
+        <div class="dropdown-content" id="othersPanel" role="menu" aria-label="অন্যান্য">
+          <a href="#sub1" role="menuitem">সাব-মেনু ১</a>
+          <a href="#sub2" role="menuitem">সাব-মেনু ২</a>
+          <a href="#sub3" role="menuitem">সাব-মেনু ৩</a>
+          <a href="#sub4" role="menuitem">সাব-মেনু ৪</a>
+          <a href="#sub5" role="menuitem">সাব-মেনু ৫</a>
+        </div>
+      </div>
+
+      <a href="#contact">যোগাযোগ</a>
+    </div>
+
+    <div class="search-box">
+      <input type="text" placeholder="অনুসন্ধান করুন..." id="searchInput" aria-label="সার্চ">
+      <button type="button" id="searchBtn" aria-label="সার্চ করুন">🔍</button>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="মেনু টগল" aria-expanded="false" aria-controls="navLinks">☰</button>
+  </nav>
+
+  <div class="container" id="page-content">
+    <!-- হেডার: স্ক্রিনে লুকানো, প্রিন্ট/PDF-এ দৃশ্যমান -->
+    <div class="header" aria-hidden="true">
+      <img src="school_image/school_logo.jpg" alt="বিদ্যালয়ের লোগো">
+      <div class="title">
+        <h1>গয়হাট্টা সরকারি প্রাথমিক বিদ্যালয়</h1>
+        <p>ঠিকানা: গয়হাট্টা-৬৭৬২, উল্লাপাড়া, সিরাজগঞ্জ।</p>
+      </div>
+    </div>
+
+    <section class="profile">
+      <img src="../teachers-staff/at-tahmina.jpg" alt="মোছাঃ তাহমিনা খাতুন এর ছবি">
+      <div class="info">
+        <div class="item"><span class="key">নাম</span>: মোছাঃ তাহমিনা খাতুন</div>
+        <div class="item"><span class="key">পদবী</span>: সহকারী শিক্ষক</div>
+        <div class="item"><span class="key">সর্বোচ্চ শিক্ষাগত যোগ্যতা</span>: বি.এ.;  সি.ইন.এড.</div>
+        <div class="item"><span class="key">জন্ম তারিখ</span>: ২২-০১-১৯৮৫</div>
+        <div class="item"><span class="key">শিক্ষকতায় প্রথম যোগদান</span>: ০২-০৭-২০০৬</div>
+        <div class="item"><span class="key">বর্তমান পদে যোগদান</span>: ০২-০৭-২০০৬</div>
+        <div class="item"><span class="key">বর্তমান বিদ্যালয়ে যোগদান</span>: ৩০-০৩-২০১৭</div>
+        <div class="item"><span class="key">অবসর গ্রহণের তারিখ</span>:২২-০১-২০৪৪</div>
+        <div class="item"><span class="key">মোবাইল</span>: ০১৭৪৫১৭৯১২৯</div>
+        <div class="item"><span class="key">ই-মেইল</span>: rashedzaman1978@gmail.com</div>
+        <div class="actions">
+          <button class="btn print" onclick="window.print()"><i class="fas fa-print"></i> প্রিন্ট</button>
+          <button class="btn download" onclick="downloadPDF()"><i class="fas fa-download"></i> ডাউনলোড</button>
+          <a class="btn call" href="tel:017445179129"><i class="fas fa-phone"></i> কল করুন</a>
+          <a class="btn email" href="mailto:tahminareza1985@gmail.com"><i class="fas fa-envelope"></i> ই-মেইল</a>
+          <a class="btn whatsapp" href="https://wa.me/88017445179129?text=গয়হাট্টা সরকারি প্রাথমিক বিদ্যালয় সম্পর্কে জানতে চাই" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="routine">
+      <h2>ক্লাস রুটিন</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>বার</th>
+            <th>১ম পিরিয়ড<br>১২:০০-১২:৪০</th>
+            <th>২য় পিরিয়ড<br>১২:৪৫-১:২৫</th>
+            <th>৩য় পিরিয়ড<br>১:৩০-২:১০</th>
+            <th>৪র্থ পিরিয়ড<br>২:১৫-২:৫৫</th>
+            <th>৫ম পিরিয়ড<br>৩:০০-৩:৪০</th>
+            <th>৬ষ্ঠ পিরিয়ড<br>৩:৪৫-৪:২৫</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>রবিবার</td><td>গণিত</td><td>বাংলা</td><td>ইংরেজি</td><td>বিজ্ঞান</td><td>সামাজিক</td><td>শারীরিক</td></tr>
+          <tr><td>সোমবার</td><td>ইংরেজি</td><td>গণিত</td><td>বাংলা</td><td>বিজ্ঞান</td><td>ধর্ম</td><td>শарীরিক</td></tr>
+          <tr><td>মঙ্গলবার</td><td>বাংলা</td><td>ইংরেজি</td><td>গণিত</td><td>ধর্ম</td><td>বিজ্ঞান</td><td>শারীরিক</td></tr>
+          <tr><td>বুধবার</td><td>বিজ্ঞান</td><td>গণিত</td><td>বাংলা</td><td>ইংরেজি</td><td>ধর্ম</td><td>শারীরিক</td></tr>
+          <tr><td>বৃহস্পতিবার</td><td>ধর্ম</td><td>বিজ্ঞান</td><td>গণিত</td><td>বাংলা</td><td>ইংরেজি</td><td>শারীরিক</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- Back to Home Button -->
+  <a href="../staff-gallery.html" class="back-home" aria-label="হোমে ফিরে যান">🏠 হোম</a>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menuToggle');
+    const dropdown = document.getElementById('dropdown');
+    const othersMenu = document.getElementById('othersMenu');
+    const navLinksContainer = document.getElementById('navLinks');
+    const navLinks = navLinksContainer.querySelectorAll('a[href^="#"]');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+
+    // Menu helpers
+    function openMenu(){
+      navbar.classList.add('active');
+      menuToggle.textContent = '✖';
+      menuToggle.classList.add('rotated');
+      menuToggle.setAttribute('aria-expanded','true');
+    }
+    function closeMenu(){
+      navbar.classList.remove('active');
+      menuToggle.textContent = '☰';
+      menuToggle.classList.remove('rotated');
+      menuToggle.setAttribute('aria-expanded','false');
+      dropdown.classList.remove('active');
+      othersMenu.setAttribute('aria-expanded','false');
+    }
+    function toggleMenu(){ navbar.classList.contains('active') ? closeMenu() : openMenu(); }
+    menuToggle.addEventListener('click', (e)=>{ e.stopPropagation(); toggleMenu(); });
+
+    // Dropdown (mobile)
+    function toggleDropdown(e){
+      if (window.innerWidth <= 768){
+        e.preventDefault();
+        e.stopPropagation();
+        const willBeActive = !dropdown.classList.contains('active');
+        dropdown.classList.toggle('active');
+        othersMenu.setAttribute('aria-expanded', willBeActive ? 'true' : 'false');
+      }
+    }
+    othersMenu.addEventListener('click', toggleDropdown);
+    othersMenu.addEventListener('keydown', (e)=>{ if (e.key==='Enter' || e.key===' ') toggleDropdown(e); });
+
+    // Close on link click (mobile)
+    navLinks.forEach(link=>{
+      link.addEventListener('click', ()=>{ if (window.innerWidth <= 768){ setTimeout(closeMenu,300); }});
+    });
+
+    // Click outside to close (mobile)
+    document.addEventListener('click', (e)=>{
+      if (window.innerWidth <= 768 && !navbar.contains(e.target) && navbar.classList.contains('active')) closeMenu();
+    });
+
+    // Search
+    function handleSearch(){
+      const query = searchInput.value.trim();
+      if (query){ alert(`অনুসন্ধান: "${query}"\nএই বৈশিষ্ট্যটি শীঘ্রই যোগ করা হবে।`); }
+      else { alert('অনুগ্রহ করে অনুসন্ধানের জন্য কিছু লিখুন।'); }
+    }
+    searchBtn.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keypress', (e)=>{ if(e.key==='Enter') handleSearch(); });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+      anchor.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+        if (!href || href === '#') return;
+        const targetId = href.substring(1);
+        const target = document.getElementById(targetId);
+        if (target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
+
+    // Navbar scroll effect
+    function onScroll(){
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('orientationchange', onScroll);
+
+    // Resize handling
+    window.addEventListener('resize', ()=>{ if (window.innerWidth > 768){ closeMenu(); }});
+    document.addEventListener('DOMContentLoaded', ()=>{ closeMenu(); onScroll(); });
+
+    function downloadPDF() {
+      const element = document.getElementById("page-content");
+
+      // PDF মোড চালু: হেডার দেখাবে, বাটন লুকাবে
+      document.body.classList.add('pdf-mode');
+
+      // --- অটো-ফিট: কনটেন্টের উচ্চতা অনুযায়ী স্কেল নির্ণয় ---
+      // A4 উচ্চতা (পোর্ট্রেট) আনুমানিক 11.69in * 96dpi ≈ 1122px (মার্জিন বাদে একটু কম ধরা)
+      const A4_HEIGHT_PX = 1122; // 96dpi-র আনুমানিক
+      const SAFE_PADDING = 40;    // ওপর-নিচে নিরাপদ বাফার
+      const rect = element.getBoundingClientRect();
+      const available = A4_HEIGHT_PX - SAFE_PADDING;
+      let scale = Math.min(1, available / rect.height);
+
+      // খুব বেশি ছোট না করতে নিম্ন সীমা দিন (প্রয়োজনে টিউন করুন)
+      scale = Math.max(scale, 0.72);
+
+      if (scale < 1) {
+        element.style.transform = `scale(${scale})`;
+        element.style.transformOrigin = 'top left';
+        // স্কেল করলে ডান পাশে ক্লিপ এড়াতে কন্টেইনারের প্রস্থ সামান্য বাড়ানো যেতে পারে (প্রয়োজনে):
+        // element.style.width = `${Math.round(1000 / scale)}px`;
+      }
+
+      // লে-আউট আপডেটের সময় দিন
+      setTimeout(() => {
+        html2pdf().set({
+          margin: 0.3,
+          filename: 'school-profile.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['avoid-all'] }
+        }).from(element).save().then(cleanup).catch(cleanup);
+      }, 50);
+
+      function cleanup() {
+        element.style.transform = '';
+        element.style.transformOrigin = '';
+        // element.style.width = '';
+        document.body.classList.remove('pdf-mode');
+      }
+    }
+  </script>
+</body>
+</html>

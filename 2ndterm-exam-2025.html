@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>২য় প্রান্তিক মূল্যায়ন ২০২৫ - সময়সূচী</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+          
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  body{
+    font-family:"Noto Sans Bengali","SutonnyMJ","Kalpurush",Arial,sans-serif;
+    background:linear-gradient(135deg,#F0F2BD 0%,#B8CFCE 100%);
+    min-height:100vh; line-height:1.6; color:#113D43;
+  }
+
+  /* ===== NAVBAR ===== */
+  .nav_bar{
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#DDF6D2 0%,#C8E6C9 100%);
+    padding:0 20px; position:sticky; top:0; z-index:1000;
+    box-shadow:0 4px 15px rgba(0,0,0,.1); backdrop-filter:blur(10px);
+    transition:all .3s ease; animation:fadeInUp .6s ease-out;
+  }
+  .nav_bar::before{content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); z-index:-1}
+
+  .nav-links{display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:relative; justify-content:center}
+  .nav_bar a{
+    color:#113D43; font-size:20px; font-weight:500; padding:12px 16px; text-decoration:none;
+    transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; border-radius:8px; position:relative; overflow:hidden;
+  }
+  .nav_bar a::before{content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .5s ease}
+  .nav_bar a:hover::before{left:100%}
+  .nav_bar a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none; box-shadow:0 4px 12px rgba(76,175,80,.25)}
+  .nav_bar a:active{transform:translateY(0)}
+
+  /* Dropdown */
+  .dropdown{position:relative; display:inline-block}
+  .dropdown > a{cursor:pointer}
+  .dropdown-content{
+    display:none; position:absolute; background:linear-gradient(135deg,#E8F5E9 0%,#C8E6C9 100%);
+    min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.2); border-radius:8px; z-index:1001; overflow:hidden; transform:translateY(10px);
+    opacity:0; transition:all .3s ease;
+  }
+  .dropdown-content a{display:block; padding:12px 16px; font-size:16px; color:#113D43; text-decoration:none; transition:all .3s ease}
+  .dropdown-content a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none}
+
+  /* Desktop hover */
+  @media (min-width:769px){
+    .dropdown:hover .dropdown-content{display:block; transform:translateY(0); opacity:1}
+    .nav_bar a{display:inline-flex; align-items:center; height:48px; will-change:transform}
+  }
+
+  /* Search Box */
+  .search-box{
+    display:flex; align-items:center; background:#fff; border-radius:25px; overflow:hidden;
+    box-shadow:0 3px 10px rgba(0,0,0,.1); transition:all .3s ease;
+    position:absolute; right:20px; top:50%; transform:translateY(-50%);
+  }
+  .search-box:focus-within{transform:translateY(-50%) scale(1.02); box-shadow:0 5px 20px rgba(0,0,0,.15)}
+  .search-box input{padding:8px 16px; border:none; font-size:16px; outline:none; background:transparent; width:200px; font-family:inherit}
+  .search-box input::placeholder{color:#999}
+  .search-box button{padding:8px 13px; border:none; background:linear-gradient(135deg,#FEA405,#FF9800); color:#fff; cursor:pointer; font-size:16px; transition:all .3s ease; display:flex; align-items:center; justify-content:center}
+  .search-box button:hover{background:linear-gradient(135deg,#FF9800,#F57C00); transform:scale(1.05)}
+
+  /* Hamburger */
+  .menu-toggle{display:none; font-size:24px; color:#386641; cursor:pointer; padding:8px; border-radius:8px; transition:all .3s ease; background:rgba(255,255,255,.1)}
+  .menu-toggle:hover{background:rgba(255,255,255,.2); transform:scale(1.1)}
+  .menu-toggle.rotated{transform:rotate(180deg); transition:transform .3s ease}
+
+  /* Scroll effect */
+  .nav_bar.scrolled{background:rgba(221,246,210,.95); backdrop-filter:blur(15px)}
+
+  /* ===== Back to Home (fixed) ===== */
+  .back-home{
+    position:fixed; right:18px; bottom:18px;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 14px; border-radius:999px; text-decoration:none;
+    background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; font-weight:700;
+    box-shadow:0 6px 18px rgba(76,175,80,.28);
+    z-index:3500;
+  }
+  .back-home:focus,.back-home:hover{transform:translateY(-1px); box-shadow:0 12px 28px rgba(76,175,80,.35);}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:1024px){
+    .search-box input{width:150px}
+    .nav_bar a{font-size:16px; padding:10px 12px}
+    .dropdown-content{min-width:180px}
+  }
+
+  @media (max-width:768px){
+    .nav_bar{flex-direction:column; align-items:center; padding:15px 20px 0; justify-content:center}
+    .menu-toggle{display:block; position:absolute; top:15px; right:20px}
+
+    .nav-links{
+      flex-direction:column; width:100%; max-height:0; overflow:hidden; transition:max-height .5s ease-out; align-items:center;
+    }
+    .nav_bar.active .nav-links{max-height:850px; padding-bottom:5px}
+
+    .nav_bar a{
+      display:block; width:80%; text-align:center; padding:8px; margin:3px auto; border-radius:10px;
+      background:rgba(255,255,255,.1); backdrop-filter:blur(5px);
+      transform:translateX(-100px); opacity:0; transition:all .4s cubic-bezier(.4,0,.2,1);
+    }
+    .nav_bar.active a{transform:translateX(0); opacity:1}
+
+    .dropdown{width:80%;}
+    .dropdown-content{position:static; display:none; width:100%; box-shadow:none; background:rgba(255,255,255,.1); margin:5px 0; border-radius:8px; transform:none; opacity:1; transition:none;}
+    .dropdown.active .dropdown-content{display:block}
+    .dropdown-content a{padding:10px 15px; text-align:center; font-size:15px}
+
+    .nav_bar.active .nav-links > a:nth-of-type(1){transition-delay:.05s}
+    .nav_bar.active .nav-links > a:nth-of-type(2){transition-delay:.1s}
+    .nav_bar.active .nav-links > a:nth-of-type(3){transition-delay:.15s}
+    .nav_bar.active .nav-links > a:nth-of-type(4){transition-delay:.2s}
+    .nav_bar.active .nav-links > a:nth-of-type(5){transition-delay:.25s}
+    .nav_bar.active .nav-links > a:nth-of-type(6){transition-delay:.3s}
+    .nav_bar.active .nav-links > a:nth-of-type(7){transition-delay:.35s}
+    .nav_bar.active .nav-links > a:nth-of-type(8){transition-delay:.4s}
+
+    .search-box{width:80%; margin:15px 0 10px; opacity:0; transform:translateY(-20px); transition:all .3s ease; position:static; right:auto; top:auto}
+    .nav_bar.active .search-box{opacity:1; transform:translateY(0); transition-delay:.5s}
+    .search-box input{flex:1; width:auto}
+  }
+
+  /* Animations (fade only; header removed) */
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)}}
+
+  @media (prefers-reduced-motion: reduce){
+    .nav_bar a, .dropdown-content, .search-box, .menu-toggle {transition:none !important}
+  }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .exam-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .time-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .time-slot {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .time-slot:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .time-slot h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .time-slot .time {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e74c3c;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .schedule-table {
+            margin: 30px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        td {
+            padding: 18px 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 1rem;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9ff;
+        }
+
+        tr:hover {
+            background-color: #e3f2fd;
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Button Styles */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 30px;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .pdf-btn {
+            background: linear-gradient(135deg, #ff7676 0%, #f54ea2 100%);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .time-info {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .schedule-table {
+                margin: 20px 10px;
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            th, td {
+                padding: 12px 8px;
+                font-size: 0.9rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                margin: 20px 10px;
+                gap: 10px;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 0.5in;
+            }
+
+            body {
+                background: white !important;
+                padding: 0;
+                font-size: 12px;
+                line-height: 1.4;
+            }
+
+            .container {
+                max-width: 100%;
+                margin: 0;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+
+            .header {
+                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+                padding: 15px !important;
+            }
+
+            .header h1 {
+                font-size: 1.6rem !important;
+                margin-bottom: 8px !important;
+            }
+
+            .exam-title {
+                font-size: 1.4rem !important;
+                padding: 10px !important;
+            }
+
+            .time-info {
+                padding: 15px !important;
+            }
+
+            .time-slot {
+                padding: 15px !important;
+            }
+
+            .time-slot h3 {
+                font-size: 1.1rem !important;
+            }
+
+            .time-slot .time {
+                font-size: 1.2rem !important;
+            }
+
+            .schedule-table {
+                margin: 15px !important;
+            }
+
+            th {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                color: white !important;
+                padding: 12px 8px !important;
+                font-size: 1rem !important;
+            }
+
+            td {
+                padding: 10px 8px !important;
+                font-size: 0.9rem !important;
+            }
+
+            .footer {
+                background: #2c3e50 !important;
+                color: white !important;
+                padding: 15px !important;
+                font-size: 0.8rem !important;
+            }
+
+            .action-buttons {
+                display: none !important;
+            }
+
+            .back-home {
+                display: none !important;
+            }
+
+            .nav_bar {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+  <!-- Navbar -->
+
+  <nav class="nav_bar" id="navbar" aria-label="প্রধান নেভিগেশন">
+    <div class="nav-links" id="navLinks">
+      <a href="#school-info">বিদ্যালয়ের তথ্য</a>
+      <a href="#teachers">শিক্ষক</a>
+      <a href="#students">শিক্ষার্থী</a>
+      <a href="#results">ফলাফল</a>
+      <a href="#notices">নোটিশ বোর্ড</a>
+      <a href="#gallery">গ্যালারি</a>
+      <a href="#admission">ভর্তি</a>
+      <a href="#advice">পরামর্শ</a>
+
+      <!-- Dropdown -->
+      <div class="dropdown" id="dropdown">
+        <a id="othersMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-controls="othersPanel">অন্যান্য ▼</a>
+        <div class="dropdown-content" id="othersPanel" role="menu" aria-label="অন্যান্য">
+          <a href="#sub1" role="menuitem">সাব-মেনু ১</a>
+          <a href="#sub2" role="menuitem">সাব-মেনু ২</a>
+          <a href="#sub3" role="menuitem">সাব-মেনু ৩</a>
+          <a href="#sub4" role="menuitem">সাব-মেনু ৪</a>
+          <a href="#sub5" role="menuitem">সাব-মেনু ৫</a>
+        </div>
+      </div>
+
+      <a href="#contact">যোগাযোগ</a>
+    </div>
+
+    <div class="search-box">
+      <input type="text" placeholder="অনুসন্ধান করুন..." id="searchInput" aria-label="সার্চ">
+      <button type="button" id="searchBtn" aria-label="সার্চ করুন">🔍</button>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="মেনু টগল" aria-expanded="false" aria-controls="navLinks">☰</button>
+  </nav>
+
+    <!-- Main Content -->
+  <div class="container" id="pdfContent">
+    <div class="header">
+        <h1>গয়হাট্টা সরকারি প্রাথমিক বিদ্যালয়</h1>
+        <div class="exam-title">দ্বিতীয় প্রান্তিক মূল্যায়ন ২০২৫ এর সময়সূচী</div>
+    </div>
+
+    <div class="time-info">
+        <div class="time-slot">
+            <h3>১ম ও ২য় শ্রেণি</h3>
+            <div class="time">সকাল ১০:00 - ১২:00 টা পর্যন্ত</div>
+        </div>
+        <div class="time-slot">
+            <h3>৩য়, ৪র্থ ও ৫ম শ্রেণি</h3>
+            <div class="time">বিকাল ০১:৩০ - ০৩:৩০ টা পর্যন্ত</div>
+        </div>
+    </div>
+
+    <div class="schedule-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>তারিখ</th>
+                    <th>দিন</th>
+                    <th>১ম ও ২য় শ্রেণি</th>
+                    <th>৩য়, ৪র্থ ও ৫ম শ্রেণি</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>১৮-০৮-২০২৫</td>
+                    <td>সোমবার</td>
+                    <td>ইংরেজি</td>
+                    <td>ইংরেজি</td>
+                </tr>
+                <tr>
+                    <td>১৯-০৮-২০২৫</td>
+                    <td>মঙ্গলবার</td>
+                    <td>বাংলা</td>
+                    <td>বাংলা</td>
+                </tr>
+                <tr>
+                    <td>২১-০৮-২০২৫</td>
+                    <td>বৃহস্পতিবার</td>
+                    <td>প্রাথমিক গণিত</td>
+                    <td>প্রাথমিক গণিত</td>
+                </tr>
+                <tr>
+                    <td>২৪-০৮-২০২৫</td>
+                    <td>রবিবার</td>
+                    <td>পরিবেশ পরিচিতি</td>
+                    <td>প্রাথমিক বিজ্ঞান</td>
+                </tr>
+                <tr>
+                    <td>২৫-০৮-২০২৫</td>
+                    <td>সোমবার</td>
+                    <td>ধর্ম ও নৈতিক শিক্ষা</td>
+                    <td>ধর্ম ও নৈতিক শিক্ষা</td>
+                </tr>
+                <tr>
+                    <td>২৭-০৮-২০২৫</td>
+                    <td>মঙ্গলবার</td>
+                    <td>চারু ও কারুকলা</td>
+                    <td>বাংলাদেশ ও বিশ্ব পরিচয়</td>
+                </tr>
+                <tr>
+                    <td>২৭-০৮-২০২৫</td>
+                    <td>বুধবার</td>
+                    <td>শারীরিক শিক্ষা</td>
+                    <td>চারু ও কারুকলা</td>
+                </tr>
+                <tr>
+                    <td>২৮-০৮-২০২৫</td>
+                    <td>বৃহস্পতিবার</td>
+                    <td>-</td>
+                    <td>শারীরিক শিক্ষা</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Action Buttons at the bottom -->
+    <div class="action-buttons">
+        <button class="action-btn print-btn" onclick="printSchedule()">
+            <span>🖨️</span> প্রিন্ট করুন
+        </button>
+        <button class="action-btn pdf-btn" onclick="downloadPDF()">
+            <span>📄</span> পিডিএফ ডাউনলোড
+        </button>
+    </div>
+	<!-- Back to Home Button -->
+  <a href="index.html" class="back-home" aria-label="হোমে ফিরে যান">🏠 হোম</a>
+   <div class="footer">
+        <p>সকল শিক্ষার্থীদের নির্ধারিত সময়ে পরীক্ষায় অংশগ্রহণ করার জন্য অনুরোধ করা হলো।</p>
+        <p><strong>শুভকামনা রইলো সবার জন্য! 🌟</strong></p>
+    </div>
+</div>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  const menuToggle = document.getElementById('menuToggle');
+  const dropdown = document.getElementById('dropdown');
+  const othersMenu = document.getElementById('othersMenu');
+  const navLinksContainer = document.getElementById('navLinks');
+  const navLinks = navLinksContainer.querySelectorAll('a[href^="#"]');
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+
+  // Menu helpers
+  function openMenu(){
+    navbar.classList.add('active');
+    menuToggle.textContent = '✖';
+    menuToggle.classList.add('rotated');
+    menuToggle.setAttribute('aria-expanded','true');
+  }
+  function closeMenu(){
+    navbar.classList.remove('active');
+    menuToggle.textContent = '☰';
+    menuToggle.classList.remove('rotated');
+    menuToggle.setAttribute('aria-expanded','false');
+    dropdown.classList.remove('active');
+    othersMenu.setAttribute('aria-expanded','false');
+  }
+  function toggleMenu(){ navbar.classList.contains('active') ? closeMenu() : openMenu(); }
+  menuToggle.addEventListener('click', (e)=>{ e.stopPropagation(); toggleMenu(); });
+
+  // Dropdown (mobile)
+  function toggleDropdown(e){
+    if (window.innerWidth <= 768){
+      e.preventDefault();
+      e.stopPropagation();
+      const willBeActive = !dropdown.classList.contains('active');
+      dropdown.classList.toggle('active');
+      othersMenu.setAttribute('aria-expanded', willBeActive ? 'true' : 'false');
+    }
+  }
+  othersMenu.addEventListener('click', toggleDropdown);
+  othersMenu.addEventListener('keydown', (e)=>{ if (e.key==='Enter' || e.key===' ') toggleDropdown(e); });
+
+  // Close on link click (mobile)
+  navLinks.forEach(link=>{
+    link.addEventListener('click', ()=>{ if (window.innerWidth <= 768){ setTimeout(closeMenu,300); }});
+  });
+
+  // Click outside to close (mobile)
+  document.addEventListener('click', (e)=>{
+    if (window.innerWidth <= 768 && !navbar.contains(e.target) && navbar.classList.contains('active')) closeMenu();
+  });
+
+  // Search
+  function handleSearch(){
+    const query = searchInput.value.trim();
+    if (query){ alert(`অনুসন্ধান: "${query}"\nএই বৈশিষ্ট্যটি শীঘ্রই যোগ করা হবে।`); }
+    else { alert('অনুগ্রহ করে অনুসন্ধানের জন্য কিছু লিখুন।'); }
+  }
+  searchBtn.addEventListener('click', handleSearch);
+  searchInput.addEventListener('keypress', (e)=>{ if(e.key==='Enter') handleSearch(); });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+    anchor.addEventListener('click', function(e){
+      const href = this.getAttribute('href');
+      if (!href || href === '#') return;
+      const targetId = href.substring(1);
+      const target = document.getElementById(targetId);
+      if (target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  // Navbar scroll effect
+  function onScroll(){
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  }
+  window.addEventListener('scroll', onScroll);
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('orientationchange', onScroll);
+
+  // Resize handling
+  window.addEventListener('resize', ()=>{ if (window.innerWidth > 768){ closeMenu(); }});
+  document.addEventListener('DOMContentLoaded', ()=>{ closeMenu(); onScroll(); });
+
+  // Print functionality
+  function printSchedule() {
+    window.print();
+  }
+
+  // PDF Download functionality
+  function downloadPDF() {
+    // Use html2canvas and jsPDF
+    const { jsPDF } = window.jspdf;
+    
+    // Get the element to convert to PDF
+    const element = document.getElementById('pdfContent');
+    
+    // Show loading message
+    const originalContent = element.innerHTML;
+    element.innerHTML = '<div style="text-align:center;padding:50px;font-size:20px;">পিডিএফ তৈরি হচ্ছে... ⏳</div>';
+    
+    html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false
+    }).then(canvas => {
+        // Restore original content
+        element.innerHTML = originalContent;
+        
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 297; // A4 height in mm
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+        
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        
+        // Add more pages if needed
+        while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+        
+        // Save the PDF
+        pdf.save('গয়হাট্টা-সরকারি-প্রাথমিক-বিদ্যালয়-সময়সূচী.pdf');
+    }).catch(error => {
+        console.error('PDF generation error:', error);
+        alert('পিডিএফ ডাউনলোড করতে সমস্যা হচ্ছে। পরে আবার চেষ্টা করুন।');
+        element.innerHTML = originalContent;
+    });
+  }
+</script>
+</body>
