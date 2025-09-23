@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="shortcut icon" href="school_image/school_logo.jpg" type="image/x-icon">
-  <title>ফলাফল চেক করুন</title>
+  <title>ফলাফল চেক করুন — Multi-Select Exams</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
@@ -22,226 +22,84 @@
       --err:#dc2626;
     }
     body {
-  font-family: 'Noto Sans Bengali', "SutonnyMJ", "Kalpurush", Arial, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(135deg, #F0F2BD 0%, #B8CFCE 100%); /* Change the background color */
-  min-height: 100vh;
-  line-height: 1.6;
-  color: #113D43;
-}
+      font-family: 'Noto Sans Bengali', "SutonnyMJ", "Kalpurush", Arial, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #F0F2BD 0%, #B8CFCE 100%);
+      min-height: 100vh; line-height: 1.6; color: #113D43;
+    }
 
-/* ===== BUTTONS ===== */
-button {
-  padding: 12px 16px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: 700;
-  transition: all 0.3s ease;
-}
+    /* ===== BUTTONS ===== */
+    button { padding: 12px 16px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; transition: all 0.3s ease; }
+    .btn { background: #2563eb; color:#fff; } .btn:hover{background:#1e40af}
+    .btn-secondary { background:#0ea5e9; color:#fff; } .btn-secondary:hover{background:#0284c7}
 
-.btn {
-  background: #2563eb; /* Update button background color */
-  color: #fff;
-}
+    /* ===== SECTIONS ===== */
+    .grid{ display:grid; grid-template-columns: repeat(6, 1fr); gap:12px; }
+    .grid > div{ display:flex; flex-direction:column; padding:16px; background:#ffffff; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,.1); }
+    label{ font-weight:600; margin-bottom:6px; }
+    input, select{ padding:10px 12px; border:1px solid #cbd5e1; border-radius:10px; font-size:14px; background:#fff; }
+    input:focus, select:focus{ border-color:#0ea5e9; outline:none; }
 
-.btn:hover {
-  background: #1e40af; /* Update button hover color */
-}
+    /* Make multi-select nicer */
+    select[multiple]{ height:auto; min-height: 98px; }
+    .hint{ font-size:12px; color:#475569; margin-top:6px }
 
-.btn-secondary {
-  background: #0ea5e9; /* Update secondary button color */
-  color: #fff;
-}
+    /* ===== NAVBAR (unchanged) ===== */
+    .nav_bar{ display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#DDF6D2 0%,#C8E6C9 100%); padding:0 20px; position:sticky; top:0; z-index:1000; box-shadow:0 4px 15px rgba(0,0,0,.1); backdrop-filter:blur(10px); transition:all .3s ease; animation:fadeInUp .6s ease-out; }
+    .nav_bar::before{content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); z-index:-1}
+    .nav-links{display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:relative; justify-content:center}
+    .nav_bar a{ color:#113D43; font-size:20px; font-weight:500; padding:12px 16px; text-decoration:none; transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; border-radius:8px; position:relative; overflow:hidden; }
+    .nav_bar a::before{content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .5s ease}
+    .nav_bar a:hover::before{left:100%}
+    .nav_bar a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none; box-shadow:0 4px 12px rgba(76,175,80,.25)}
+    .nav_bar a:active{transform:translateY(0)}
+    .dropdown{position:relative; display:inline-block}
+    .dropdown > a{cursor:pointer}
+    .dropdown-content{ display:none; position:absolute; background:linear-gradient(135deg,#E8F5E9 0%,#C8E6C9 100%); min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.2); border-radius:8px; z-index:1001; overflow:hidden; transform:translateY(10px); opacity:0; transition:all .3s ease; }
+    .dropdown-content a{display:block; padding:12px 16px; font-size:16px; color:#113D43; text-decoration:none; transition:all .3s ease}
+    .dropdown-content a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none}
+    @media (min-width:769px){ .dropdown:hover .dropdown-content{display:block; transform:translateY(0); opacity:1} .nav_bar a{display:inline-flex; align-items:center; height:48px; will-change:transform} }
+    .search-box{ display:flex; align-items:center; background:#fff; border-radius:25px; overflow:hidden; box-shadow:0 3px 10px rgba(0,0,0,.1); transition:all .3s ease; position:absolute; right:20px; top:50%; transform:translateY(-50%); }
+    .search-box:focus-within{transform:translateY(-50%) scale(1.02); box-shadow:0 5px 20px rgba(0,0,0,.15)}
+    .search-box input{padding:8px 16px; border:none; font-size:16px; outline:none; background:transparent; width:150px; font-family:inherit}
+    .search-box input::placeholder{color:#999}
+    .search-box button{padding:8px 13px; border:none; background:linear-gradient(135deg,#FEA405,#FF9800); color:#fff; cursor:pointer; font-size:16px; transition:all .3s ease; display:flex; align-items:center; justify-content:center}
+    .search-box button:hover{background:linear-gradient(135deg,#FF9800,#F57C00); transform:scale(1.05)}
+    .menu-toggle{display:none; font-size:24px; color:#386641; cursor:pointer; padding:8px; border-radius:8px; transition:all .3s ease; background:rgba(255,255,255,.1)}
+    .menu-toggle:hover{background:rgba(255,255,255,.2); transform:scale(1.1)}
+    .menu-toggle.rotated{transform:rotate(180deg); transition:transform .3s ease}
+    .nav_bar.scrolled{background:rgba(221,246,210,.95); backdrop-filter:blur(15px)}
+    @media (max-width:1024px){ .search-box input{width:150px} .nav_bar a{font-size:16px; padding:10px 12px} .dropdown-content{min-width:180px} }
+    @media (max-width:768px){
+      .header_container{display:none;}
+      .nav_bar{flex-direction:column; align-items:center; padding:15px 20px 0; justify-content:center}
+      .menu-toggle{display:block; position:absolute; top:15px; right:20px}
+      .nav-links{ flex-direction:column; width:100%; max-height:0; overflow:hidden; transition:max-height .5s ease-out; align-items:center; }
+      .nav_bar.active .nav-links{max-height:850px; padding-bottom:5px}
+      .nav_bar a{ display:block; width:80%; text-align:center; padding:8px; margin:3px auto; border-radius:10px; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); transform:translateX(-100px); opacity:0; transition:all .4s cubic-bezier(.4,0,.2,1); }
+      .nav_bar.active a{transform:translateX(0); opacity:1}
+      .dropdown{width:80%;}
+      .dropdown-content{position:static; display:none; width:100%; box-shadow:none; background:rgba(255,255,255,.1); margin:5px 0; border-radius:8px; transform:none; opacity:1; transition:none;}
+      .dropdown.active .dropdown-content{display:block}
+      .dropdown-content a{padding:10px 15px; text-align:center; font-size:15px}
+      .nav_bar.active .nav-links > a:nth-of-type(1){transition-delay:.05s}
+      .nav_bar.active .nav-links > a:nth-of-type(2){transition-delay:.1s}
+      .nav_bar.active .nav-links > a:nth-of-type(3){transition-delay:.15s}
+      .nav_bar.active .nav-links > a:nth-of-type(4){transition-delay:.2s}
+      .nav_bar.active .nav-links > a:nth-of-type(5){transition-delay:.25s}
+      .nav_bar.active .nav-links > a:nth-of-type(6){transition-delay:.3s}
+      .nav_bar.active .nav-links > a:nth-of-type(7){transition-delay:.35s}
+      .nav_bar.active .nav-links > a:nth-of-type(8){transition-delay:.4s}
+      .search-box{width:80%; margin:15px 0 10px; opacity:0; transform:translateY(-20px); transition:all .3s ease; position:static; right:auto; top:auto}
+      .nav_bar.active .search-box{opacity:1; transform:translateY(0); transition-delay:.5s}
+      .search-box input{flex:1; width:auto}
+    }
+    @media (prefers-reduced-motion: reduce){ .nav_bar a, .dropdown-content, .search-box, .menu-toggle, #backToTop {transition:none !important} }
 
-.btn-secondary:hover {
-  background: #0284c7; /* Update secondary button hover color */
-}
-
-/* ===== SECTIONS ===== */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-}
-
-.grid > div {
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  background-color: #ffffff; /* Add background color for sections */
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Optional: add shadow to section */
-}
-
-label {
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-input, select {
-  padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  font-size: 14px;
-  background: #fff;
-}
-
-input:focus, select:focus {
-  border-color: #0ea5e9; /* Add focus effect for input and select */
-  outline: none;
-}
-
-
-/* =============== NAVBAR (FIXED) =============== */
-.nav_bar{
-  display:flex; align-items:center; justify-content:space-between; /* <-- FIX */
-  background:linear-gradient(135deg,#DDF6D2 0%,#C8E6C9 100%);
-  padding:0 20px; position:sticky; top:0; z-index:1000;
-  box-shadow:0 4px 15px rgba(0,0,0,.1); backdrop-filter:blur(10px);
-  transition:all .3s ease; animation:fadeInUp .6s ease-out;
-  flex-wrap: wrap; /* allow wrapping when tight */
-}
-.nav_bar::before{content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); z-index:-1}
-
-.nav-links{
-  display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:relative;
-  justify-content:flex-start; flex: 1 1 auto; min-width: 320px;
-}
-.nav_bar a{
-  color:#113D43; 
-  font-size: clamp(14px, 1vw, 16px); /* <-- FIX: responsive, capped */
-  font-weight:500; 
-  padding:12px 16px; 
-  text-decoration:none;
-  transition:all .3s cubic-bezier(.4,0,.2,1); 
-  white-space:nowrap; border-radius:8px; position:relative; overflow:hidden;
-}
-.nav_bar a::before{content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .5s ease}
-.nav_bar a:hover::before{left:100%}
-.nav_bar a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none; box-shadow:0 4px 12px rgba(76,175,80,.25)}
-.nav_bar a:active{transform:translateY(0)}
-
-/* Dropdown */
-.dropdown{position:relative; display:inline-block}
-.dropdown > a{cursor:pointer}
-.dropdown-content{
-  display:none; position:absolute; background:linear-gradient(135deg,#E8F5E9 0%,#C8E6C9 100%);
-  min-width:200px; box-shadow:0 8px 16px rgba(0,0,0,.2); border-radius:8px; z-index:1001; overflow:hidden; transform:translateY(10px);
-  opacity:0; transition:all .3s ease;
-}
-.dropdown-content a{display:block; padding:12px 16px; font-size:16px; color:#113D43; text-decoration:none; transition:all .3s ease}
-.dropdown-content a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none}
-
-/* Desktop hover */
-@media (min-width:769px){
-  .dropdown:hover .dropdown-content{display:block; transform:translateY(0); opacity:1}
-  .nav_bar a{display:inline-flex; align-items:center; height:48px; will-change:transform}
-}
-
-/* Search Box (FIX: no absolute; sits at right) */
-.search-box{
-  display:flex; align-items:center; background:#fff; border-radius:25px; overflow:hidden;
-  box-shadow:0 3px 10px rgba(0,0,0,.1); transition:all .3s ease;
-  position: static;           /* <-- FIX */
-  margin-left: auto;          /* <-- FIX */
-  flex-shrink: 0;             /* <-- FIX */
-}
-.search-box:focus-within{transform:scale(1.02); box-shadow:0 5px 20px rgba(0,0,0,.15)}
-.search-box input{
-  padding:8px 16px; border:none; font-size:15px; outline:none; background:transparent; 
-  width: 140px;    /* <-- FIX: sensible width on desktop */
-  font-family:inherit
-}
-.search-box input::placeholder{color:#999}
-.search-box button{padding:8px 13px; border:none; background:linear-gradient(135deg,#FEA405,#FF9800); color:#fff; cursor:pointer; font-size:16px; transition:all .3s ease; display:flex; align-items:center; justify-content:center}
-.search-box button:hover{background:linear-gradient(135deg,#FF9800,#F57C00); transform:scale(1.05)}
-
-/* Hamburger */
-.menu-toggle{display:none; font-size:24px; color:#386641; cursor:pointer; padding:8px; border-radius:8px; transition:all .3s ease; background:rgba(255,255,255,.1)}
-.menu-toggle:hover{background:rgba(255,255,255,.2); transform:scale(1.1)}
-.menu-toggle.rotated{transform:rotate(180deg); transition:transform .3s ease}
-
-/* Scroll effect */
-.nav_bar.scrolled{background:rgba(221,246,210,.95); backdrop-filter:blur(15px)}
-
-/* =============== RESPONSIVE (DESKTOP DOWN) =============== */
-@media (max-width: 1200px){
-  .search-box input{ width: min(22rem, 34vw); }
-}
-@media (max-width: 1024px){
-  .nav_bar a{ font-size: 15px; padding:10px 12px; }
-  .dropdown-content{ min-width:180px; }
-  .search-box input{ width: min(18rem, 40vw); }
-}
-
-/* ছোট স্ক্রিন: হেডার হাইড, মেনু ডিফল্ট ক্লোজ */
-@media (max-width:768px){
-  .header_container{display:none;}
-
-  .nav_bar{flex-direction:column; align-items:center; padding:15px 20px 0; justify-content:center}
-  .menu-toggle{display:block; position:absolute; top:15px; right:20px}
-
-  .nav-links{
-    flex-direction:column; width:100%; max-height:0; overflow:hidden; transition:max-height .5s ease-out; align-items:center;
-  }
-  .nav_bar.active .nav-links{max-height:850px; padding-bottom:5px}
-
-  .nav_bar a{
-    display:block; width:80%; text-align:center; padding:8px; margin:3px auto; border-radius:10px;
-    background:rgba(255,255,255,.1); backdrop-filter:blur(5px);
-    transform:translateX(-100px); opacity:0; transition:all .4s cubic-bezier(.4,0,.2,1);
-  }
-  .nav_bar.active a{transform:translateX(0); opacity:1}
-
-  .dropdown{width:80%;}
-  .dropdown-content{position:static; display:none; width:100%; box-shadow:none; background:rgba(255,255,255,.1); margin:5px 0; border-radius:8px; transform:none; opacity:1; transition:none;}
-  .dropdown.active .dropdown-content{display:block}
-  .dropdown-content a{padding:10px 15px; text-align:center; font-size:15px}
-
-  .nav_bar.active .nav-links > a:nth-of-type(1){transition-delay:.05s}
-  .nav_bar.active .nav-links > a:nth-of-type(2){transition-delay:.1s}
-  .nav_bar.active .nav-links > a:nth-of-type(3){transition-delay:.15s}
-  .nav_bar.active .nav-links > a:nth-of-type(4){transition-delay:.2s}
-  .nav_bar.active .nav-links > a:nth-of-type(5){transition-delay:.25s}
-  .nav_bar.active .nav-links > a:nth-of-type(6){transition-delay:.3s}
-  .nav_bar.active .nav-links > a:nth-of-type(7){transition-delay:.35s}
-  .nav_bar.active .nav-links > a:nth-of-type(8){transition-delay:.4s}
-
-  /* Mobile search box shown as full-width row */
-  .search-box{
-    width:80%; margin:15px 0 10px; opacity:0; transform:translateY(-20px);
-    transition:all .3s ease; position:static;
-  }
-  .nav_bar.active .search-box{opacity:1; transform:translateY(0); transition-delay:.5s}
-  .search-box input{flex:1; width:auto}
-}
-
-@media (prefers-reduced-motion: reduce){
-  .nav_bar a, .dropdown-content, .search-box, .menu-toggle, #backToTop {transition:none !important}
-}
-  /* ===== Back to Home (fixed) ===== */
-  .back-home{
-    position:fixed; right:18px; bottom:18px;
-    display:inline-flex; align-items:center; gap:8px;
-    padding:10px 14px; border-radius:999px; text-decoration:none;
-    background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; font-weight:700;
-    box-shadow:0 6px 18px rgba(76,175,80,.28);
-    z-index:3500;
-  }
-  .back-home:focus,.back-home:hover{transform:translateY(-1px); box-shadow:0 12px 28px rgba(76,175,80,.35);}
     .container { max-width: 1120px; margin: 0 auto; margin-top: 50px; }
     .card { background: #fff; border-radius: 16px; box-shadow: var(--card-shadow); padding: 20px; }
     .title { font-size: 24px; font-weight: 700; margin-bottom: 16px; text-align:center; }
 
-    .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-    .grid > div { display: flex; flex-direction: column; }
-    label { font-weight: 600; margin-bottom: 6px; }
-    input, select { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; background:#fff; }
-    button { padding: 12px 16px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; }
-    .btn { background: #2563eb; color: #fff; }
-    .btn-secondary { background: #0ea5e9; color: #fff; }
     .status { display:flex; gap:8px; align-items:center; margin-bottom:12px; font-size:14px; }
     .badge { padding:4px 10px; border-radius:999px; font-weight:700; }
     .ok { background:#dcfce7; color:#166534; border:1px solid #86efac; }
@@ -251,9 +109,7 @@ input:focus, select:focus {
 
     .sheet { background:#fff; border:1px solid var(--border); border-radius: 8px; padding: 14mm; margin-top: 16px; }
     .sheet-inner{ width: 100%; max-width: 180mm; margin: 0 auto; }
-    .sheet-header{
-      display:grid; grid-template-columns: 22mm 1fr; align-items:center; gap:6mm; margin-bottom: 6mm;
-    }
+    .sheet-header{ display:grid; grid-template-columns: 22mm 1fr; align-items:center; gap:6mm; margin-bottom: 6mm; }
     .logo{ width:22mm; height:22mm; object-fit:contain; border-radius:4px; border:1px solid #e2e8f0; }
     .school h1{ margin:0; font-size: 22pt; color: var(--primary); text-align:center; }
     .school p{ margin:.5mm 0 0 0; color:#334155; text-align:center; }
@@ -267,8 +123,7 @@ input:focus, select:focus {
     th { background:#f1f5f9; }
     .meta-table { margin-top: 1.5mm; }
     .subject-table { margin-top: 2mm; }
-    .subject-table th { text-align:center; }
-    .subject-table td{ text-align:center; }
+    .subject-table th, .subject-table td{ text-align:center; }
     .subject-table td:first-child{ width: 30%; text-align:left; }
     .meta-table th{ text-align:left; }
     .meta-table td{ text-align:center; }
@@ -279,99 +134,30 @@ input:focus, select:focus {
 
     .print-footer{ display:none; }
     .print-meta{ text-align:right; font-size:9pt; color:#475569; }
-    
+
+    .back-home{ position:fixed; right:18px; bottom:18px; display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; text-decoration:none; background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; font-weight:700; box-shadow:0 6px 18px rgba(76,175,80,.28); z-index:3500; }
+    .back-home:focus,.back-home:hover{transform:translateY(-1px); box-shadow:0 12px 28px rgba(76,175,80,.35);}
+
     @media print {
-  /* ——— শুধু প্রিন্টে টিউন ——— */
-  .card, .controls, .troubleshoot, .nav_bar, .back-home { display:none !important; }
-
-  /* এক পেজে ফিট করার জন্য হালকা স্কেল */
-  .sheet{ 
-    box-shadow:none; border-color:#cbd5e1;
-    zoom: 0.90;                  /* Chrome/Edge */
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    page-break-inside: avoid;
-  }
-
-  /* Adjust header styles */
-  .school h1 {
-    font-size: 22pt; /* Header font size */
-    margin-top: 2mm; /* Decreased top margin */
-  }
-
-  .school p {
-    margin: .5mm 0 0 0;
-    font-size: 16pt; /* Increased font size */
-  }
-
-  .sheet-title .name {
-    font-size: 24px; /* Font size of the title */
-    padding: 1.5mm 6mm;
-  }
-
-  .sheet-title .exam {
-    font-size: 16px; 
-    margin-top: 1mm;
-  }
-
-  th, td {
-    font-size: 13pt; 
-    padding: 1.8mm 2.2mm; 
-    line-height: 1.22;
-  }
-
-  .subject-table td:first-child {
-    width: 34%; 
-  }
-
-  .signatures {
-    margin-top: 9mm;
-    font-size: 13pt;
-    gap:6px;
-  }
-
-  /* Footer adjustment */
-  .print-footer {
-    position: fixed;
-    bottom: 6mm;
-    left: 8mm;
-    right: 8mm;
-    text-align: right;
-    font-size: 10pt;
-    color: #475569;
-    display: block;
-  }
-
-  /* Signature styles */
-  .signatures {
-    margin-top: 9mm;
-    font-size: 13pt;
-    gap:6px;
-  }
-
-  .print-footer {
-    display:block;
-    position: fixed;
-    bottom: 6mm;
-    left: 8mm;
-    right: 8mm;
-    text-align:right;
-  }
-  .print-meta{ font-size:9pt; color:#475569; }
-}
-
-    
+      .card, .controls, .troubleshoot, .nav_bar, .back-home { display:none !important; }
+      .sheet{ box-shadow:none; border-color:#cbd5e1; zoom: 0.90; -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+      .school h1 { font-size: 22pt; margin-top: 2mm; }
+      .school p { margin: .5mm 0 0 0; font-size: 16pt; }
+      .sheet-title .name { font-size: 24px; padding: 1.5mm 6mm; }
+      .sheet-title .exam { font-size: 16px; margin-top: 1mm; }
+      th, td { font-size: 13pt; padding: 1.8mm 2.2mm; line-height: 1.22; }
+      .subject-table td:first-child { width: 34%; }
+      .signatures { margin-top: 9mm; font-size: 13pt; gap:6px; }
+      .print-footer { position: fixed; bottom: 6mm; left: 8mm; right: 8mm; text-align: right; font-size: 10pt; color: #475569; display: block; }
+    }
 
     @page { size: A4; margin: 8mm; }
-
     .hide { display:none; }
     .troubleshoot { margin-top:12px; font-size:16px; color:var(--muted); }
     .troubleshoot details { border:1px dashed #e2e8f0; border-radius:12px; padding:10px 12px; background:#fff; }
     .troubleshoot summary { font-weight:700; cursor:pointer; }
 
-    @media (max-width: 992px){
-      .grid{ grid-template-columns: repeat(3, 1fr); }
-    }
+    @media (max-width: 992px){ .grid{ grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 640px){
       body{ padding: 12px; }
       .grid{ grid-template-columns: 1fr; }
@@ -400,8 +186,6 @@ input:focus, select:focus {
       <a href="#gallery">গ্যালারি</a>
       <a href="#admission">ভর্তি</a>
       <a href="#advice">পরামর্শ</a>
-
-      <!-- Dropdown -->
       <div class="dropdown" id="dropdown">
         <a id="othersMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-controls="othersPanel">অন্যান্য ▼</a>
         <div class="dropdown-content" id="othersPanel" role="menu" aria-label="অন্যান্য">
@@ -412,7 +196,6 @@ input:focus, select:focus {
           <a href="#sub5" role="menuitem">সাব-মেনু ৫</a>
         </div>
       </div>
-
       <a href="#contact">যোগাযোগ</a>
     </div>
 
@@ -462,21 +245,19 @@ input:focus, select:focus {
           </select>
         </div>
         <div>
-          <label>পরীক্ষার নাম</label>
-          <select id="exam">
-            <option value="" selected disabled hidden>পরীক্ষার নাম নির্বাচন করুন</option>
-            <option>১ম প্রান্তিক মূল্যায়ন</option>
-            <option>২য় প্রান্তিক মূল্যায়ন</option>
-            <option>চূড়ান্ত মূল্যায়ন</option>
+          <label>পরীক্ষার নাম (একাধিক নির্বাচন করুন)</label>
+          <select id="exam" multiple size="3">
+            <option value="১ম প্রান্তিক মূল্যায়ন">১ম প্রান্তিক মূল্যায়ন</option>
+            <option value="২য় প্রান্তিক মূল্যায়ন">২য় প্রান্তিক মূল্যায়ন</option>
+            <option value="চূড়ান্ত মূল্যায়ন">চূড়ান্ত মূল্যায়ন</option>
           </select>
+          <div class="hint">Tip: Ctrl/⌘ চেপে ধরে একাধিক সিলেক্ট করুন।</div>
         </div>
         <div>
           <label>শিক্ষাবর্ষ</label>
           <select id="year">
             <option value="" selected disabled hidden>সাল নির্বাচন করুন</option>
-            <!--<option>২০২৪</option>-->
             <option>২০২৫</option>
-            <!--<option>২০২৬</option>-->
           </select>
         </div>
         <div style="display:flex; gap:8px; align-items:end; justify-content:center;">
@@ -538,11 +319,9 @@ input:focus, select:focus {
 
         <table class="subject-table">
           <thead>
-            <tr>
+            <tr id="subjectHeadRow">
               <th>বিষয়সমূহ</th>
-              <th>১ম প্রান্তিক মূল্যায়ন</th>
-              <th>২য় প্রান্তিক মূল্যায়ন</th>
-              <th>চূড়ান্ত মূল্যায়ন</th>
+              <!-- dynamic exam columns go here -->
             </tr>
           </thead>
           <tbody id="subjectRows"></tbody>
@@ -558,9 +337,7 @@ input:focus, select:focus {
     </div>
   </div>
 
-  <div class="print-footer print-meta">
-    মুদ্রণের সময়: <span id="printTime"></span>
-  </div>
+  <div class="print-footer print-meta"> মুদ্রণের সময়: <span id="printTime"></span> </div>
 
 <script>
   const navbar = document.getElementById('navbar');
@@ -572,95 +349,33 @@ input:focus, select:focus {
   const searchInput = document.getElementById('searchInput');
   const navSearchBtn = document.getElementById('navSearchBtn');
 
-  // Menu helpers
-  function openMenu(){
-    navbar.classList.add('active');
-    menuToggle.textContent = '✖';
-    menuToggle.classList.add('rotated');
-    menuToggle.setAttribute('aria-expanded','true');
-  }
-  function closeMenu(){
-    navbar.classList.remove('active');
-    menuToggle.textContent = '☰';
-    menuToggle.classList.remove('rotated');
-    menuToggle.setAttribute('aria-expanded','false');
-    dropdown.classList.remove('active');
-    othersMenu.setAttribute('aria-expanded','false');
-  }
+  function openMenu(){ navbar.classList.add('active'); menuToggle.textContent = '✖'; menuToggle.classList.add('rotated'); menuToggle.setAttribute('aria-expanded','true'); }
+  function closeMenu(){ navbar.classList.remove('active'); menuToggle.textContent = '☰'; menuToggle.classList.remove('rotated'); menuToggle.setAttribute('aria-expanded','false'); dropdown.classList.remove('active'); othersMenu.setAttribute('aria-expanded','false'); }
   function toggleMenu(){ navbar.classList.contains('active') ? closeMenu() : openMenu(); }
   menuToggle.addEventListener('click', (e)=>{ e.stopPropagation(); toggleMenu(); });
-
-  // Dropdown (mobile)
-  function toggleDropdown(e){
-    if (window.innerWidth <= 768){
-      e.preventDefault();
-      e.stopPropagation();
-      const willBeActive = !dropdown.classList.contains('active');
-      dropdown.classList.toggle('active');
-      othersMenu.setAttribute('aria-expanded', willBeActive ? 'true' : 'false');
-    }
-  }
+  function toggleDropdown(e){ if (window.innerWidth <= 768){ e.preventDefault(); e.stopPropagation(); const willBeActive = !dropdown.classList.contains('active'); dropdown.classList.toggle('active'); othersMenu.setAttribute('aria-expanded', willBeActive ? 'true' : 'false'); } }
   othersMenu.addEventListener('click', toggleDropdown);
   othersMenu.addEventListener('keydown', (e)=>{ if (e.key==='Enter' || e.key===' ') toggleDropdown(e); });
-
-  // Close on link click (mobile)
-  navLinks.forEach(link=>{
-    link.addEventListener('click', ()=>{ if (window.innerWidth <= 768){ setTimeout(closeMenu,300); }});
-  });
-
-  // Click outside to close (mobile)
-  document.addEventListener('click', (e)=>{
-    if (window.innerWidth <= 768 && !navbar.contains(e.target) && navbar.classList.contains('active')) closeMenu();
-  });
-
-  // Search (navbar)
-  function handleSearch(){
-    const query = searchInput.value.trim();
-    if (query){ alert(`অনুসন্ধান: "${query}"\nএই বৈশিষ্ট্যটি শীঘ্রই যোগ করা হবে।`); }
-    else { alert('অনুগ্রহ করে অনুসন্ধানের জন্য কিছু লিখুন।'); }
-  }
+  navLinks.forEach(link=>{ link.addEventListener('click', ()=>{ if (window.innerWidth <= 768){ setTimeout(closeMenu,300); }}); });
+  document.addEventListener('click', (e)=>{ if (window.innerWidth <= 768 && !navbar.contains(e.target) && navbar.classList.contains('active')) closeMenu(); });
+  function handleSearch(){ const query = searchInput.value.trim(); if (query){ alert(`অনুসন্ধান: "${query}"\nএই বৈশিষ্ট্যটি শীঘ্রই যোগ করা হবে।`); } else { alert('অনুগ্রহ করে অনুসন্ধানের জন্য কিছু লিখুন।'); } }
   navSearchBtn.addEventListener('click', handleSearch);
   searchInput.addEventListener('keypress', (e)=>{ if(e.key==='Enter') handleSearch(); });
-
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
-    anchor.addEventListener('click', function(e){
-      const href = this.getAttribute('href');
-      if (!href || href === '#') return;
-      const targetId = href.substring(1);
-      const target = document.getElementById(targetId);
-      if (target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
-    });
-  });
-
-  // Navbar scroll effect
-  function onScroll(){
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
-  }
-  window.addEventListener('scroll', onScroll);
-  window.addEventListener('resize', onScroll);
-  window.addEventListener('orientationchange', onScroll);
-
-  // Resize handling
+  document.querySelectorAll('a[href^="#"]').forEach(anchor=>{ anchor.addEventListener('click', function(e){ const href = this.getAttribute('href'); if (!href || href === '#') return; const targetId = href.substring(1); const target = document.getElementById(targetId); if (target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); } }); });
+  function onScroll(){ navbar.classList.toggle('scrolled', window.scrollY > 50); }
+  window.addEventListener('scroll', onScroll); window.addEventListener('resize', onScroll); window.addEventListener('orientationchange', onScroll);
   window.addEventListener('resize', ()=>{ if (window.innerWidth > 768){ closeMenu(); }});
   document.addEventListener('DOMContentLoaded', ()=>{ closeMenu(); onScroll(); });
 
   // ======= CONFIG =======
   const SCHOOL_NAME ="গয়হাট্টা সরকারি প্রাথমিক বিদ্যালয়";
-  const SCHOOL_ADDR = "গয়হাট্টা-৬৭৬২, উল্লাপাড়া, সিরাজগঞ্জ।";
+  const SCHOOL_ADDR = "ডাকঘরঃ গয়হাট্টা-৬৭৬২, উল্লাপাড়া, সিরাজগঞ্জ।";
   const SCHOOL_CONTACT = "মোবাইল: ০১৭১৮-৭২৪৪১৪, ইমেইল: ggps1929@gmail.com";
   const LOGO_URL = "school_logo.jpg";
 
   // ======= Data source candidates =======
   const queryUrl = new URLSearchParams(location.search).get("data");
-  const DATA_CANDIDATES = [
-    queryUrl, 
-    "sheet2_data.json",
-    "results.json",
-    "./results.json",
-    "../results.json",
-    "data/results.json"
-  ].filter(Boolean);
+  const DATA_CANDIDATES = [ queryUrl, "sheet2_data.json", "results.json", "./results.json", "../results.json", "data/results.json" ].filter(Boolean);
 
   let records = [];
   const selects = {
@@ -673,11 +388,7 @@ input:focus, select:focus {
   // ======= UI status =======
   const statusBadge = document.getElementById('statusBadge');
   const statusInfo  = document.getElementById('statusInfo');
-  function setStatus(type, text, info=""){
-    statusBadge.className = "badge " + type;
-    statusBadge.textContent = text;
-    statusInfo.textContent = info;
-  }
+  function setStatus(type, text, info=""){ statusBadge.className = "badge " + type; statusBadge.textContent = text; statusInfo.textContent = info; }
 
   // ======= Digit helpers =======
   const bnToEnMap = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
@@ -689,89 +400,41 @@ input:focus, select:focus {
   // ======= Date-time (BN) =======
   const days = ["রবিবার","সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
   const months = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
-  function bnDateTime(date){
-    const d = days[date.getDay()];
-    const dd = enToBn(date.getDate());
-    const mm = months[date.getMonth()];
-    const yyyy = enToBn(date.getFullYear());
-    let h = date.getHours();
-    const m = enToBn(String(date.getMinutes()).padStart(2,'0'));
-    const ampm = h >= 12 ? "অপরাহ্ন" : "পূর্বাহ্ন";
-    h = h % 12; if(h === 0) h = 12;
-    const hh = enToBn(h);
-    return `${d}, ${dd} ${mm} ${yyyy}, ${hh}:${m} ${ampm}`;
-  }
-  function updatePrintTime(){
-    const el = document.getElementById('printTime');
-    if (el) el.textContent = bnDateTime(new Date());
-  }
+  function bnDateTime(date){ const d = days[date.getDay()]; const dd = enToBn(date.getDate()); const mm = months[date.getMonth()]; const yyyy = enToBn(date.getFullYear()); let h = date.getHours(); const m = enToBn(String(date.getMinutes()).padStart(2,'0')); const ampm = h >= 12 ? "অপরাহ্ন" : "পূর্বাহ্ন"; h = h % 12; if(h === 0) h = 12; const hh = enToBn(h); return `${d}, ${dd} ${mm} ${yyyy}, ${hh}:${m} ${ampm}`; }
+  function updatePrintTime(){ const el = document.getElementById('printTime'); if (el) el.textContent = bnDateTime(new Date()); }
 
-  // ======= Header =======
-  function initHeader(){
-    document.getElementById('schoolName').textContent = SCHOOL_NAME;
-    document.getElementById('schoolAddr').textContent = SCHOOL_ADDR;
-    document.getElementById('schoolContact').textContent = SCHOOL_CONTACT;
-    document.getElementById('schoolLogo').src = LOGO_URL;
-    updatePrintTime();
-  }
+  function initHeader(){ document.getElementById('schoolName').textContent = SCHOOL_NAME; document.getElementById('schoolAddr').textContent = SCHOOL_ADDR; document.getElementById('schoolContact').textContent = SCHOOL_CONTACT; document.getElementById('schoolLogo').src = LOGO_URL; updatePrintTime(); }
 
-  // ======= Load data =======
   async function loadData(){
     for(const url of DATA_CANDIDATES){
-      try{
-        const res = await fetch(url);
-        if(!res.ok) throw new Error("HTTP "+res.status);
-        const json = await res.json();
-        records = Array.isArray(json) ? json : (json.records || []);
-        setStatus("ok", "ডেটা লোড হয়েছে", `রেকর্ড: ${records.length}`);
-        return;
-      }catch(err){
-        console.warn("Failed to load", url, err);
-      }
+      try{ const res = await fetch(url); if(!res.ok) throw new Error("HTTP "+res.status); const json = await res.json(); records = Array.isArray(json) ? json : (json.records || []); setStatus("ok", "ডেটা লোড হয়েছে", `রেকর্ড: ${records.length}`); return; }catch(err){ console.warn("Failed to load", url, err); }
     }
     setStatus("err", "ডেটা লোড হয়নি", "results.json পাথ ঠিক আছে কিনা দেখুন, অথবা নিচে JSON আপলোড করুন।");
   }
   loadData();
 
-  // ======= Manual upload =======
   document.getElementById('loadJsonBtn').addEventListener('click', async ()=>{
     const f = document.getElementById('jsonFile').files[0];
     if(!f){ alert("JSON ফাইল নির্বাচন করুন"); return; }
-    try{
-      const txt = await f.text();
-      const json = JSON.parse(txt);
-      records = Array.isArray(json) ? json : (json.records || []);
-      setStatus("ok", "ডেটা লোড হয়েছে", `রেকর্ড: ${records.length}`);
-    }catch(e){
-      alert("JSON পড়তে সমস্যা হয়েছে: " + e.message);
-    }
+    try{ const txt = await f.text(); const json = JSON.parse(txt); records = Array.isArray(json) ? json : (json.records || []); setStatus("ok", "ডেটা লোড হয়েছে", `রেকর্ড: ${records.length}`); }catch(e){ alert("JSON পড়তে সমস্যা হয়েছে: " + e.message); }
   });
 
   function normalize(str){ return (str??"").toString().trim(); }
+  function canonicalClass(x){ x = normalize(x); if(!x) return ""; if(/(১ম|প্রথম)/.test(x)) return "১ম"; if(/(২য়|দ্বিতীয়|দ্বিতীয়)/.test(x)) return "২য়"; if(/(৩য়|তৃতীয়|তৃতীয়)/.test(x)) return "৩য়"; if(/(৪র্থ|চতুর্থ)/.test(x)) return "৪র্থ"; if(/(৫ম|পঞ্চম)/.test(x)) return "৫ম"; return x; }
 
-  // শ্রেণি নরমালাইজার
-  function canonicalClass(x){
-    x = normalize(x);
-    if(!x) return "";
-    if(/(১ম|প্রথম)/.test(x)) return "১ম";
-    if(/(২য়|দ্বিতীয়|দ্বিতীয়)/.test(x)) return "২য়";
-    if(/(৩য়|তৃতীয়|তৃতীয়)/.test(x)) return "৩য়";
-    if(/(৪র্থ|চতুর্থ)/.test(x)) return "৪র্থ";
-    if(/(৫ম|পঞ্চম)/.test(x)) return "৫ম";
-    return x;
-  }
+  const EXAM_TO_CODE = { '১ম প্রান্তিক মূল্যায়ন':'s1', '২য় প্রান্তিক মূল্যায়ন':'s2', 'চূড়ান্ত মূল্যায়ন':'sf' };
+  const CODE_TO_EXAM = { s1:'১ম প্রান্তিক মূল্যায়ন', s2:'২য় প্রান্তিক মূল্যায়ন', sf:'চূড়ান্ত মূল্যায়ন' };
+
+  function getSelectedExams(){ return Array.from(selects.exam.selectedOptions).map(o=>normalize(o.value)).filter(Boolean); }
 
   function onSearch(){
     const roll = bnToEn(normalize(document.getElementById('roll').value));
     const klassSel = canonicalClass(selects.class.value);
     const sectionSel = normalize(selects.section.value);
-    const examSel = normalize(selects.exam.value);
-    const yearSelEn = bnToEn(normalize(selects.year.value)); // বাংলা → ইংরেজি
+    const examsSel = getSelectedExams(); // array (can be empty)
+    const yearSelEn = bnToEn(normalize(selects.year.value));
 
-    if(!records.length){
-      alert("ডেটা লোড হয়নি। উপরের নির্দেশনা দেখে JSON পাথ ঠিক করুন বা JSON আপলোড করুন।");
-      return;
-    }
+    if(!records.length){ alert("ডেটা লোড হয়নি। উপরের নির্দেশনা দেখে JSON পাথ ঠিক করুন বা JSON আপলোড করুন।"); return; }
 
     // Filter
     let candidates = records.filter(rec => {
@@ -784,59 +447,37 @@ input:focus, select:focus {
       const rollOk  = roll   ? (r === roll) : true;
       const classOk = klassSel ? (c === klassSel) : true;
       const secOk   = sectionSel ? (s === sectionSel) : true;
-      const examOk  = examSel ? (e === examSel) : true;
+      // Exam filter: if multi-selected, allow any match; if none selected -> ignore exam filter
+      const examOk  = examsSel.length ? (examsSel.includes(e) || !e) : true;
       const yearOk  = yearSelEn ? (yEn === yearSelEn) : true;
 
       return rollOk && classOk && secOk && examOk && yearOk;
     });
 
     if(!roll){
-      if(candidates.length === 1){
-        renderSheet(candidates[0], {klass: klassSel, section: sectionSel, exam: examSel, year: selects.year.value});
-        return;
-      } else if(candidates.length === 0){
-        alert("কোনো রেকর্ড মেলেনি। ইনপুটগুলো (বিশেষ করে শিক্ষাবর্ষ) ঠিক আছে কি না দেখুন।");
-        document.getElementById('sheet').classList.add('hide');
-        return;
-      } else {
-        alert("একাধিক রেকর্ড মিলেছে। অনুগ্রহ করে রোল দিন।");
-        document.getElementById('sheet').classList.add('hide');
-        return;
-      }
+      if(candidates.length === 1){ renderSheet(candidates[0], {klass: klassSel, section: sectionSel, exams: examsSel, year: selects.year.value}); return; }
+      else if(candidates.length === 0){ alert("কোনো রেকর্ড মেলেনি। ইনপুটগুলো (বিশেষ করে শিক্ষাবর্ষ) ঠিক আছে কি না দেখুন।"); document.getElementById('sheet').classList.add('hide'); return; }
+      else { alert("একাধিক রেকর্ড মিলেছে। অনুগ্রহ করে রোল দিন।"); document.getElementById('sheet').classList.add('hide'); return; }
     }
 
     const exact = candidates.find(rec => bnToEn(String(rec["রোল"] ?? "")) === roll);
     const hit = exact || candidates[0];
-    if(!hit){
-      alert("রেকর্ড মেলেনি। ইনপুটগুলো যাচাই করুন।");
-      document.getElementById('sheet').classList.add('hide');
-      return;
-    }
-    renderSheet(hit, {klass: klassSel, section: sectionSel, exam: examSel, year: selects.year.value});
+    if(!hit){ alert("রেকর্ড মেলেনি। ইনপুটগুলো যাচাই করুন।"); document.getElementById('sheet').classList.add('hide'); return; }
+    renderSheet(hit, {klass: klassSel, section: sectionSel, exams: examsSel, year: selects.year.value});
   }
 
   document.getElementById('formSearchBtn').addEventListener('click', onSearch);
-
-  document.getElementById('clearBtn').addEventListener('click', ()=>{
-    document.getElementById('roll').value = "";
-    selects.class.value = "";
-    selects.section.value = "";
-    selects.exam.value = "";
-    selects.year.value = "";
-    document.getElementById('sheet').classList.add('hide');
-  });
-
+  document.getElementById('clearBtn').addEventListener('click', ()=>{ document.getElementById('roll').value = ""; selects.class.value = ""; selects.section.value = ""; Array.from(selects.exam.options).forEach(o=>o.selected=false); selects.year.value = ""; document.getElementById('sheet').classList.add('hide'); });
   window.addEventListener('beforeprint', updatePrintTime);
 
   function renderSheet(rec, userSel){
     initHeader();
 
-    // Title
-    const recExam = rec["পরীক্ষার নাম"] ?? rec["পরীক্ষা"] ?? "পরীক্ষা";
-    const ex = userSel.exam || recExam;
-    const yrRaw = rec["শিক্ষাবর্ষ"];
-    const yr = userSel.year || (typeof yrRaw === "number" ? enToBn(String(yrRaw)) : (yrRaw || "শিক্ষাবর্ষ"));
-    document.getElementById('examTitle').textContent = ex + " • " + yr;
+    // Decide which exams to show
+    let chosenExams = Array.isArray(userSel.exams) && userSel.exams.length ? userSel.exams : [ '১ম প্রান্তিক মূল্যায়ন','২য় প্রান্তিক মূল্যায়ন','চূড়ান্ত মূল্যায়ন' ];
+
+    const yrRaw = rec["শিক্ষাবর্ষ"]; const yr = userSel.year || (typeof yrRaw === "number" ? enToBn(String(yrRaw)) : (yrRaw || "শিক্ষাবর্ষ"));
+    document.getElementById('examTitle').textContent = `${chosenExams.join(' + ')} • ${yr}`;
 
     // Meta
     document.getElementById('m_name').textContent    = rec["নাম"]||"—";
@@ -848,108 +489,101 @@ input:focus, select:focus {
     document.getElementById('m_gender').textContent  = rec["লিঙ্গ"]||"—";
     document.getElementById('m_att').textContent     = rec["উপস্থিত/অনুপস্থিত"]||"—";
 
-    // Subjects
+    // Prepare subjects map
     const keys = Object.keys(rec);
-    const exclude = new Set([
-      "রোল","নাম","শ্রেণি","শাখা","লিঙ্গ","উপস্থিত/অনুপস্থিত",
-      "পরীক্ষা","পরীক্ষার নাম","শিক্ষাবর্ষ","বর্তমান অবস্থান",
-      "মোট","সর্বমোট"
-    ]);
-
+    const exclude = new Set(["রোল","নাম","শ্রেণি","শাখা","লিঙ্গ","উপস্থিত/অনুপস্থিত","পরীক্ষা","পরীক্ষার নাম","শিক্ষাবর্ষ","বর্তমান অবস্থান","মোট","সর্বমোট"]);
     const map = {}; // base -> {s1,s2,sf}
     function detectSuffix(key){
-      key = key.trim();
-      if(/চূ[ড়|ড়]ান্ত|ফাইনাল/.test(key)) return "sf";
-      if(/১ম|প্রথম/.test(key)) return "s1";
-      if(/২য়|দ্বিতীয়|দ্বিতীয়/.test(key)) return "s2";
-      return null;
-    }
+  key = (key||'').toString().trim();
+  // Normalize spaces
+  const k = key.replace(/\s+/g,' ');
+  // Final markers
+  if(/চূ[ড়|ড়]ান্ত|সমাপনী|ফাইনাল|final/i.test(k)) return 'sf';
+  // 1st / first / ১ম / প্রথম / (১) / 1
+  if(/১ম|প্রথম|\(১\)|\b১\b|\b1\b|1st|first/i.test(k)) return 's1';
+  // 2nd / second / ২য় / ২য় / দ্বিতীয় / (২) / 2
+  if(/২য়|২য়|দ্বিতীয়|দ্বিতীয়|\(২\)|\b২\b|\b2\b|2nd|second/i.test(k)) return 's2';
+  return null;
+}
     function stripSuffix(key){
-      return key.replace(/\s*(?:১ম|১|প্রথম|২য়|২|দ্বিতীয়|দ্বিতীয়|৩য়|৩|তৃতীয়|তৃতীয়|চূড়ান্ত|চূড়ান্ত|ফাইনাল)\s*$/,"").replace(/[()\-\–]+$/,"").trim();
-    }
+  key = (key||'').toString().trim();
+  // Drop trailing parenthetical markers e.g., (১ম), (২য়), (চূড়ান্ত), (Final)
+  key = key.replace(/\s*\((?:[^)]*(?:১ম|প্রথম|১|২য়|২|দ্বিতীয়|দ্বিতীয়|চূড়ান্ত|চূড়ান্ত|সমাপনী|ফাইনাল|final)[^)]*)\)\s*$/i, '');
+  // Drop bare trailing markers with optional words like প্রান্তিক/মূল্যায়ন
+  key = key.replace(/\s*(?:১ম|প্রথম|১|২য়|২য়|২|দ্বিতীয়|দ্বিতীয়|চূড়ান্ত|চূড়ান্ত|সমাপনী|ফাইনাল|final)(?:\s*(?:প্রান্তিক|মূল্যায়ন))?\s*$/i, '');
+  // Clean leftover dashes/parentheses
+  key = key.replace(/[()\-–]+$/, '').trim();
+  return key;
+}
 
     for(const k of keys){
       if(exclude.has(k)) continue;
-      const val = rec[k];
-      if(val === "" || val === null || typeof val === "undefined") continue;
-      const base = stripSuffix(k);
-      const code = detectSuffix(k);
+      const val = rec[k]; if(val === "" || val === null || typeof val === "undefined") continue;
+      const base = stripSuffix(k); const code = detectSuffix(k);
       if(!map[base]) map[base] = {s1:"", s2:"", sf:""};
       if(code === "s1") map[base].s1 = val;
       else if(code === "s2") map[base].s2 = val;
       else if(code === "sf") map[base].sf = val;
       else {
-        // no suffix: put into selected exam column
-        const selected = userSel.exam || "";
-        if(selected.includes("১ম")) map[base].s1 = val;
-        else if(selected.includes("২য়")) map[base].s2 = val;
-        else map[base].sf = val;
+        // If no suffix, try to place by record-level exam; else assume final
+        const recExam = normalize(rec["পরীক্ষার নাম"] || rec["পরীক্ষা"] || "");
+        const codeGuess = EXAM_TO_CODE[recExam] || 'sf';
+        map[base][codeGuess] = val;
       }
     }
 
-    const tbody = document.getElementById('subjectRows');
-    tbody.innerHTML = "";
-    const bases = Object.keys(map).sort((a,b)=>{
-      const weight = (n)=>{
-        if(/বাংলা/.test(n)) return 0;
-        if(/ইংরেজি/.test(n)) return 1;
-        if(/গণিত/.test(n)) return 2;
-        if(/বিজ্ঞান/.test(n)) return 3;
-        if(/বাংলাদেশ|বিশ্বপরিচ|বিশ্ব পরিচ|বাওবি/.test(n)) return 4;
-        if(/ধর্ম|ইসলাম|হিন্দু|খ্রিস্ট|খ্রীষ্ট|বৌদ্ধ/.test(n)) return 5;
-        return 9;
-      };
-      const wa = weight(a), wb = weight(b);
-      if(wa !== wb) return wa - wb;
-      return a.localeCompare(b,'bn');
+    // Sort subjects
+    const tbody = document.getElementById('subjectRows'); tbody.innerHTML = "";
+    const bases = Object?.keys(map)?.filter(key => !["পিতার নাম", "মাতার নাম"]?.includes(key))?.sort((a,b)=>{
+      const weight = (n)=>{ if(/বাংলা/.test(n)) return 0; if(/ইংরেজি/.test(n)) return 1; if(/গণিত/.test(n)) return 2; if(/বিজ্ঞান/.test(n)) return 3; if(/বাংলাদেশ|বিশ্বপরিচ|বিশ্ব পরিচ|বাওবি/.test(n)) return 4; if(/ধর্ম|ইসলাম|হিন্দু|খ্রিস্ট|খ্রীষ্ট|বৌদ্ধ/.test(n)) return 5; return 7; };
+      const wa = weight(a), wb = weight(b); if(wa !== wb) return wa - wb; return a.localeCompare(b,'bn');
     });
+
+    // Build dynamic header
+    const headRow = document.getElementById('subjectHeadRow');
+    headRow.innerHTML = '<th>বিষয়সমূহ</th>' + chosenExams.map(ex=>`<th>${ex}</th>`).join('');
+
+    // Totals per exam code
+    const totals = { s1:0, s2:0, sf:0 };
+    function num(v){ const n = parseFloat(bnToEn(String(v)).replace(/[^0-9.\-]/g,'')); return isNaN(n) ? 0 : n; }
 
     bases.forEach(base => {
-      const v1 = map[base].s1, v2 = map[base].s2, vf = map[base].sf;
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${base}</td><td>${toBnDigits(v1 ?? "")}</td><td>${toBnDigits(v2 ?? "")}</td><td>${toBnDigits(vf ?? "")}</td>`;
-      tbody.appendChild(tr);
+      const row = document.createElement('tr');
+      let tds = `<td style="text-align:left">${base}</td>`;
+      chosenExams.forEach(ex=>{ const code = EXAM_TO_CODE[ex]; const val = map[base][code]; totals[code] += num(val); tds += `<td>${toBnDigits(val ?? "")}</td>`; });
+      row.innerHTML = tds; tbody.appendChild(row);
     });
 
-    // --- Footer rows: সর্বমোট + বর্তমান অবস্থান ---
-    const foot = document.getElementById('subjectFoot');
-    foot.innerHTML = "";
-
-    // কোন কলামে মোট/র‍্যাঙ্ক বসবে
-    const selectedExam = (userSel.exam || recExam || "").toString();
-    let colIdx = 3; // ডিফল্ট: চূড়ান্ত
-    if (selectedExam.includes("১ম")) colIdx = 1;
-    else if (selectedExam.includes("২য়")) colIdx = 2;
-
-    // সর্বমোট সারি
-    const totalVal = rec["সর্বমোট"] ?? rec["মোট"] ?? "";
+    // Footer rows
+    const foot = document.getElementById('subjectFoot'); foot.innerHTML = "";
+    // সর্বমোট
     const trTotal = document.createElement('tr');
-    trTotal.innerHTML = `<td>সর্বমোট</td><td></td><td></td><td></td>`;
-    if (totalVal !== "") trTotal.children[colIdx].textContent = toBnDigits(totalVal);
-    foot.appendChild(trTotal);
+    let totalCells = '<td>সর্বমোট</td>';
+    chosenExams.forEach(ex=>{ const code = EXAM_TO_CODE[ex]; totalCells += `<td>${toBnDigits(totals[code])}</td>`; });
+    trTotal.innerHTML = totalCells; foot.appendChild(trTotal);
 
-    // বর্তমান অবস্থান সারি
-    const rankVal = rec["বর্তমান অবস্থান"] ? toBnDigits(rec["বর্তমান অবস্থান"]) : "—";
+    // বর্তমান অবস্থান — try exam-specific fields first (e.g., "বর্তমান অবস্থান ১ম"), else fallback to single overall
     const trRank = document.createElement('tr');
-    trRank.innerHTML = `<td>বর্তমান অবস্থান</td><td></td><td></td><td></td>`;
-    trRank.children[colIdx].textContent = rankVal;
-    foot.appendChild(trRank);
+    let rankCells = '<td>বর্তমান অবস্থান</td>';
+    chosenExams.forEach(ex=>{
+      const code = EXAM_TO_CODE[ex];
+      const rankKeyVariants = [ `বর্তমান অবস্থান ${ex}`, `বর্তমান অবস্থান ${CODE_TO_EXAM[code]}`, `বর্তমান অবস্থান ${code.toUpperCase()}` ];
+      let rv = null;
+      for(const k of rankKeyVariants){ if(rec[k] !== undefined){ rv = rec[k]; break; } }
+      if(rv === null && (rec['বর্তমান অবস্থান'] !== undefined)) rv = rec['বর্তমান অবস্থান'];
+      rankCells += `<td>${rv !== null && rv !== undefined && rv !== '' ? toBnDigits(rv) : '—'}</td>`;
+    });
+    trRank.innerHTML = rankCells; foot.appendChild(trRank);
 
     document.getElementById('sheet').classList.remove('hide');
   }
 
   window.addEventListener('load', updatePrintTime);
 
-  // ডাউনলোড বাটন কাজ করার জন্য কোড
+  // Download PDF
   document.getElementById('downloadBtn').addEventListener('click', function() {
     const element = document.getElementById('sheet');
-    const options = {
-        margin:       10,
-        filename:     'result_sheet.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+    const options = { margin:10, filename:'result_sheet.pdf', image:{ type:'jpeg', quality:0.98 }, html2canvas:{ scale:2 }, jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' } };
     html2pdf().from(element).set(options).save();
   });
 </script>
