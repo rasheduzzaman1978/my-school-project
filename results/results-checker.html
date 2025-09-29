@@ -147,7 +147,7 @@
       .sheet-title .exam { font-size: 16px; margin-top: 1mm; }
       th, td { font-size: 13pt; padding: 1.8mm 2.2mm; line-height: 1.22; }
       .subject-table td:first-child { width: 34%; }
-      .signatures { margin-top: 9mm; font-size: 13pt; gap:6px; }
+      .signatures { margin-top: 35mm; font-size: 13pt; gap:6px; }
       .print-footer { position: fixed; bottom: 6mm; left: 8mm; right: 8mm; text-align: right; font-size: 10pt; color: #475569; display: block; }
     }
 
@@ -372,12 +372,9 @@
   const SCHOOL_ADDR = "ডাকঘরঃ গয়হাট্টা-৬৭৬২, উল্লাপাড়া, সিরাজগঞ্জ।";
   const SCHOOL_CONTACT = "মোবাইল: ০১৭১৮-৭২৪৪১৪, ইমেইল: ggps1929@gmail.com";
   const LOGO_URL = "school_logo.jpg";
-
-  // ======= Data source candidates =======
-  const queryUrl = new URLSearchParams(location.search).get("data");
-  const DATA_CANDIDATES = [ queryUrl, "sheet2_data.json", "results.json", "./results.json", "../results.json", "data/results.json" ].filter(Boolean);
-
+const DATA_CANDIDATES = [ "results.json" ];
   let records = [];
+
   const selects = {
     class: document.getElementById('class'),
     section: document.getElementById('section'),
@@ -385,39 +382,44 @@
     year: document.getElementById('year')
   };
 
-  // ======= UI status =======
   const statusBadge = document.getElementById('statusBadge');
   const statusInfo  = document.getElementById('statusInfo');
   function setStatus(type, text, info=""){ statusBadge.className = "badge " + type; statusBadge.textContent = text; statusInfo.textContent = info; }
 
-  // ======= Digit helpers =======
+  // Digit helpers
   const bnToEnMap = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
   function bnToEn(s){ return (s??"").toString().replace(/[০-৯]/g, d => bnToEnMap[d]); }
   const enToBnMap = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
-  function enToBn(s){ return (s??"").toString().replace(/[0-9]/g, d => enToBnMap[d]); }
   function toBnDigits(v){ if(v===null||v===undefined) return ""; const t=String(v); return t.replace(/[0-9]/g, d=>enToBnMap[d]); }
 
-  // ======= Date-time (BN) =======
+  // Date-time
   const days = ["রবিবার","সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
   const months = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
-  function bnDateTime(date){ const d = days[date.getDay()]; const dd = enToBn(date.getDate()); const mm = months[date.getMonth()]; const yyyy = enToBn(date.getFullYear()); let h = date.getHours(); const m = enToBn(String(date.getMinutes()).padStart(2,'0')); const ampm = h >= 12 ? "অপরাহ্ন" : "পূর্বাহ্ন"; h = h % 12; if(h === 0) h = 12; const hh = enToBn(h); return `${d}, ${dd} ${mm} ${yyyy}, ${hh}:${m} ${ampm}`; }
+  function bnDateTime(date){ const d = days[date.getDay()]; const dd = toBnDigits(date.getDate()); const mm = months[date.getMonth()]; const yyyy = toBnDigits(date.getFullYear()); let h = date.getHours(); const m = toBnDigits(String(date.getMinutes()).padStart(2,'0')); const ampm = h >= 12 ? "অপরাহ্ন" : "পূর্বাহ্ন"; h = h % 12; if(h === 0) h = 12; const hh = toBnDigits(h); return `${d}, ${dd} ${mm} ${yyyy}, ${hh}:${m} ${ampm}`; }
   function updatePrintTime(){ const el = document.getElementById('printTime'); if (el) el.textContent = bnDateTime(new Date()); }
 
-  function initHeader(){ document.getElementById('schoolName').textContent = SCHOOL_NAME; document.getElementById('schoolAddr').textContent = SCHOOL_ADDR; document.getElementById('schoolContact').textContent = SCHOOL_CONTACT; document.getElementById('schoolLogo').src = LOGO_URL; updatePrintTime(); }
+  function initHeader(){ 
+    document.getElementById('schoolName').textContent = SCHOOL_NAME; 
+    document.getElementById('schoolAddr').textContent = SCHOOL_ADDR; 
+    document.getElementById('schoolContact').textContent = SCHOOL_CONTACT; 
+    document.getElementById('schoolLogo').src = LOGO_URL; 
+    updatePrintTime(); 
+  }
 
   async function loadData(){
     for(const url of DATA_CANDIDATES){
-      try{ const res = await fetch(url); if(!res.ok) throw new Error("HTTP "+res.status); const json = await res.json(); records = Array.isArray(json) ? json : (json.records || []); setStatus("ok", "ডেটা লোড হয়েছে", `রেকর্ড: ${records.length}`); return; }catch(err){ console.warn("Failed to load", url, err); }
+      try{ 
+        const res = await fetch(url); 
+        if(!res.ok) throw new Error("HTTP "+res.status); 
+        const json = await res.json(); 
+        records = Array.isArray(json) ? json : (json.records || []); 
+        setStatus("ok", "ডেটা লোড হয়েছে", `রেকর্ড: ${records.length}`); 
+        return; 
+      }catch(err){ console.warn("Failed to load", url, err); }
     }
-    setStatus("err", "ডেটা লোড হয়নি", "results.json পাথ ঠিক আছে কিনা দেখুন, অথবা নিচে JSON আপলোড করুন।");
+    setStatus("err", "ডেটা লোড হয়নি", "results.json পাথ ঠিক আছে কিনা দেখুন।");
   }
   loadData();
-
-  document.getElementById('loadJsonBtn').addEventListener('click', async ()=>{
-    const f = document.getElementById('jsonFile').files[0];
-    if(!f){ alert("JSON ফাইল নির্বাচন করুন"); return; }
-    try{ const txt = await f.text(); const json = JSON.parse(txt); records = Array.isArray(json) ? json : (json.records || []); setStatus("ok", "ডেটা লোড হয়েছে", `রেকর্ড: ${records.length}`); }catch(e){ alert("JSON পড়তে সমস্যা হয়েছে: " + e.message); }
-  });
 
   function normalize(str){ return (str??"").toString().trim(); }
   function canonicalClass(x){ x = normalize(x); if(!x) return ""; if(/(১ম|প্রথম)/.test(x)) return "১ম"; if(/(২য়|দ্বিতীয়|দ্বিতীয়)/.test(x)) return "২য়"; if(/(৩য়|তৃতীয়|তৃতীয়)/.test(x)) return "৩য়"; if(/(৪র্থ|চতুর্থ)/.test(x)) return "৪র্থ"; if(/(৫ম|পঞ্চম)/.test(x)) return "৫ম"; return x; }
@@ -427,153 +429,129 @@
 
   function getSelectedExams(){ return Array.from(selects.exam.selectedOptions).map(o=>normalize(o.value)).filter(Boolean); }
 
+  // ✅ Search
   function onSearch(){
     const roll = bnToEn(normalize(document.getElementById('roll').value));
     const klassSel = canonicalClass(selects.class.value);
     const sectionSel = normalize(selects.section.value);
-    const examsSel = getSelectedExams(); // array (can be empty)
+    const examsSel = getSelectedExams(); 
     const yearSelEn = bnToEn(normalize(selects.year.value));
 
-    if(!records.length){ alert("ডেটা লোড হয়নি। উপরের নির্দেশনা দেখে JSON পাথ ঠিক করুন বা JSON আপলোড করুন।"); return; }
+    if(!records.length){ alert("ডেটা লোড হয়নি। JSON ঠিক আছে কি না দেখুন।"); return; }
+    if(!roll){ alert("অনুগ্রহ করে রোল প্রদান করুন।"); return; }
 
-    // Filter
     let candidates = records.filter(rec => {
       const r = bnToEn(String(rec["রোল"] ?? ""));
       const c = canonicalClass(rec["শ্রেণি"]);
       const s = normalize(rec["শাখা"]);
       const e = normalize(rec["পরীক্ষার নাম"] ?? rec["পরীক্ষা"] ?? "");
       const yEn = bnToEn(String(rec["শিক্ষাবর্ষ"] ?? ""));
-
-      const rollOk  = roll   ? (r === roll) : true;
+      const rollOk  = roll ? (r === roll) : true;
       const classOk = klassSel ? (c === klassSel) : true;
       const secOk   = sectionSel ? (s === sectionSel) : true;
-      // Exam filter: if multi-selected, allow any match; if none selected -> ignore exam filter
       const examOk  = examsSel.length ? (examsSel.includes(e) || !e) : true;
       const yearOk  = yearSelEn ? (yEn === yearSelEn) : true;
-
       return rollOk && classOk && secOk && examOk && yearOk;
     });
 
-    if(!roll){
-      if(candidates.length === 1){ renderSheet(candidates[0], {klass: klassSel, section: sectionSel, exams: examsSel, year: selects.year.value}); return; }
-      else if(candidates.length === 0){ alert("কোনো রেকর্ড মেলেনি। ইনপুটগুলো (বিশেষ করে শিক্ষাবর্ষ) ঠিক আছে কি না দেখুন।"); document.getElementById('sheet').classList.add('hide'); return; }
-      else { alert("একাধিক রেকর্ড মিলেছে। অনুগ্রহ করে রোল দিন।"); document.getElementById('sheet').classList.add('hide'); return; }
-    }
+    const group = candidates.filter(rec => bnToEn(String(rec["রোল"] ?? "")) === roll);
+    if (!group.length){ alert("রেকর্ড মেলেনি।"); return; }
 
-    const exact = candidates.find(rec => bnToEn(String(rec["রোল"] ?? "")) === roll);
-    const hit = exact || candidates[0];
-    if(!hit){ alert("রেকর্ড মেলেনি। ইনপুটগুলো যাচাই করুন।"); document.getElementById('sheet').classList.add('hide'); return; }
-    renderSheet(hit, {klass: klassSel, section: sectionSel, exams: examsSel, year: selects.year.value});
+    const merged = { ...group[0] };
+    group.forEach(rec => {
+      const examName = rec["পরীক্ষার নাম"];
+      Object.keys(rec).forEach(k => {
+        if (["রোল","নাম","শ্রেণি","শাখা","লিঙ্গ","শিক্ষাবর্ষ","পিতার নাম","মাতার নাম","উপস্থিত/অনুপস্থিত"].includes(k)) return;
+        const newKey = `${k} (${examName})`;
+        merged[newKey] = rec[k];
+      });
+    });
+
+    renderSheet(merged, {klass: klassSel, section: sectionSel, exams: examsSel, year: selects.year.value});
   }
-
   document.getElementById('formSearchBtn').addEventListener('click', onSearch);
-  document.getElementById('clearBtn').addEventListener('click', ()=>{ document.getElementById('roll').value = ""; selects.class.value = ""; selects.section.value = ""; Array.from(selects.exam.options).forEach(o=>o.selected=false); selects.year.value = ""; document.getElementById('sheet').classList.add('hide'); });
-  window.addEventListener('beforeprint', updatePrintTime);
 
-  function renderSheet(rec, userSel){
+  // ✅ Render Sheet
+  function renderSheet(rec, userSel) {
     initHeader();
 
-    // Decide which exams to show
-    let chosenExams = Array.isArray(userSel.exams) && userSel.exams.length ? userSel.exams : [ '১ম প্রান্তিক মূল্যায়ন','২য় প্রান্তিক মূল্যায়ন','চূড়ান্ত মূল্যায়ন' ];
-
-    const yrRaw = rec["শিক্ষাবর্ষ"]; const yr = userSel.year || (typeof yrRaw === "number" ? enToBn(String(yrRaw)) : (yrRaw || "শিক্ষাবর্ষ"));
+    let chosenExams = Array.isArray(userSel.exams) && userSel.exams.length ? userSel.exams : ['১ম প্রান্তিক মূল্যায়ন', '২য় প্রান্তিক মূল্যায়ন', 'চূড়ান্ত মূল্যায়ন'];
+    const yrRaw = rec["শিক্ষাবর্ষ"];
+    const yr = userSel.year || (typeof yrRaw === "number" ? toBnDigits(String(yrRaw)) : (yrRaw || "শিক্ষাবর্ষ"));
     document.getElementById('examTitle').textContent = `${chosenExams.join(' + ')} • ${yr}`;
 
-    // Meta
-    document.getElementById('m_name').textContent    = rec["নাম"]||"—";
+    document.getElementById('m_name').textContent    = rec["নাম"] || "—";
     document.getElementById('m_class').textContent   = userSel.klass || rec["শ্রেণি"] || "—";
-    document.getElementById('m_roll').textContent    = toBnDigits(rec["রোল"]||"—");
+    document.getElementById('m_roll').textContent    = toBnDigits(rec["রোল"] || "—");
     document.getElementById('m_section').textContent = userSel.section || rec["শাখা"] || "—";
-    document.getElementById('m_father').textContent  = rec["পিতার নাম"]||"—";
-    document.getElementById('m_mother').textContent  = rec["মাতার নাম"]||"—";
-    document.getElementById('m_gender').textContent  = rec["লিঙ্গ"]||"—";
-    document.getElementById('m_att').textContent     = rec["উপস্থিত/অনুপস্থিত"]||"—";
+    document.getElementById('m_father').textContent  = rec["পিতার নাম"] || "—";
+    document.getElementById('m_mother').textContent  = rec["মাতার নাম"] || "—";
+    document.getElementById('m_gender').textContent  = rec["লিঙ্গ"] || "—";
+    document.getElementById('m_att').textContent     = rec["উপস্থিত/অনুপস্থিত"] || "—";
 
-    // Prepare subjects map
-    const keys = Object.keys(rec);
-    const exclude = new Set(["রোল","নাম","শ্রেণি","শাখা","লিঙ্গ","উপস্থিত/অনুপস্থিত","পরীক্ষা","পরীক্ষার নাম","শিক্ষাবর্ষ","বর্তমান অবস্থান","মোট","সর্বমোট"]);
-    const map = {}; // base -> {s1,s2,sf}
-    function detectSuffix(key){
-  key = (key||'').toString().trim();
-  // Normalize spaces
-  const k = key.replace(/\s+/g,' ');
-  // Final markers
-  if(/চূ[ড়|ড়]ান্ত|সমাপনী|ফাইনাল|final/i.test(k)) return 'sf';
-  // 1st / first / ১ম / প্রথম / (১) / 1
-  if(/১ম|প্রথম|\(১\)|\b১\b|\b1\b|1st|first/i.test(k)) return 's1';
-  // 2nd / second / ২য় / ২য় / দ্বিতীয় / (২) / 2
-  if(/২য়|২য়|দ্বিতীয়|দ্বিতীয়|\(২\)|\b২\b|\b2\b|2nd|second/i.test(k)) return 's2';
-  return null;
-}
-    function stripSuffix(key){
-  key = (key||'').toString().trim();
-  // Drop trailing parenthetical markers e.g., (১ম), (২য়), (চূড়ান্ত), (Final)
-  key = key.replace(/\s*\((?:[^)]*(?:১ম|প্রথম|১|২য়|২|দ্বিতীয়|দ্বিতীয়|চূড়ান্ত|চূড়ান্ত|সমাপনী|ফাইনাল|final)[^)]*)\)\s*$/i, '');
-  // Drop bare trailing markers with optional words like প্রান্তিক/মূল্যায়ন
-  key = key.replace(/\s*(?:১ম|প্রথম|১|২য়|২য়|২|দ্বিতীয়|দ্বিতীয়|চূড়ান্ত|চূড়ান্ত|সমাপনী|ফাইনাল|final)(?:\s*(?:প্রান্তিক|মূল্যায়ন))?\s*$/i, '');
-  // Clean leftover dashes/parentheses
-  key = key.replace(/[()\-–]+$/, '').trim();
-  return key;
-}
-
-    for(const k of keys){
-      if(exclude.has(k)) continue;
-      const val = rec[k]; if(val === "" || val === null || typeof val === "undefined") continue;
-      const base = stripSuffix(k); const code = detectSuffix(k);
-      if(!map[base]) map[base] = {s1:"", s2:"", sf:""};
-      if(code === "s1") map[base].s1 = val;
-      else if(code === "s2") map[base].s2 = val;
-      else if(code === "sf") map[base].sf = val;
-      else {
-        // If no suffix, try to place by record-level exam; else assume final
-        const recExam = normalize(rec["পরীক্ষার নাম"] || rec["পরীক্ষা"] || "");
-        const codeGuess = EXAM_TO_CODE[recExam] || 'sf';
-        map[base][codeGuess] = val;
-      }
+    function detectSuffix(key) {
+      key = (key || '').toString().trim();
+      if (/চূড়ান্ত|চূড়ান্ত|সমাপনী|ফাইনাল|final/i.test(key)) return 'sf';
+      if (/১ম|প্রথম|1st|first/i.test(key)) return 's1';
+      if (/২য়|২য়|দ্বিতীয়|দ্বিতীয়|2nd|second/i.test(key)) return 's2';
+      return null;
+    }
+    function stripSuffix(key) {
+      key = (key || '').toString().trim();
+      key = key.replace(/\s*\(([^)]*)\)\s*$/, '');
+      key = key.replace(/\s*(১ম|প্রথম|২য়|দ্বিতীয়|দ্বিতীয়|চূড়ান্ত|চূড়ান্ত|সমাপনী|ফাইনাল|final).*$/i, '');
+      return key.trim();
     }
 
-    // Sort subjects
+    const keys = Object.keys(rec);
+    const exclude = new Set(["রোল","নাম","শ্রেণি","শাখা","লিঙ্গ","উপস্থিত/অনুপস্থিত","পরীক্ষা","পরীক্ষার নাম","শিক্ষাবর্ষ"]);
+    const map = {};
+
+    for (const k of keys) {
+      if (exclude.has(k)) continue;
+      const val = rec[k];
+      if (val === "" || val === null || typeof val === "undefined") continue;
+      const base = stripSuffix(k);
+      const code = detectSuffix(k);
+      if (!map[base]) map[base] = { s1: "", s2: "", sf: "" };
+      if (code === "s1") map[base].s1 = val;
+      else if (code === "s2") map[base].s2 = val;
+      else if (code === "sf") map[base].sf = val;
+    }
+
+     // ✅ subjectOrder dynamic by class
+    let subjectOrder = [];
+    if (["১ম","প্রথম","২য়","দ্বিতীয়","দ্বিতীয়"].includes(userSel.klass)) {
+      subjectOrder = [
+        "বাংলা","ইংরেজি","গণিত","পরিবেশ পরিচিতি",
+        "ধর্ম","অন্যান্য","সর্বমোট","বর্তমান অবস্থান"
+      ];
+    } else {
+      subjectOrder = [
+        "বাংলা","ইংরেজি","গণিত","বিজ্ঞান","বাওবি",
+        "ধর্ম","অন্যান্য","সর্বমোট","বর্তমান অবস্থান"
+      ];
+    }
+
+    // Filter only existing
+    subjectOrder = subjectOrder.filter(subj => map[subj] || ["সর্বমোট","বর্তমান অবস্থান"].includes(subj));
+
+    
     const tbody = document.getElementById('subjectRows'); tbody.innerHTML = "";
-    const bases = Object?.keys(map)?.filter(key => !["পিতার নাম", "মাতার নাম"]?.includes(key))?.sort((a,b)=>{
-      const weight = (n)=>{ if(/বাংলা/.test(n)) return 0; if(/ইংরেজি/.test(n)) return 1; if(/গণিত/.test(n)) return 2; if(/বিজ্ঞান/.test(n)) return 3; if(/বাংলাদেশ|বিশ্বপরিচ|বিশ্ব পরিচ|বাওবি/.test(n)) return 4; if(/ধর্ম|ইসলাম|হিন্দু|খ্রিস্ট|খ্রীষ্ট|বৌদ্ধ/.test(n)) return 5; return 7; };
-      const wa = weight(a), wb = weight(b); if(wa !== wb) return wa - wb; return a.localeCompare(b,'bn');
-    });
-
-    // Build dynamic header
     const headRow = document.getElementById('subjectHeadRow');
-    headRow.innerHTML = '<th>বিষয়সমূহ</th>' + chosenExams.map(ex=>`<th>${ex}</th>`).join('');
+    headRow.innerHTML = '<th>বিষয়সমূহ</th>' + chosenExams.map(ex => `<th>${ex}</th>`).join('');
 
-    // Totals per exam code
-    const totals = { s1:0, s2:0, sf:0 };
-    function num(v){ const n = parseFloat(bnToEn(String(v)).replace(/[^0-9.\-]/g,'')); return isNaN(n) ? 0 : n; }
-
-    bases.forEach(base => {
+    subjectOrder.forEach(base => {
       const row = document.createElement('tr');
       let tds = `<td style="text-align:left">${base}</td>`;
-      chosenExams.forEach(ex=>{ const code = EXAM_TO_CODE[ex]; const val = map[base][code]; totals[code] += num(val); tds += `<td>${toBnDigits(val ?? "")}</td>`; });
-      row.innerHTML = tds; tbody.appendChild(row);
+      chosenExams.forEach(ex => {
+        const code = EXAM_TO_CODE[ex];
+        const val = map[base] ? map[base][code] : "";
+        tds += `<td>${toBnDigits(val ?? "")}</td>`;
+      });
+      row.innerHTML = tds;
+      tbody.appendChild(row);
     });
-
-    // Footer rows
-    const foot = document.getElementById('subjectFoot'); foot.innerHTML = "";
-    // সর্বমোট
-    const trTotal = document.createElement('tr');
-    let totalCells = '<td>সর্বমোট</td>';
-    chosenExams.forEach(ex=>{ const code = EXAM_TO_CODE[ex]; totalCells += `<td>${toBnDigits(totals[code])}</td>`; });
-    trTotal.innerHTML = totalCells; foot.appendChild(trTotal);
-
-    // বর্তমান অবস্থান — try exam-specific fields first (e.g., "বর্তমান অবস্থান ১ম"), else fallback to single overall
-    const trRank = document.createElement('tr');
-    let rankCells = '<td>বর্তমান অবস্থান</td>';
-    chosenExams.forEach(ex=>{
-      const code = EXAM_TO_CODE[ex];
-      const rankKeyVariants = [ `বর্তমান অবস্থান ${ex}`, `বর্তমান অবস্থান ${CODE_TO_EXAM[code]}`, `বর্তমান অবস্থান ${code.toUpperCase()}` ];
-      let rv = null;
-      for(const k of rankKeyVariants){ if(rec[k] !== undefined){ rv = rec[k]; break; } }
-      if(rv === null && (rec['বর্তমান অবস্থান'] !== undefined)) rv = rec['বর্তমান অবস্থান'];
-      rankCells += `<td>${rv !== null && rv !== undefined && rv !== '' ? toBnDigits(rv) : '—'}</td>`;
-    });
-    trRank.innerHTML = rankCells; foot.appendChild(trRank);
 
     document.getElementById('sheet').classList.remove('hide');
   }
