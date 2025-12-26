@@ -21,7 +21,7 @@ header{
   display:flex; align-items:center; justify-content:space-between;
   max-width:1200px; margin:0 auto; position:relative; z-index:1;
 }
-.left_text{flex:1; text-align:left; color:#fff; font-size:18px; font-weight:600; text-shadow:2px 2px 4px rgba(0,0,0,.3); opacity:0; animation:slideInLeft 1s ease-out .5s forwards}
+.left_text{flex:1; text-align:left; color:#fff; font-size:16px; font-weight:600; text-shadow:2px 2px 4px rgba(0,0,0,.3); opacity:0; animation:slideInLeft 1s ease-out .5s forwards}
 .left_text::before{content:"🌺📚 শিক্ষার জন্য এসো 📚🌺"}
 .header-content{flex:2; text-align:center; display:flex; align-items:center; justify-content:center; gap:20px; opacity:0; animation:fadeInUp 1s ease-out 1s forwards}
 .header-content img{width:80px; height:80px; border-radius:50%; box-shadow:0 4px 15px rgba(0,0,0,.2); transition:transform .3s ease}
