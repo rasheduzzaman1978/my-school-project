@@ -1,4 +1,4 @@
- // ===== Date-Time banner (BN) =====
+// ===== Date-Time banner (BN) =====
     function updateDateTime(){
       const now=new Date();
       const days=["রবিবার","সোমবার","মঙ্গলবার","বুধবার","বৃহস্পতিবার","শুক্রবার","শনিবার"];
@@ -205,3 +205,11 @@
         }
       });
     }
+    
+    function openForm() {
+  document.getElementById("advice-form").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("advice-form").style.display = "none";
+}
