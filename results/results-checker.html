@@ -48,7 +48,7 @@
     .nav_bar{ display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#DDF6D2 0%,#C8E6C9 100%); padding:0 20px; position:sticky; top:0; z-index:1000; box-shadow:0 4px 15px rgba(0,0,0,.1); backdrop-filter:blur(10px); transition:all .3s ease; animation:fadeInUp .6s ease-out; }
     .nav_bar::before{content:''; position:absolute; inset:0; background:rgba(255,255,255,.1); backdrop-filter:blur(5px); z-index:-1}
     .nav-links{display:flex; align-items:center; gap:10px; flex-wrap:wrap; position:relative; justify-content:center}
-    .nav_bar a{ color:#113D43; font-size:20px; font-weight:500; padding:12px 16px; text-decoration:none; transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; border-radius:8px; position:relative; overflow:hidden; }
+    .nav_bar a{ color:#113D43; font-size:16px; font-weight:500; padding:12px 16px; text-decoration:none; transition:all .3s cubic-bezier(.4,0,.2,1); white-space:nowrap; border-radius:8px; position:relative; overflow:hidden; }
     .nav_bar a::before{content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); transition:left .5s ease}
     .nav_bar a:hover::before{left:100%}
     .nav_bar a:hover{background:linear-gradient(135deg,#4CAF50,#45a049); color:#fff; transform:none; box-shadow:0 4px 12px rgba(76,175,80,.25)}
@@ -340,6 +340,13 @@
   <div class="print-footer print-meta"> মুদ্রণের সময়: <span id="printTime"></span> </div>
 
 <script>
+function calcMeritRank(allTotals, myTotal) {
+  const uniqueSorted = [...new Set(allTotals)]
+    .sort((a, b) => b - a);   // বড় → ছোট
+  return uniqueSorted.indexOf(myTotal) + 1;
+}
+
+
   const navbar = document.getElementById('navbar');
   const menuToggle = document.getElementById('menuToggle');
   const dropdown = document.getElementById('dropdown');
@@ -368,7 +375,7 @@
   document.addEventListener('DOMContentLoaded', ()=>{ closeMenu(); onScroll(); });
 
   // ======= CONFIG =======
-  const SCHOOL_NAME ="গয়হাট্টা সরকারি প্রাথমিক বিদ্যালয়";
+  const SCHOOL_NAME ="গয়হাট্টা মডেল সরকারি প্রাথমিক বিদ্যালয়";
   const SCHOOL_ADDR = "ডাকঘরঃ গয়হাট্টা-৬৭৬২, উল্লাপাড়া, সিরাজগঞ্জ।";
   const SCHOOL_CONTACT = "মোবাইল: ০১৭১৮-৭২৪৪১৪, ইমেইল: ggps1929@gmail.com";
   const LOGO_URL = "school_logo.jpg";
@@ -461,10 +468,21 @@ const DATA_CANDIDATES = [ "results.json" ];
     group.forEach(rec => {
       const examName = rec["পরীক্ষার নাম"];
       Object.keys(rec).forEach(k => {
-        if (["রোল","নাম","শ্রেণি","শাখা","লিঙ্গ","শিক্ষাবর্ষ","পিতার নাম","মাতার নাম","উপস্থিত/অনুপস্থিত"].includes(k)) return;
-        const newKey = `${k} (${examName})`;
-        merged[newKey] = rec[k];
-      });
+  if ([
+    "রোল","নাম","শ্রেণি","শাখা","লিঙ্গ",
+    "শিক্ষাবর্ষ","পিতার নাম","মাতার নাম","উপস্থিত/অনুপস্থিত"
+  ].includes(k)) return;
+
+  // ✅ সর্বমোট ও মেধাক্রম root-এ রাখব
+  if (k === "সর্বমোট" || k === "মেধাক্রম") {
+    merged[k] = rec[k];
+    return;
+  }
+
+  const newKey = `${k} (${examName})`;
+  merged[newKey] = rec[k];
+});
+
     });
 
     renderSheet(merged, {klass: klassSel, section: sectionSel, exams: examsSel, year: selects.year.value});
@@ -519,22 +537,76 @@ const DATA_CANDIDATES = [ "results.json" ];
       else if (code === "sf") map[base].sf = val;
     }
 
+
+/* ===== সর্বমোট + মেধাক্রম (FINAL) ===== */
+// 🔹 শুধুমাত্র তখনই দেখাবে যখন ৩টি পরীক্ষাই আছে
+const needFooter =
+  chosenExams.includes("১ম প্রান্তিক মূল্যায়ন") &&
+  chosenExams.includes("২য় প্রান্তিক মূল্যায়ন") &&
+  chosenExams.includes("চূড়ান্ত মূল্যায়ন");
+
+  function safeNumber(v){
+  if (v === null || v === undefined || v === "") return 0;
+  const n = Number(bnToEn(v));
+  return isNaN(n) ? 0 : n;
+}
+
+if (needFooter) {
+
+  let myTotal = 0;
+  Object.keys(map).forEach(sub => {
+    if (["মোট","বর্তমান অবস্থান"].includes(sub)) return;
+    myTotal += safeNumber(map[sub]?.s1);
+    myTotal += safeNumber(map[sub]?.s2);
+    myTotal += safeNumber(map[sub]?.sf);
+  });
+
+  const sameGroup = records.filter(r =>
+    canonicalClass(r["শ্রেণি"]) === userSel.klass &&
+    normalize(r["শাখা"]) === userSel.section &&
+    bnToEn(r["শিক্ষাবর্ষ"]) === bnToEn(userSel.year)
+  );
+
+  const totalsByRoll = {};
+  sameGroup.forEach(r => {
+    const roll = r["রোল"];
+    totalsByRoll[roll] = (totalsByRoll[roll] || 0) + safeNumber(r["মোট"]);
+  });
+
+  const totals = Object.values(totalsByRoll);
+  const merit = calcMeritRank(totals, myTotal);
+
+  document.getElementById("subjectFoot").innerHTML = `
+    <tr>
+      <td><strong>সর্বমোট</strong></td>
+      <td colspan="${chosenExams.length}">
+        <strong>${toBnDigits(myTotal)}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>মেধাক্রম</strong></td>
+      <td colspan="${chosenExams.length}">
+        <strong>${toBnDigits(merit)}</strong>
+      </td>
+    </tr>`;
+}
+
      // ✅ subjectOrder dynamic by class
     let subjectOrder = [];
     if (["১ম","প্রথম","২য়","দ্বিতীয়","দ্বিতীয়"].includes(userSel.klass)) {
       subjectOrder = [
         "বাংলা","ইংরেজি","গণিত","পরিবেশ পরিচিতি",
-        "ধর্ম","অন্যান্য","সর্বমোট","বর্তমান অবস্থান"
+        "ধর্ম","অন্যান্য","মোট","বর্তমান অবস্থান"
       ];
     } else {
       subjectOrder = [
         "বাংলা","ইংরেজি","গণিত","বিজ্ঞান","বাওবি",
-        "ধর্ম","অন্যান্য","সর্বমোট","বর্তমান অবস্থান"
+        "ধর্ম","অন্যান্য","মোট","বর্তমান অবস্থান"
       ];
     }
 
     // Filter only existing
-    subjectOrder = subjectOrder.filter(subj => map[subj] || ["সর্বমোট","বর্তমান অবস্থান"].includes(subj));
+    subjectOrder = subjectOrder.filter(subj => map[subj] || ["মোট","বর্তমান অবস্থান"].includes(subj));
 
     
     const tbody = document.getElementById('subjectRows'); tbody.innerHTML = "";
@@ -563,6 +635,28 @@ const DATA_CANDIDATES = [ "results.json" ];
     const element = document.getElementById('sheet');
     const options = { margin:10, filename:'result_sheet.pdf', image:{ type:'jpeg', quality:0.98 }, html2canvas:{ scale:2 }, jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' } };
     html2pdf().from(element).set(options).save();
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', function () {
+
+    // ইনপুট রিসেট
+    document.getElementById('roll').value = "";
+
+    // সিলেক্ট রিসেট
+    document.getElementById('class').value = "";
+    document.getElementById('section').value = "";
+    document.getElementById('year').selectedIndex = 0;
+
+    // মাল্টি-সিলেক্ট (exam) রিসেট
+    const examSelect = document.getElementById('exam');
+    Array.from(examSelect.options).forEach(opt => opt.selected = false);
+
+    // রেজাল্ট শিট লুকানো
+    document.getElementById('sheet').classList.add('hide');
+
+    // স্ট্যাটাস রিসেট
+    setStatus("warn", "রিসেট করা হয়েছে", "");
+
   });
 </script>
 </body>
